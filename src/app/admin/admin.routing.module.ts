@@ -1,11 +1,14 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from "@angular/router";
 import {AdminComponent} from "./admin.component";
+import {SelfAssessmentComponent} from "./pages/self-assessment/self-assessment.component";
 
 const routes: Routes = [
     {
         path: '', component: AdminComponent,
-        children: []
+        children: [
+            {path: 'self-assessment', component: SelfAssessmentComponent},
+        ]
     },
 ];
 
