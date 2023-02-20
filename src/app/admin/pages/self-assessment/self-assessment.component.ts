@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class SelfAssessmentComponent {
 
+  public currentMonth = new Date().getMonth() + 1;
+  constructor() {
+
+
+  }
+
 }
