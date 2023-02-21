@@ -4,6 +4,7 @@ import {AdminComponent} from './admin.component';
 import {AdminRoutingModule} from "./admin.routing.module";
 import {FormsModule} from "@angular/forms";
 import {SelfAssessmentComponent} from "./pages/self-assessment/self-assessment.component";
+import {ApiService} from "../shared/services/api.service";
 
 
 @NgModule({
@@ -14,9 +15,10 @@ import {SelfAssessmentComponent} from "./pages/self-assessment/self-assessment.c
     imports: [
         CommonModule,
         FormsModule,
-        AdminRoutingModule
+        AdminRoutingModule,
+
     ],
-    providers: [],
+    providers: [ApiService],
 })
 export class AdminModule {
 }

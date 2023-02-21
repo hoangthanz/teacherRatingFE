@@ -35,7 +35,7 @@ export class AuthenticationService {
     public convertObjectToString = (object: any) => JSON.stringify(object);
 
     login = (username: string, password: string, hasRemember: boolean) => this.http.post<any>(`${environment.domain}/api/Authencation/login`, {
-        email: username,
+        username: username,
         password: password
     }).subscribe((response: any) => {
             localStorage.setItem('access_token', response.accessToken);

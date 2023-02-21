@@ -1,7 +1,37 @@
-<h5 class="mt-0 mb-2 text-xl font-medium leading-tight text-primary">
-    KHAI BÁO THÁNG {{ currentMonth }}
-</h5>
+<div
+        class="block rounded-lg bg-white p-6 shadow-lg dark:bg-neutral-700 w-full h-[30rem]">
+    <h5
+            class="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
+        KHAI BÁO THÁNG {{ currentMonth }}
+    </h5>
+    <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200">
+        Khai báo thông tin đánh giá trong tháng
+    </p>
 
-<hr
-        class="my-12 h-0.5 border-t-0 bg-neutral-100 opacity-100 dark:opacity-50"/>
+
+    <div class="flex-1">
+        <div class="flex flex-row">
+            <div class="md:basis-1/2">
+                <div class="flex justify-center">
+                    <div class="flex justify-center">
+                        <div class="mb-3 xl:w-96">
+                            <select data-te-select-init data-te-select-filter="true">
+                                <option [value]="assessmentCriteriaGroup.id"
+                                        *ngFor="let assessmentCriteriaGroup of assessmentCriteriaGroups">{{assessmentCriteriaGroup?.name }}</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="md:basis-1/2">
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
 
