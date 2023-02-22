@@ -5,6 +5,7 @@ import {AdminRoutingModule} from "./admin.routing.module";
 import {FormsModule} from "@angular/forms";
 import {SelfAssessmentComponent} from "./pages/self-assessment/self-assessment.component";
 import {ApiService} from "../shared/services/api.service";
+import {SharedModule} from "../shared/shared.module";
 
 
 @NgModule({
@@ -16,7 +17,7 @@ import {ApiService} from "../shared/services/api.service";
         CommonModule,
         FormsModule,
         AdminRoutingModule,
-
+        SharedModule
     ],
     providers: [ApiService],
 })

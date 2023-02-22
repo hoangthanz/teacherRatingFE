@@ -15,6 +15,8 @@ export class SelfAssessmentComponent{
 
     public assessmentCriteriaGroups :AssessmentCriteriaGroup[] = [];
 
+    public selectedAssessmentCriteriaGroup!: AssessmentCriteriaGroup;
+
     constructor(private apiService: ApiService) {
         this.getAssessmentCriteriaGroups();
     }

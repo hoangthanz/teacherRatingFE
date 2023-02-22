@@ -1,37 +1,14 @@
-<div
-        class="block rounded-lg bg-white p-6 shadow-lg dark:bg-neutral-700 w-full h-[30rem]">
-    <h5
-            class="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
-        KHAI BÁO THÁNG {{ currentMonth }}
-    </h5>
-    <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200">
-        Khai báo thông tin đánh giá trong tháng
-    </p>
+<nz-card nzTitle="{{'KHAI BÁO THÁNG' + ' ' + currentMonth}}">
+    <p style="font-size:14px;color:rgba(0, 0, 0, 0.85);margin-bottom:16px;font-weight: 500;"> Khai báo thông tin đánh
+        giá trong tháng</p>
 
-
-    <div class="flex-1">
-        <div class="flex flex-row">
-            <div class="md:basis-1/2">
-                <div class="flex justify-center">
-                    <div class="flex justify-center">
-                        <div class="mb-3 xl:w-96">
-                            <select data-te-select-init data-te-select-filter="true">
-                                <option [value]="assessmentCriteriaGroup.id"
-                                        *ngFor="let assessmentCriteriaGroup of assessmentCriteriaGroups">{{assessmentCriteriaGroup?.name }}</option>
-
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="md:basis-1/2">
-
-            </div>
-        </div>
-    </div>
-
-
-</div>
-
-
+    <nz-select
+            [(ngModel)]="selectedAssessmentCriteriaGroup"
+            nzPlaceHolder="Chọn nhóm tiêu chí đánh giá"
+            nzAllowClear
+    >
+        <nz-option *ngFor="let assessmentCriteriaGroup of assessmentCriteriaGroups"
+                   [nzValue]="assessmentCriteriaGroup.id" [nzLabel]="assessmentCriteriaGroup.name"></nz-option>
+    </nz-select>
+</nz-card>
 
