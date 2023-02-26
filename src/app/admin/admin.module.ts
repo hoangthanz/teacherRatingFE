@@ -7,13 +7,17 @@ import {SelfAssessmentComponent} from "./pages/self-assessment/self-assessment.c
 import {ApiService} from "../shared/services/api.service";
 import {SharedModule} from "../shared/shared.module";
 import {SelfAssessmentListComponent} from "./pages/self-assessment-list/self-assessment-list.component";
+import {
+    ViewSeflAssessmentComponent
+} from "./pages/self-assessment-list/components/view-sefl-assessment/view-sefl-assessment.component";
 
 
 @NgModule({
     declarations: [
         AdminComponent,
         SelfAssessmentComponent,
-        SelfAssessmentListComponent
+        SelfAssessmentListComponent,
+        ViewSeflAssessmentComponent
     ],
     imports: [
         CommonModule,

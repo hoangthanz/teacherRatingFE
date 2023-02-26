@@ -25,59 +25,45 @@ export class SelfAssessmentListComponent implements OnInit {
     }
 
     seflAssessmentList: SelfCriticism[] = [];
-    searchValue = '';
-    visible = false;
-    listOfData: DataItem[] = [
-        {
-            name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park'
-        },
-        {
-            name: 'Jim Green',
-            age: 42,
-            address: 'London No. 1 Lake Park'
-        },
-        {
-            name: 'Joe Black',
-            age: 32,
-            address: 'Sidney No. 1 Lake Park'
-        },
-        {
-            name: 'Jim Red',
-            age: 32,
-            address: 'London No. 2 Lake Park'
-        }
-    ];
-    listOfDisplayData = [...this.listOfData];
 
-    reset(): void {
-        this.searchValue = '';
-        this.search();
-    }
+    isVisible = false;
 
-    search(): void {
-        this.visible = false;
-        this.listOfDisplayData = this.listOfData.filter((item: DataItem) => item.name.indexOf(this.searchValue) !== -1);
-    }
+
+    viewOfSelfAssessment : SelfCriticism = new SelfCriticism();
 
     ngOnInit(): void {
     }
 
+    showModal(i: number): void {
+        this.viewOfSelfAssessment = this.seflAssessmentList[i];
+        this.isVisible = true;
+    }
+
+    handleOk(): void {
+        this.isVisible = false;
+    }
+
+    handleCancel(): void {
+        this.isVisible = false;
+    }
 
     getSelfAssessmentList() {
         const currentUserId = localStorage.getItem("current_user_id");
-        if(currentUserId == null) return;
+        if (currentUserId == null) return;
         this.apiService.getSelfCriticismByUserId(currentUserId).subscribe((response: any) => {
             if (response.result === ResultRespond.Success) {
                 this.seflAssessmentList = response.data;
+
+                for (let i = 0; i < this.seflAssessmentList.length; i++) {
+                    this.seflAssessmentList[i].index = i + 1;
+                }
             }
         })
     }
 
     updateSelfAssessment(selfCriticism: SelfCriticism, isSubmitted: boolean) {
         const currentUserId = localStorage.getItem("current_user_id");
-        if(currentUserId == null) return;
+        if (currentUserId == null) return;
 
         selfCriticism.isSubmitted = isSubmitted;
         this.apiService.updateStatusAssessment(currentUserId, isSubmitted, selfCriticism.id).subscribe((response: any) => {
