@@ -1,0 +1,43 @@
+<script src="../../../core/models/self-criticism.ts"></script>
+<nz-card nzTitle="{{'DANH SÁCH ĐÃ KHAI BÁO'}}">
+    <p style="font-size:14px;color:rgba(0, 0, 0, 0.85);margin-bottom:16px;font-weight: 500;"> Các bản ghi do người dùng
+        đã tạo</p>
+
+
+    <nz-table #seflAssessmentListTable [nzData]="seflAssessmentList" nzTableLayout="fixed">
+        <thead>
+        <tr>
+            <th>STT</th>
+            <th>
+                Tháng/Năm
+            </th>
+            <th>Điểm</th>
+            <th>Trạng thái</th>
+            <th>Thời gian tạo</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of seflAssessmentListTable.data; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ data?.month + '/' + data?.year }}</td>
+            <td>{{ data?.totalScore }}</td>
+
+            <td>
+                <nz-tag [nzColor]="'magenta'" *ngIf="data?.isSubmitted == false">Bản nháp</nz-tag>
+                <nz-tag [nzColor]="'blue'" *ngIf="data?.isSubmitted == true">Đã nộp</nz-tag>
+            </td>
+            <td>{{ data?.createdDate | date: 'dd/MM/yyyy hh:mm a'}}</td>
+            <td>
+                <button nz-button nzType="dashed" nzShape="round"
+                        (click)="updateSelfAssessment(data, !data.isSubmitted)">Nộp
+                </button>
+            </td>
+
+        </tr>
+        </tbody>
+    </nz-table>
+
+</nz-card>
+
+

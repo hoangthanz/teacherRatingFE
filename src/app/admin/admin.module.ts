@@ -6,12 +6,14 @@ import {FormsModule} from "@angular/forms";
 import {SelfAssessmentComponent} from "./pages/self-assessment/self-assessment.component";
 import {ApiService} from "../shared/services/api.service";
 import {SharedModule} from "../shared/shared.module";
+import {SelfAssessmentListComponent} from "./pages/self-assessment-list/self-assessment-list.component";
 
 
 @NgModule({
     declarations: [
         AdminComponent,
-        SelfAssessmentComponent
+        SelfAssessmentComponent,
+        SelfAssessmentListComponent
     ],
     imports: [
         CommonModule,
