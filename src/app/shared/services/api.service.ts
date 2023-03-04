@@ -5,6 +5,7 @@ import {ResponseApi} from "../../core/models/response-api";
 import {AssessmentCriteriaGroup} from "../../core/models/assessment-criteria-group";
 import {SelfCriticism} from "../../core/models/self-criticism";
 import {User} from "../../core/models/user";
+import {ɵFormGroupValue, ɵTypedOrUntyped} from "@angular/forms";
 
 @Injectable({
     providedIn: 'root'
@@ -49,7 +50,7 @@ export class ApiService {
         return this.http.get<ResponseApi<User[]>>(`${this.domain}/api/Authencation/get-all-user`);
     }
 
-    public postUser(){
+    public postUser(value: ɵTypedOrUntyped<any, ɵFormGroupValue<any>, any>){
         return this.http.post<ResponseApi<User>>(`${this.domain}/api/User/create-user`, {
             "email": 123,
         });

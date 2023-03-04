@@ -94,7 +94,7 @@ export class UserManagementComponent implements OnInit {
     }
 
     submit() {
-        this.apiService.createUser(this.validateForm.value).subscribe(res => {
+        this.apiService.postUser(this.validateForm.value).subscribe(res => {
             if (res.result == ResultRespond.Success) {
                 this.message.create('success', 'Tạo tài khoản thành công');
                 this.getAllUser();

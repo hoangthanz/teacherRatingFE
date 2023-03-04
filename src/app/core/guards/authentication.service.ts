@@ -71,7 +71,8 @@ export class AuthenticationService {
         password: password,
         confirmPassword: confirmPassword,
         name: name,
-        phoneNumber: phone
+        phoneNumber: phone,
+        username: phone
     }).subscribe((response: any) => {
         if(response.success) {
             localStorage.setItem('username', email);
