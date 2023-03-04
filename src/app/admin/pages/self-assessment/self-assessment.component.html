@@ -6,38 +6,42 @@
     <ul nz-list [nzDataSource]="createdSelfCriticism.assessmentCriterias" nzBordered nzSize="large">
         <nz-list-header>
             <div class="flex">
-                <div class="flex-1">Các công việc đánh giá</div>
+                <div class="flex-1">Nội dung công việc đã làm</div>
                 <div class="justify-end items-end">
                     <button nz-button nzType="primary" nzSize="large" nzShape="round" (click)="addAssessmentToList()">
-                        Thêm bản ghi
+                        + Khai báo
                     </button>
                 </div>
             </div>
         </nz-list-header>
         <li nz-list-item *ngFor="let item of createdSelfCriticism.assessmentCriterias; let i = index">
 
-            <div class="sm:grid sm:grid-cols-1 md:grid md:grid-cols-3 flex-1 md:gap-4">
-                <div>
-                    <nz-select class="max-w-50%"
-                               [(ngModel)]="selectedAssessmentCriteriaGroup[i]"
-                               nzPlaceHolder="Chọn nhóm tiêu chí đánh giá"
-                               (ngModelChange)="selectChangeAssessmentCriteriaGroup($event, i)">
-                        >
-                        <nz-option *ngFor="let assessmentCriteriaGroup of assessmentCriteriaGroups"
-                                   [nzValue]="assessmentCriteriaGroup"
-                                   [nzLabel]="assessmentCriteriaGroup.name"></nz-option>
-                    </nz-select>
+            <div class="flex flex-col flex-1 gap-4">
+                <div class="sm:grid sm:grid-cols-1 md:grid md:grid-cols-2 flex-1 md:gap-2">
+                    <div>
+                        <nz-select class="max-w-50%"
+                                   [(ngModel)]="selectedAssessmentCriteriaGroup[i]"
+                                   nzPlaceHolder="Chọn nhóm tiêu chí đánh giá"
+                                   (ngModelChange)="selectChangeAssessmentCriteriaGroup($event, i)">
+                            >
+                            <nz-option *ngFor="let assessmentCriteriaGroup of assessmentCriteriaGroups"
+                                       [nzValue]="assessmentCriteriaGroup"
+                                       [nzLabel]="assessmentCriteriaGroup.name"></nz-option>
+                        </nz-select>
+                    </div>
+                    <div>
+                        <nz-select class="max-w-50%" nzPlaceHolder="Chọn tiêu chí đánh giá"
+                                   [(ngModel)]="selectedAssessmentCriteria[i]"
+                                   (ngModelChange)="changeValueOfIndexAssessment($event, i)">
+                            <nz-option *ngFor="let assessment of assessmentCriteria1[i]"
+                                       [nzValue]="assessment" [nzLabel]="assessment.name"></nz-option>
+                        </nz-select>
+                    </div>
                 </div>
                 <div>
-                    <nz-select class="max-w-50%" nzPlaceHolder="Chọn tiêu chí đánh giá"
-                               [(ngModel)]="selectedAssessmentCriteria[i]"
-                               (ngModelChange)="changeValueOfIndexAssessment($event, i)">
-                        <nz-option *ngFor="let assessment of assessmentCriteria1[i]"
-                                   [nzValue]="assessment" [nzLabel]="assessment.name"></nz-option>
-                    </nz-select>
+                    <input nz-input placeholder="Mô tả thêm" [(ngModel)]="selectedAssessmentCriteria[i].description"/>
                 </div>
-
-                <div class="justify-end items-end">
+                <div>
                     <button nz-button nzType="default" nzDanger (click)="removeAssessment(i)">Xóa</button>
                 </div>
             </div>
@@ -50,8 +54,9 @@
     <nz-divider nzType="vertical"></nz-divider>
 
     <div style="text-align: end">
-        <button nz-button nzType="dashed" nzSize="large" nzShape="round" (click)="createSelfCriticism(createdSelfCriticism)">
-           Lưu bản ghi
+        <button nz-button nzType="dashed" nzSize="large" nzShape="round"
+                (click)="createSelfCriticism(createdSelfCriticism)">
+            Lưu bản ghi
         </button>
     </div>
 </nz-card>
