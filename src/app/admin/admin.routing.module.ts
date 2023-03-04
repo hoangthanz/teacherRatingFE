@@ -3,6 +3,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {AdminComponent} from "./admin.component";
 import {SelfAssessmentComponent} from "./pages/self-assessment/self-assessment.component";
 import {SelfAssessmentListComponent} from "./pages/self-assessment-list/self-assessment-list.component";
+import {UserManagementComponent} from "./pages/user-management/user-management.component";
 
 const routes: Routes = [
     {
@@ -10,6 +11,7 @@ const routes: Routes = [
         children: [
             {path: 'self-assessment', component: SelfAssessmentComponent},
             {path: 'self-assessment-list', component: SelfAssessmentListComponent},
+            {path: 'user', component: UserManagementComponent},
         ]
     },
 ];

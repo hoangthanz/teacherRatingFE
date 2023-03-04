@@ -31,4 +31,8 @@ export class AdminComponent {
     goToSelfAssessmentList() {
         this.router.navigate(['admin/self-assessment-list']);
     }
+
+    goToUserPage(){
+        this.router.navigate(['admin/user']);
+    }
 }

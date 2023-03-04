@@ -10,6 +10,7 @@ import {SelfAssessmentListComponent} from "./pages/self-assessment-list/self-ass
 import {
     ViewSeflAssessmentComponent
 } from "./pages/self-assessment-list/components/view-sefl-assessment/view-sefl-assessment.component";
+import {UserManagementComponent} from "./pages/user-management/user-management.component";
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {
         AdminComponent,
         SelfAssessmentComponent,
         SelfAssessmentListComponent,
-        ViewSeflAssessmentComponent
+        ViewSeflAssessmentComponent,
+        UserManagementComponent
     ],
     imports: [
         CommonModule,

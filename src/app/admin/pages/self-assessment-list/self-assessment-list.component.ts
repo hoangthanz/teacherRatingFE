@@ -4,12 +4,6 @@ import {ResultRespond} from "../../../core/enums/result-respond";
 import {SelfCriticism} from "../../../core/models/self-criticism";
 import {NzMessageService} from "ng-zorro-antd/message";
 
-interface DataItem {
-    name: string;
-    age: number;
-    address: string;
-}
-
 @Component({
     selector: 'app-self-assessment-list',
     templateUrl: './self-assessment-list.component.html',

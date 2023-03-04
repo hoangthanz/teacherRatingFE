@@ -4,6 +4,7 @@ import {environment} from "../../../environments/environment";
 import {ResponseApi} from "../../core/models/response-api";
 import {AssessmentCriteriaGroup} from "../../core/models/assessment-criteria-group";
 import {SelfCriticism} from "../../core/models/self-criticism";
+import {User} from "../../core/models/user";
 
 @Injectable({
     providedIn: 'root'
@@ -37,10 +38,20 @@ export class ApiService {
 
     public updateStatusAssessment(userId: string, isSubmitted: boolean, id: string) {
         return this.http.post<ResponseApi<any>>(`${this.domain}/api/SelfCriticism/update-status-self-criticism`,
-             {
+            {
                 userId: userId,
                 isSubmitted: isSubmitted,
                 id: id
             });
+    }
+
+    public getAllUser() {
+        return this.http.get<ResponseApi<User[]>>(`${this.domain}/api/Authencation/get-all-user`);
+    }
+
+    public postUser(){
+        return this.http.post<ResponseApi<User>>(`${this.domain}/api/User/create-user`, {
+            "email": 123,
+        });
     }
 }
