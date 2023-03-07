@@ -1,80 +1,51 @@
-<link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css">
-<link rel="stylesheet"
-      href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
+<div class="bg-blue-50 h-screen w-screen">
+  <div class="flex flex-col items-center flex-1 h-full justify-center px-4 sm:px-0">
+    <div class="flex rounded-lg shadow-lg w-full sm:w-3/4 lg:w-1/2 bg-white sm:mx-0" style="height: 500px">
+      <div class="flex flex-col w-full md:w-1/2 p-4">
+        <div class="flex flex-col flex-1 justify-center mb-8 gap-2">
+          <div class="w-full flex">
+            <img
+              src="assets/logos/logo_congdoan.png"
+              class="w-32 rounded-full mx-auto shadow-lg"
+              alt="Avatar"/>
+          </div>
 
 
-<section class="bg-blueGray-50">
-    <div class="w-full lg:w-4/12 px-4 mx-auto pt-6">
-        <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0">
-            <div class="rounded-t mb-0 px-6 py-6">
-                <div class="text-center mb-3">
-                    <h6 class="text-blueGray-500 text-sm font-bold">
-                        Đăng ký với
-                    </h6>
-                </div>
-                <div class="btn-wrapper text-center">
-                    <button class="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                            type="button">
-                        <img alt="..." class="w-5 mr-1"
-                             src="https://demos.creative-tim.com/notus-js/assets/img/github.svg">Github
-                    </button>
-                    <button class="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                            type="button">
-                        <img alt="..." class="w-5 mr-1"
-                             src="https://demos.creative-tim.com/notus-js/assets/img/google.svg">Google
-                    </button>
-
-                </div>
-                <hr class="mt-6 border-b-1 border-blueGray-300">
+          <h1 class="text-4xl text-center font-thin">{{headerContent}}</h1>
+          <div class="w-full mt-4">
+            <form class="form-horizontal w-3/4 mx-auto" method="POST" action="#">
+              <div class="flex flex-col mt-4">
+                <input id="email" type="text" class="flex-grow h-8 px-2 border rounded border-grey-400" name="email"
+                       placeholder="Tài khoản" [(ngModel)]="username"
+                       [ngModelOptions]="{standalone: true}">
+              </div>
+              <div class="flex flex-col mt-4">
+                <input id="password" type="password" class="flex-grow h-8 px-2 rounded border border-grey-400"
+                       name="password" required placeholder="Password" [(ngModel)]="password"
+                       [ngModelOptions]="{standalone: true}">
+              </div>
+              <div class="flex items-center mt-4">
+                <input type="checkbox" name="remember" id="remember" class="mr-2" [checked]="rememberMe"
+                       (change)="rememberMe = !rememberMe"> <label for="remember"
+                                                                   class="text-sm text-grey-dark">Nhớ tài khoản</label>
+              </div>
+              <div class="flex flex-col mt-8">
+                <button type="submit" (click)="login()"
+                        class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded">
+                  Đăng nhập
+                </button>
+              </div>
+            </form>
+            <div class="text-center mt-4">
+              <a class="no-underline hover:underline text-blue-dark text-xs">
+                Quên mật khẩud?
+              </a>
             </div>
-            <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-                <div class="text-blueGray-400 text-center mb-3 font-bold">
-                    <small>Hoặc sử dụng chứng thực</small>
-                </div>
-                <form>
-                    <div class="relative w-full mb-3">
-                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" for="grid-password">Tài
-                            khoản</label><input type="email"
-                                                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                                                placeholder="Email" [(ngModel)]="username"
-                                                [ngModelOptions]="{standalone: true}">
-                    </div>
-                    <div class="relative w-full mb-3">
-                        <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2" for="grid-password">Mật
-                            khẩu</label><input type="password"
-                                               class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                                               placeholder="Password" [(ngModel)]="password"
-                                               [ngModelOptions]="{standalone: true}">
-                    </div>
-                    <div>
-                        <label class="inline-flex items-center cursor-pointer"><input id="customCheckLogin"
-                                                                                      type="checkbox"
-                                                                                      class="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
-                                                                                      [checked]="rememberMe"
-                                                                                      (change)="rememberMe = !rememberMe"><span
-                                class="ml-2 text-sm font-semibold text-blueGray-600">Nhớ mật khẩu</span></label>
-                    </div>
-                    <div class="text-center mt-6">
-                        <button class="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                                type="button" (click)="login()"> Đăng nhập
-                        </button>
-                    </div>
-                </form>
-            </div>
+          </div>
         </div>
+      </div>
+      <div class="hidden md:block md:w-1/2 rounded-r-lg"
+           style="background: url('assets/images/bg_1.jpg'); background-size: cover; background-position: center center;"></div>
     </div>
-    <footer class="relative pt-8 pb-6 mt-2">
-        <div class="container mx-auto px-2">
-            <div class="flex flex-wrap items-center md:justify-between justify-center">
-                <div class="w-full md:w-6/12 px-4 mx-auto text-center">
-                    <div class="text-sm text-blueGray-500 font-semibold py-1">
-                        Made with <a href="https://www.creative-tim.com/product/notus-js"
-                                     class="text-blueGray-500 hover:text-gray-800" target="_blank">Notus JS</a> by <a
-                            href="https://www.creative-tim.com" class="text-blueGray-500 hover:text-blueGray-800"
-                            target="_blank"> Creative Tim</a>.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-</section>
+  </div>
+</div>

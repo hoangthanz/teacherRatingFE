@@ -8,26 +8,28 @@ import {ApiService} from "../shared/services/api.service";
 import {SharedModule} from "../shared/shared.module";
 import {SelfAssessmentListComponent} from "./pages/self-assessment-list/self-assessment-list.component";
 import {
-    ViewSeflAssessmentComponent
+  ViewSeflAssessmentComponent
 } from "./pages/self-assessment-list/components/view-sefl-assessment/view-sefl-assessment.component";
 import {UserManagementComponent} from "./pages/user-management/user-management.component";
+import {TeacherGroupComponent} from "./pages/teacher-group/teacher-group.component";
 
 
 @NgModule({
-    declarations: [
-        AdminComponent,
-        SelfAssessmentComponent,
-        SelfAssessmentListComponent,
-        ViewSeflAssessmentComponent,
-        UserManagementComponent
-    ],
-    imports: [
-        CommonModule,
-        FormsModule,
-        AdminRoutingModule,
-        SharedModule
-    ],
-    providers: [ApiService],
+  declarations: [
+    AdminComponent,
+    SelfAssessmentComponent,
+    SelfAssessmentListComponent,
+    ViewSeflAssessmentComponent,
+    UserManagementComponent,
+    TeacherGroupComponent
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    AdminRoutingModule,
+    SharedModule
+  ],
+  providers: [ApiService],
 })
 export class AdminModule {
 }

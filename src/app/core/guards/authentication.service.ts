@@ -28,8 +28,11 @@ export class AuthenticationService {
     ) {
     }
 
-    public getToken() {
-        return sessionStorage.getItem('access_token');
+    public getToken(): string {
+        const token = sessionStorage.getItem('access_token');
+        if(token === '' || token == null)
+          return "";
+        return token;
     }
 
     public convertObjectToString = (object: any) => JSON.stringify(object);

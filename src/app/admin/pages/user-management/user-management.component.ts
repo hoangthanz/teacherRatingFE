@@ -5,104 +5,161 @@ import {User} from "../../../core/models/user";
 import {ResultRespond} from "../../../core/enums/result-respond";
 import {UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import {NzFormTooltipIcon} from "ng-zorro-antd/form";
+import {Role} from "../../../core/models/role";
+import {BaseComponent} from "../../../shared/components/base/base.component";
+import {Router} from "@angular/router";
+import {School} from "../../../core/models/school";
 
 @Component({
-    selector: 'app-user-management',
-    templateUrl: './user-management.component.html',
-    styleUrls: ['./user-management.component.css']
+  selector: 'app-user-management',
+  templateUrl: './user-management.component.html',
+  styleUrls: ['./user-management.component.css']
 })
-export class UserManagementComponent implements OnInit {
+export class UserManagementComponent extends BaseComponent implements OnInit {
 
-    userList: User [] = [];
-    isVisible = false;
-    validateForm!: UntypedFormGroup;
-    captchaTooltipIcon: NzFormTooltipIcon = {
-        type: 'info-circle',
-        theme: 'twotone'
-    };
+  userList: User [] = [];
+  isVisible = false;
+  validateForm!: UntypedFormGroup;
+  captchaTooltipIcon: NzFormTooltipIcon = {
+    type: 'info-circle',
+    theme: 'twotone'
+  };
+  roles: Role[] = [];
+  schools : School[] = [];
+  currentSchool: any;
+  constructor(
+    public apiService: ApiService,
+    public override message: NzMessageService,
+    private fb: UntypedFormBuilder,
+    public override router: Router,
+  ) {
+    super(router, message);
+    this.getSchools();
 
-    constructor(
-        public apiService: ApiService,
-        public message: NzMessageService,
-        private fb: UntypedFormBuilder
-    ) {
+  }
+
+  ngOnInit(): void {
+    this.validateForm = this.fb.group({
+      userName: [null, [Validators.required]],
+      email: [null, [Validators.email, Validators.required]],
+      password: [null, [Validators.required]],
+      confirmPassword: [null, [Validators.required, this.confirmationValidator]],
+      displayName: [null, [Validators.required]],
+      phoneNumberPrefix: ['+84'],
+      phoneNumber: [null, [Validators.required]],
+    });
+  }
+
+  getAllUser() {
+    this.apiService.getAllUser().subscribe(res => {
+      if (res.result == ResultRespond.Success) {
+        this.userList = res.data;
+        for (let i = 0; i < this.userList.length; i++) {
+          this.userList[i].index = i + 1;
+        }
+      }
+    });
+  }
+
+  getUserBySchool(id: string){
+    this.apiService.getUserBySchool(id).subscribe(res => {
+      if (res.result == ResultRespond.Success) {
+        this.userList = res.data;
+        for (let i = 0; i < this.userList.length; i++) {
+          this.userList[i].index = i + 1;
+        }
+      }
+    });
+  }
+
+  showCreateUser(): void {
+    this.isVisible = true;
+  }
+
+  handleOk(): void {
+    this.isVisible = false;
+  }
+
+  handleCancel(): void {
+    this.isVisible = false;
+  }
+
+  submitForm(): void {
+    if (this.validateForm.valid) {
+      console.log('submit', this.validateForm.value);
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({onlySelf: true});
+        }
+      });
+    }
+  }
+
+  updateConfirmValidator(): void {
+    /** wait for refresh value */
+    Promise.resolve().then(() => this.validateForm.controls['confirmPassword'].updateValueAndValidity());
+  }
+
+  confirmationValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return {required: true};
+    } else if (control.value !== this.validateForm.controls["password"].value) {
+      return {confirm: true, error: true};
+    }
+    return {};
+  };
+
+  submit() {
+    this.apiService.postUser(this.validateForm.value).subscribe(res => {
+      if (res.result == ResultRespond.Success) {
+        this.message.create('success', 'Tạo tài khoản thành công');
         this.getAllUser();
-    }
-
-    getAllUser() {
-        this.apiService.getAllUser().subscribe(res => {
-            if (res.result == ResultRespond.Success) {
-                this.userList = res.data;
-                for (let i = 0; i < this.userList.length; i++) {
-                    this.userList[i].index = i + 1;
-                }
-            }
-        });
-    }
-
-    showCreateUser(): void {
-        this.isVisible = true;
-    }
-
-    handleOk(): void {
         this.isVisible = false;
-    }
+      } else {
+        this.message.create('error', 'Tạo tài khoản thất bại');
+      }
+    });
+  }
 
-    handleCancel(): void {
-        this.isVisible = false;
-    }
+  getRoles = () => {
+    this.apiService.getRoles().subscribe(r => {
+      if (r.result != ResultRespond.Success)
+        this.roles = [];
 
+      this.roles = r.data;
 
-    submitForm(): void {
-        if (this.validateForm.valid) {
-            console.log('submit', this.validateForm.value);
-        } else {
-            Object.values(this.validateForm.controls).forEach(control => {
-                if (control.invalid) {
-                    control.markAsDirty();
-                    control.updateValueAndValidity({onlySelf: true});
-                }
-            });
-        }
-    }
+    }, error => {
+    });
+  }
 
-    updateConfirmValidator(): void {
-        /** wait for refresh value */
-        Promise.resolve().then(() => this.validateForm.controls['checkPassword'].updateValueAndValidity());
-    }
+  removeUser(id: string | undefined) {
+    if(typeof(id) == 'undefined')
+      return;
 
-    confirmationValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
-        if (!control.value) {
-            return {required: true};
-        } else if (control.value !== this.validateForm.controls["password"].value) {
-            return {confirm: true, error: true};
-        }
-        return {};
-    };
+    this.apiService.removeUser(id).subscribe(r => {
+      if (r.result != ResultRespond.Success)
+        this.createMessage('error', 'Lỗi không cập nhật được!');
 
+      this.createMessage('success', 'Cập nhật thành công!');
+      this.getAllUser();
+    })
+  }
 
-    ngOnInit(): void {
-        this.validateForm = this.fb.group({
-            username: [null, [Validators.required]],
-            email: [null, [Validators.email, Validators.required]],
-            password: [null, [Validators.required]],
-            checkPassword: [null, [Validators.required, this.confirmationValidator]],
-            displayName: [null, [Validators.required]],
-            phoneNumberPrefix: ['+84'],
-            phoneNumber: [null, [Validators.required]],
-        });
-    }
+  getSchools(){
+    // call api get all school
 
-    submit() {
-        this.apiService.postUser(this.validateForm.value).subscribe(res => {
-            if (res.result == ResultRespond.Success) {
-                this.message.create('success', 'Tạo tài khoản thành công');
-                this.getAllUser();
-                this.isVisible = false;
-            } else {
-                this.message.create('error', 'Tạo tài khoản thất bại');
-            }
-        });
-    }
+    this.apiService.getAllSchool().subscribe(r => {
+      if (r.result != ResultRespond.Success)
+        return;
+
+      this.schools = r.data;
+      this.currentSchool = this.schools[0];
+      if(this.currentSchool != null){
+        this.getUserBySchool(this.currentSchool.id);
+      }
+    })
+  }
 }
 
