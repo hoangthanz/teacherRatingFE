@@ -49,6 +49,7 @@ export class AuthenticationService {
             localStorage.setItem('current_email', decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']);
             localStorage.setItem('current_user_id', decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']);
             localStorage.setItem('teacher_id', decodedToken['TeacherId']);
+            localStorage.setItem('school_id', decodedToken['SchoolId']);
 
             if(hasRemember) {
                 localStorage.setItem('username', username);

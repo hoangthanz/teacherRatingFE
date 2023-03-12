@@ -27,6 +27,7 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
   roles: Role[] = [];
   schools : School[] = [];
   currentSchool: any;
+
   constructor(
     public apiService: ApiService,
     public override message: NzMessageService,
@@ -112,13 +113,17 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
   };
 
   submit() {
-    this.apiService.postUser(this.validateForm.value).subscribe(res => {
+
+    let data = this.validateForm.value;
+    data.schoolId = this.currentSchool.id ?? '';
+
+    this.apiService.postUser(data).subscribe(res => {
       if (res.result == ResultRespond.Success) {
         this.message.create('success', 'Tạo tài khoản thành công');
         this.getAllUser();
         this.isVisible = false;
       } else {
-        this.message.create('error', 'Tạo tài khoản thất bại');
+        this.message.create('error', `${res.message}`);
       }
     });
   }
@@ -155,6 +160,16 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
         return;
 
       this.schools = r.data;
+      const schoolId = localStorage.getItem('school_id');
+
+      if(schoolId != null){
+        this.currentSchool = this.schools.find(s => s.id == schoolId);
+        if(this.currentSchool != null){
+          this.getUserBySchool(this.currentSchool.id);
+        }
+        return;
+      }
+
       this.currentSchool = this.schools[0];
       if(this.currentSchool != null){
         this.getUserBySchool(this.currentSchool.id);

@@ -70,6 +70,7 @@ export class ApiService {
       "name": createUser.displayName,
       "phoneNumber": createUser.phoneNumber,
       "roles": [],
+      "schoolId": createUser.schoolId,
     });
   }
 
@@ -88,6 +89,11 @@ export class ApiService {
 
   public postTeacherGroup(teacherGroup: TeacherGroup) {
     return this.http.post<ResponseApi<any>>(`${this.domain}/api/TeacherGroup/create`,
+      teacherGroup);
+  }
+
+  public putTeacherGroup(teacherGroup: TeacherGroup) {
+    return this.http.put<ResponseApi<any>>(`${this.domain}/api/TeacherGroup/update/${teacherGroup.id}`,
       teacherGroup);
   }
 

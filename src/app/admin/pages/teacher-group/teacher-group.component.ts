@@ -19,6 +19,7 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
   validateForm!: UntypedFormGroup;
   isCreate = true;
 
+  currentSchoolId = localStorage.getItem('school_id');
   constructor(
     public apiService: ApiService,
     public override message: NzMessageService,
@@ -32,6 +33,7 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
+      id: [null],
       name: [null, [Validators.required]],
     });
   }
@@ -47,7 +49,21 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
     }
   }
 
-  showModelTeacherGroup(): void {
+  showModelTeacherGroup(id = ''): void {
+    if(id != ''){
+      this.isCreate = false;
+      const teacherGroup = this.teacherGroups.find(x => x.id == id);
+      this.validateForm = this.fb.group({
+        id: [teacherGroup?.id],
+        name: [teacherGroup?.name, [Validators.required]],
+      });
+    }else{
+      this.isCreate = true;
+      this.validateForm = this.fb.group({
+        id: [null],
+        name: [null, [Validators.required]],
+      });
+    }
     this.isVisible = true;
   }
 
@@ -56,6 +72,12 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
       if (r.result != ResultRespond.Success) {
         this.teacherGroups = [];
         this.createMessage('error', 'Lỗi không lấy được dữ liệu');
+      }
+
+
+      // set index for teacherGroups
+      for (let i = 0; i < r.data.length; i++) {
+        r.data[i].index = i + 1;
       }
 
       this.teacherGroups = r.data;
@@ -89,13 +111,34 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
     var teacherGroup = new TeacherGroup();
     teacherGroup.id = "";
     teacherGroup.name = valueOfForm.name;
-
+    teacherGroup.schoolId = this.currentSchoolId ?? "";
     this.apiService.postTeacherGroup(teacherGroup).subscribe(
       r => {
         if(r.result != ResultRespond.Success){
+          this.createMessage('error', r.message);
           return;
         }
         this.createMessage('success', 'Tạo tổ thành công');
+        this.getTeacherGroups();
+      }
+    )
+  }
+
+  updateTeacherGroup() {
+    const valueOfForm = this.validateForm.value;
+
+    // call api create teacher-group
+
+    valueOfForm.schoolId = this.currentSchoolId ?? "";
+    this.apiService.putTeacherGroup(valueOfForm).subscribe(
+      r => {
+        if(r.result != ResultRespond.Success){
+          this.createMessage('error', r.message);
+          return;
+        }
+        this.createMessage('success', 'Cập nhật tổ thành công');
+        this.getTeacherGroups();
+        this.isVisible = false;
       }
     )
   }

@@ -16,4 +16,5 @@ export class SelfCriticism {
     userId!: string;
     assessmentCriterias!: AssessmentCriteria[];
     totalScore!: number;
+    schoolId!: string;
 }

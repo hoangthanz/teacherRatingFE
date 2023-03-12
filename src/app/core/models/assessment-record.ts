@@ -6,4 +6,5 @@ export class AssessmentRecord {
     competitionScorePeriod1!: number;
     competitionScorePeriod2!: number;
     competitionScoreAcademicYear!: number;
+    schoolId: string | any;
 }
