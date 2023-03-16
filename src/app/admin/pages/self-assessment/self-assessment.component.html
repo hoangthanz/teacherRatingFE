@@ -1,87 +1,149 @@
-<nz-card nzTitle="{{'TỰ ĐÁNH GIÁ'}}">
-  <p style="font-size:14px;color:rgba(0, 0, 0, 0.85);margin-bottom:16px;font-weight: 500;"> Khai báo:
-    <nz-select ngModel="{{currentMonth}}" style="margin: 0 8px 10px 0;  width: 120px; ">
-      <nz-option nzLabel="{{month.label}}" *ngFor="let month of months" nzValue="{{month.value}}"></nz-option>
+<nz-card nzTitle="{{ 'TỰ ĐÁNH GIÁ' }}">
+  <p
+    style="
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.85);
+      margin-bottom: 16px;
+      font-weight: 500;
+    "
+  >
+    Khai báo:
+    <nz-select
+      ngModel="{{ currentMonth }}"
+      style="margin: 0 8px 10px 0; width: 120px"
+    >
+      <nz-option
+        nzLabel="{{ month.label }}"
+        *ngFor="let month of months"
+        nzValue="{{ month.value }}"
+      ></nz-option>
     </nz-select>
   </p>
 
-
-  <ul nz-list [nzDataSource]="createdSelfCriticism.assessmentCriterias" nzBordered nzSize="large">
+  <ul
+    nz-list
+    [nzDataSource]="createdSelfCriticism.assessmentCriterias"
+    nzBordered
+    nzSize="large"
+  >
     <nz-list-header>
       <div class="flex">
         <div class="flex-1">Nội dung công việc đã làm</div>
         <div class="justify-end items-end">
-          <button nz-button nzType="primary" nzSize="large" nzShape="round" (click)="addAssessmentToList()">
+          <button
+            nz-button
+            nzType="primary"
+            nzSize="large"
+            nzShape="round"
+            (click)="addAssessmentToList()"
+          >
             + Khai báo
           </button>
         </div>
       </div>
     </nz-list-header>
 
-    <li nz-list-item *ngFor="let item of createdSelfCriticism.assessmentCriterias; let i = index">
-
+    <li
+      nz-list-item
+      *ngFor="
+        let item of createdSelfCriticism.assessmentCriterias;
+        let i = index
+      "
+    >
       <div class="flex flex-col flex-1 gap-4">
-
-        <div class="sm:grid sm:grid-cols-1 md:grid md:grid-cols-12 flex-1 md:gap-2">
+        <div
+          class="sm:grid sm:grid-cols-1 md:grid md:grid-cols-12 flex-1 md:gap-2"
+        >
           <div class="col-span-1 align-center">
-            <nz-tag nzColor="processing">{{i + 1}}</nz-tag>
+            <nz-tag nzColor="processing">{{ i + 1 }}</nz-tag>
           </div>
           <div class="col-span-10">
-            <div class="sm:grid sm:grid-cols-1 md:grid md:grid-cols-12 flex-1 md:gap-2">
+            <div
+              class="sm:grid sm:grid-cols-1 md:grid md:grid-cols-12 flex-1 md:gap-2"
+            >
               <div class="col-span-5">
-                <nz-select class="max-w-50%"
-                           [(ngModel)]="selectedAssessmentCriteriaGroup[i]"
-                           nzPlaceHolder="Chọn nhóm tiêu chí đánh giá"
-                           (ngModelChange)="selectChangeAssessmentCriteriaGroup($event, i)">
+                <nz-select
+                  class="max-w-50%"
+                  [(ngModel)]="selectedAssessmentCriteriaGroup[i]"
+                  nzPlaceHolder="Chọn nhóm tiêu chí đánh giá"
+                  (ngModelChange)="
+                    selectChangeAssessmentCriteriaGroup($event, i)
+                  "
+                >
                   >
-                  <nz-option *ngFor="let assessmentCriteriaGroup of assessmentCriteriaGroups"
-                             [nzValue]="assessmentCriteriaGroup"
-                             [nzLabel]="assessmentCriteriaGroup.name"></nz-option>
+                  <nz-option
+                    *ngFor="
+                      let assessmentCriteriaGroup of assessmentCriteriaGroups
+                    "
+                    [nzValue]="assessmentCriteriaGroup"
+                    [nzLabel]="assessmentCriteriaGroup.name"
+                  ></nz-option>
                 </nz-select>
               </div>
               <div class="col-span-5">
-                <nz-select class="max-w-50%" nzPlaceHolder="Chọn tiêu chí đánh giá"
-                           [(ngModel)]="selectedAssessmentCriteria[i]"
-                           (ngModelChange)="changeValueOfIndexAssessment($event, i)">
-                  <nz-option *ngFor="let assessment of assessmentCriteria1[i]"
-                             [nzValue]="assessment" [nzLabel]="assessment.name"></nz-option>
+                <nz-select
+                  class="max-w-50%"
+                  nzPlaceHolder="Chọn tiêu chí đánh giá"
+                  [(ngModel)]="selectedAssessmentCriteria[i]"
+                  (ngModelChange)="changeValueOfIndexAssessment($event, i)"
+                >
+                  <nz-option
+                    *ngFor="let assessment of assessmentCriteria1[i]"
+                    [nzValue]="assessment"
+                    [nzLabel]="assessment.name"
+                  ></nz-option>
                 </nz-select>
               </div>
               <div class="col-span-1">
-                <nz-input-number [(ngModel)]="selectedAssessmentCriteria[i].quantity" [nzMin]="1" [nzMax]="10" [nzStep]="1"></nz-input-number>
+                <nz-input-number
+                  [(ngModel)]="selectedAssessmentCriteria[i].quantity"
+                  [nzMin]="1"
+                  [nzMax]="10"
+                  [nzStep]="1"
+                ></nz-input-number>
               </div>
-              <div class="col-span-1">
-
-              </div>
+              <div class="col-span-1"></div>
             </div>
-            <div class="sm:grid sm:grid-cols-1 md:grid md:grid-cols-12 flex-1 md:gap-2 mt-2">
-
+            <div
+              class="sm:grid sm:grid-cols-1 md:grid md:grid-cols-12 flex-1 md:gap-2 mt-2"
+            >
               <div class="col-span-5">
-                <input nz-input placeholder="Mô tả thêm" [(ngModel)]="selectedAssessmentCriteria[i].description"/>
+                <input
+                  nz-input
+                  placeholder="Mô tả thêm"
+                  [(ngModel)]="selectedAssessmentCriteria[i].description"
+                />
               </div>
-              <div class="col-span-5">
-
-              </div>
+              <div class="col-span-5"></div>
             </div>
-
           </div>
           <div class="col-span-1">
-            <button nz-button nzType="default" nzDanger (click)="removeAssessment(i)">Xóa</button>
+            <button
+              nz-button
+              nzType="default"
+              nzDanger
+              (click)="removeAssessment(i)"
+            >
+              Xóa
+            </button>
           </div>
         </div>
-
       </div>
     </li>
-    <nz-list-footer>Tổng điểm: {{total}}</nz-list-footer>
+    <nz-list-footer>Tổng điểm: {{ total }}</nz-list-footer>
   </ul>
 
   <nz-divider nzType="vertical"></nz-divider>
 
   <div style="text-align: end">
-    <button nz-button nzType="dashed" nzSize="large" nzShape="round"
-            (click)="createSelfCriticism(createdSelfCriticism)">
+    <button
+      nz-button
+      nzType="dashed"
+      nzSize="large"
+      nzShape="round"
+      (click)="createSelfCriticism(createdSelfCriticism)"
+    >
       Lưu bản ghi
     </button>
   </div>
 </nz-card>
-

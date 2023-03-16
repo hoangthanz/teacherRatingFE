@@ -1,16 +1,14 @@
-import {Component} from '@angular/core';
-import {Router} from "@angular/router";
-import {JwtHelperService} from "@auth0/angular-jwt";
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css']
+  styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent {
-
-  constructor(private router: Router) {
-  }
+  constructor(private router: Router) {}
 
   goToSelfAssessment() {
     this.router.navigate(['admin/self-assessment']);

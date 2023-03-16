@@ -1,7 +1,7 @@
 export class AssessmentCriteria {
   id!: string;
   name!: string;
-  description!: string
+  description!: string;
   deductScore!: number;
   isDeduct!: boolean;
   value!: number;

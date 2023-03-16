@@ -1,35 +1,56 @@
-<nz-card nzTitle="{{'QUẢN TRỊ NGƯỜI DÙNG'}}">
+<nz-card nzTitle="{{ 'QUẢN TRỊ NGƯỜI DÙNG' }}">
   <div class="w-full flex">
     <div class="basis-1/2">
-      <p style="font-size:14px;color:rgba(0, 0, 0, 0.85);margin-bottom:16px;font-weight: 500;" class="flex">
+      <p
+        style="
+          font-size: 14px;
+          color: rgba(0, 0, 0, 0.85);
+          margin-bottom: 16px;
+          font-weight: 500;
+        "
+        class="flex"
+      >
         Thông tin người dùng
       </p>
-
     </div>
     <div class="basis-1/2 text-right">
-      <button nz-button nzType="primary" class="text-right flex-1" (click)="showCreateUser()">Thêm</button>
+      <button
+        nz-button
+        nzType="primary"
+        class="text-right flex-1"
+        (click)="showCreateUser()"
+      >
+        Thêm
+      </button>
     </div>
   </div>
 
   <div class="block sm:hidden">
     <div class="mt-2 space-y-2">
-      <div class="flex flex-col sm:justify-center sm:items-center max-w-xs mx-auto"
-           *ngFor="let data of userListTable.data; let i = index">
+      <div
+        class="flex flex-col sm:justify-center sm:items-center max-w-xs mx-auto"
+        *ngFor="let data of userListTable.data; let i = index"
+      >
         <div class="py-2 px-3 bg-gray-200 rounded-md">
-          <div class="font-medium text-gray-900"> STT: {{ data?.index}}</div>
-          <div class="text-sm text-gray-500"> Tài khoản: {{ data?.userName }}</div>
-          <div class="text-sm text-gray-500">Hiển thị: {{ data?.displayName }}</div>
+          <div class="font-medium text-gray-900">STT: {{ data?.index }}</div>
+          <div class="text-sm text-gray-500">
+            Tài khoản: {{ data?.userName }}
+          </div>
+          <div class="text-sm text-gray-500">
+            Hiển thị: {{ data?.displayName }}
+          </div>
           <div class="text-sm text-gray-500">Email: {{ data?.email }}</div>
           <div class="text-sm text-gray-500">SĐT: {{ data?.phoneNumber }}</div>
           <div class="text-sm text-gray-500">
-            <button nz-button nzType="primary" nzShape="round"
-            >Sửa
-            </button>
-            <button nz-button nzType="dashed" nzShape="round"
-            >Xem
-            </button>
-            <button nz-button nzType="link" nzShape="round" (click)="removeUser(data?.id)"
-            >Xóa
+            <button nz-button nzType="primary" nzShape="round">Sửa</button>
+            <button nz-button nzType="dashed" nzShape="round">Xem</button>
+            <button
+              nz-button
+              nzType="link"
+              nzShape="round"
+              (click)="removeUser(data?.id)"
+            >
+              Xóa
             </button>
           </div>
         </div>
@@ -37,76 +58,102 @@
     </div>
   </div>
   <div class="hidden sm:block">
-    <nz-table #userListTable [nzData]="userList" nzTableLayout="fixed" class="w-full flex flex-col sm:flex-row">
+    <nz-table
+      #userListTable
+      [nzData]="userList"
+      nzTableLayout="fixed"
+      class="w-full flex flex-col sm:flex-row"
+    >
       <thead>
-      <tr>
-        <th>STT</th>
-        <th>Tên tài khoản</th>
-        <th>Tên hiển thị</th>
-        <th>Email</th>
-        <th>Sđt</th>
-        <th>Trạng thái</th>
-        <th>Thời gian tạo</th>
-        <th></th>
-      </tr>
+        <tr>
+          <th>STT</th>
+          <th>Tên tài khoản</th>
+          <th>Tên hiển thị</th>
+          <th>Email</th>
+          <th>Sđt</th>
+          <th>Trạng thái</th>
+          <th>Thời gian tạo</th>
+          <th></th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let data of userListTable.data; let i = index">
-        <td>{{ data?.index }}</td>
-        <td>{{ data?.userName }}</td>
-        <td>{{ data?.displayName }}</td>
-        <td>{{ data?.email }}</td>
-        <td>{{ data?.phoneNumber }}</td>
+        <tr *ngFor="let data of userListTable.data; let i = index">
+          <td>{{ data?.index }}</td>
+          <td>{{ data?.userName }}</td>
+          <td>{{ data?.displayName }}</td>
+          <td>{{ data?.email }}</td>
+          <td>{{ data?.phoneNumber }}</td>
 
-        <td>
-          <nz-tag [nzColor]="'magenta'" *ngIf="data?.isActive == false"
-          >Chưa hoạt động
-          </nz-tag
-          >
-          <nz-tag [nzColor]="'blue'" *ngIf="data?.isActive == true"
-          >Hoạt động
-          </nz-tag
-          >
-        </td>
-        <td>{{ data?.createdDate | date: 'dd/MM/yyyy hh:mm a' }}</td>
-        <td>
-          <button nz-button nzType="primary" nzShape="round"
-          >Sửa
-          </button>
-          <button nz-button nzType="dashed" nzShape="round"
-          >Xem
-          </button>
-          <button nz-button nzType="link" nzShape="round" (click)="removeUser(data?.id)"
-          >Xóa
-          </button>
-        </td>
-      </tr>
+          <td>
+            <nz-tag [nzColor]="'magenta'" *ngIf="data?.isActive == false"
+              >Chưa hoạt động
+            </nz-tag>
+            <nz-tag [nzColor]="'blue'" *ngIf="data?.isActive == true"
+              >Hoạt động
+            </nz-tag>
+          </td>
+          <td>{{ data?.createdDate | date : 'dd/MM/yyyy hh:mm a' }}</td>
+          <td>
+            <button nz-button nzType="primary" nzShape="round">Sửa</button>
+            <button nz-button nzType="dashed" nzShape="round">Xem</button>
+            <button
+              nz-button
+              nzType="link"
+              nzShape="round"
+              (click)="removeUser(data?.id)"
+            >
+              Xóa
+            </button>
+          </td>
+        </tr>
       </tbody>
     </nz-table>
   </div>
-
-
 </nz-card>
 
-<nz-modal [(nzVisible)]="isVisible" nzTitle="Tạo người dùng" [nzFooter]="null" centered (nzOnOk)="showCreateUser()"
-          (nzOnCancel)="handleCancel()">
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Tạo người dùng"
+  [nzFooter]="null"
+  centered
+  (nzOnOk)="showCreateUser()"
+  (nzOnCancel)="handleCancel()"
+>
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userName">Tên tài khoản</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Tên tài khoản không để trống!">
-          <input nz-input formControlName="userName" id="userName"/>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userName"
+          >Tên tài khoản</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Tên tài khoản không để trống!"
+        >
+          <input nz-input formControlName="userName" id="userName" />
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Email không được trống!">
-          <input nz-input formControlName="email" id="email"/>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email"
+          >E-mail</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Email không được trống!"
+        >
+          <input nz-input formControlName="email" id="email" />
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>Mật khẩu</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Yêu cầu nhập mật khẩu!">
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired
+          >Mật khẩu</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Yêu cầu nhập mật khẩu!"
+        >
           <input
             nz-input
             type="password"
@@ -117,11 +164,19 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="confirmPassword" nzRequired>Xác nhận mật khẩu</nz-form-label>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="confirmPassword" nzRequired
+          >Xác nhận mật khẩu</nz-form-label
+        >
         <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
-          <input nz-input type="password" formControlName="confirmPassword" id="confirmPassword"/>
+          <input
+            nz-input
+            type="password"
+            formControlName="confirmPassword"
+            id="confirmPassword"
+          />
           <ng-template #errorTpl let-control>
-            <ng-container *ngIf="control.hasError('required')">Yêu cầu nhập lại mật khẩu xác nhận
+            <ng-container *ngIf="control.hasError('required')"
+              >Yêu cầu nhập lại mật khẩu xác nhận
             </ng-container>
             <ng-container *ngIf="control.hasError('confirm')">
               Mật khẩu xác nhận không khớp
@@ -139,12 +194,18 @@
         >
           <span>Tên hiển thị</span>
         </nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Yêu cầu nhập tên hiển thị!">
-          <input nz-input id="displayName" formControlName="displayName"/>
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Yêu cầu nhập tên hiển thị!"
+        >
+          <input nz-input id="displayName" formControlName="displayName" />
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired>Số điện thoại</nz-form-label>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired
+          >Số điện thoại</nz-form-label
+        >
         <nz-form-control
           [nzSm]="14"
           [nzXs]="24"
@@ -153,24 +214,26 @@
         >
           <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
             <ng-template #addOnBeforeTemplate>
-              <nz-select formControlName="phoneNumberPrefix" class="phone-select">
+              <nz-select
+                formControlName="phoneNumberPrefix"
+                class="phone-select"
+              >
                 <nz-option nzLabel="+84" nzValue="+84"></nz-option>
                 <nz-option nzLabel="+87" nzValue="+87"></nz-option>
               </nz-select>
             </ng-template>
-            <input formControlName="phoneNumber" id="'phoneNumber'" nz-input/>
+            <input formControlName="phoneNumber" id="'phoneNumber'" nz-input />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item nz-row class="register-area">
         <nz-form-control [nzSpan]="14" [nzOffset]="6" class="text-right">
-          <button nz-button nzType="primary" (click)="submit()">Xác nhận</button>
+          <button nz-button nzType="primary" (click)="submit()">
+            Xác nhận
+          </button>
         </nz-form-control>
-
       </nz-form-item>
     </form>
   </ng-container>
 </nz-modal>
-
-

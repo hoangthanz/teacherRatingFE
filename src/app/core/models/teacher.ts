@@ -1,4 +1,4 @@
-import {AssessmentRecord} from "./assessment-record";
+import { AssessmentRecord } from './assessment-record';
 
 export class Teacher {
   id!: string;

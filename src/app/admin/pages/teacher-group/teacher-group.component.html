@@ -1,34 +1,53 @@
-<nz-card nzTitle="{{'PHÂN TỔ GIÁO VIÊN'}}">
+<nz-card nzTitle="{{ 'PHÂN TỔ GIÁO VIÊN' }}">
   <div class="w-full flex">
     <div class="basis-1/2">
-      <p style="font-size:14px;color:rgba(0, 0, 0, 0.85);margin-bottom:16px;font-weight: 500;" class="flex">
+      <p
+        style="
+          font-size: 14px;
+          color: rgba(0, 0, 0, 0.85);
+          margin-bottom: 16px;
+          font-weight: 500;
+        "
+        class="flex"
+      >
         Thông tin giáo viên trong các tổ
       </p>
-
     </div>
     <div class="basis-1/2 text-right">
-      <button nz-button nzType="primary" class="text-right flex-1" (click)="showModelTeacherGroup()">Thêm</button>
+      <button
+        nz-button
+        nzType="primary"
+        class="text-right flex-1"
+        (click)="showModelTeacherGroup()"
+      >
+        Thêm
+      </button>
     </div>
   </div>
 
   <div class="block sm:hidden">
     <div class="mt-2 space-y-2">
-      <div class="flex flex-col sm:justify-center sm:items-center max-w-xs mx-auto"
-           *ngFor="let data of teacherGroupListTable.data; let i = index">
+      <div
+        class="flex flex-col sm:justify-center sm:items-center max-w-xs mx-auto"
+        *ngFor="let data of teacherGroupListTable.data; let i = index"
+      >
         <div class="py-2 px-3 bg-gray-200 rounded-md">
-          <div class="font-medium text-gray-900"> STT: {{ data?.index}}</div>
+          <div class="font-medium text-gray-900">STT: {{ data?.index }}</div>
           <div class="text-sm text-gray-500">Tên tổ: {{ data?.name }}</div>
-          <div class="text-sm text-gray-500">Thành viên: {{ data?.totalMember }}</div>
+          <div class="text-sm text-gray-500">
+            Thành viên: {{ data?.totalMember }}
+          </div>
 
           <div class="text-sm text-gray-500">
-            <button nz-button nzType="primary" nzShape="round"
-            >Sửa
-            </button>
-            <button nz-button nzType="dashed" nzShape="round"
-            >Xem
-            </button>
-            <button nz-button nzType="link" nzShape="round" (click)="removerTeacherGroup(data?.id)"
-            >Xóa
+            <button nz-button nzType="primary" nzShape="round">Sửa</button>
+            <button nz-button nzType="dashed" nzShape="round">Xem</button>
+            <button
+              nz-button
+              nzType="link"
+              nzShape="round"
+              (click)="removerTeacherGroup(data?.id)"
+            >
+              Xóa
             </button>
           </div>
         </div>
@@ -37,62 +56,87 @@
   </div>
 
   <div class="hidden sm:block">
-    <nz-table #teacherGroupListTable [nzData]="teacherGroups" nzTableLayout="fixed"
-              class="w-full flex flex-col sm:flex-row">
+    <nz-table
+      #teacherGroupListTable
+      [nzData]="teacherGroups"
+      nzTableLayout="fixed"
+      class="w-full flex flex-col sm:flex-row"
+    >
       <thead>
-      <tr>
-        <th>STT</th>
-        <th>Tên tổ</th>
-        <th>Thành viên</th>
-        <th></th>
-      </tr>
+        <tr>
+          <th>STT</th>
+          <th>Tên tổ</th>
+          <th>Thành viên</th>
+          <th></th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let data of teacherGroupListTable.data; let i = index">
-        <td>{{ data?.index }}</td>
-        <td>{{ data?.name }}</td>
-        <td>{{ data?.totalMember }}</td>
-        <td>
-          <button nz-button nzType="primary" nzShape="round" (click)="showModelTeacherGroup(data?.id)"
-          >Sửa
-          </button>
-          <button nz-button nzType="dashed" nzShape="round"
-          >Xem
-          </button>
-          <button nz-button nzType="link" nzShape="round" (click)="removerTeacherGroup(data?.id)"
-          >Xóa
-          </button>
-        </td>
-      </tr>
+        <tr *ngFor="let data of teacherGroupListTable.data; let i = index">
+          <td>{{ data?.index }}</td>
+          <td>{{ data?.name }}</td>
+          <td>{{ data?.totalMember }}</td>
+          <td>
+            <button
+              nz-button
+              nzType="primary"
+              nzShape="round"
+              (click)="showModelTeacherGroup(data?.id)"
+            >
+              Sửa
+            </button>
+            <button nz-button nzType="dashed" nzShape="round">Xem</button>
+            <button
+              nz-button
+              nzType="link"
+              nzShape="round"
+              (click)="removerTeacherGroup(data?.id)"
+            >
+              Xóa
+            </button>
+          </td>
+        </tr>
       </tbody>
     </nz-table>
   </div>
 
-<!--  {{teacherGroups | json}}-->
+  <!--  {{teacherGroups | json}}-->
 </nz-card>
 
-<nz-modal [(nzVisible)]="isVisible" nzTitle="{{(isCreate == true ? 'Tạo tổ' : 'Cập nhật tổ')}}" [nzFooter]="null"
-          centered
-          (nzOnCancel)="handleCancel()">
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="{{ isCreate == true ? 'Tạo tổ' : 'Cập nhật tổ' }}"
+  [nzFooter]="null"
+  centered
+  (nzOnCancel)="handleCancel()"
+>
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="name">Tên tổ</nz-form-label>
-        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Tên tổ không để trống!">
-          <input nz-input formControlName="name" id="name"/>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="name"
+          >Tên tổ</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Tên tổ không để trống!"
+        >
+          <input nz-input formControlName="name" id="name" />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item nz-row class="register-area">
         <nz-form-control [nzSpan]="14" [nzOffset]="6" class="text-right">
-          <button nz-button nzType="primary" (click)=" isCreate == true ? createTeacherGroup() : updateTeacherGroup()">
+          <button
+            nz-button
+            nzType="primary"
+            (click)="
+              isCreate == true ? createTeacherGroup() : updateTeacherGroup()
+            "
+          >
             Xác nhận
           </button>
         </nz-form-control>
-
       </nz-form-item>
     </form>
   </ng-container>
 </nz-modal>
-
-

@@ -1,2 +1,1 @@
-export class UserInfor {
-}
+export class UserInfor {}

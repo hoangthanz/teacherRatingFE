@@ -1,95 +1,134 @@
-<nz-card nzTitle="{{'DANH SÁCH ĐÃ KHAI BÁO'}}">
-  <p style="font-size:14px;color:rgba(0, 0, 0, 0.85);margin-bottom:16px;font-weight: 500;"> Các bản ghi do người dùng
-    đã tạo</p>
+<nz-card nzTitle="{{ 'DANH SÁCH ĐÃ KHAI BÁO' }}">
+  <p
+    style="
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.85);
+      margin-bottom: 16px;
+      font-weight: 500;
+    "
+  >
+    Các bản ghi do người dùng đã tạo
+  </p>
 
-
-  <nz-table #seflAssessmentListTable [nzData]="seflAssessmentList" nzTableLayout="fixed">
+  <nz-table
+    #seflAssessmentListTable
+    [nzData]="seflAssessmentList"
+    nzTableLayout="fixed"
+  >
     <thead>
-    <tr>
-      <th>STT</th>
-      <th>
-        Tháng/Năm
-      </th>
-      <th>Điểm</th>
-      <th>Trạng thái</th>
-      <th>Thời gian tạo</th>
-      <th></th>
-    </tr>
+      <tr>
+        <th>STT</th>
+        <th>Tháng/Năm</th>
+        <th>Điểm</th>
+        <th>Trạng thái</th>
+        <th>Thời gian tạo</th>
+        <th></th>
+      </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let data of seflAssessmentListTable.data; let i = index">
-      <td>{{ data?.index }}</td>
-      <td>{{ data?.month + '/' + data?.year }}</td>
-      <td>{{ data?.totalScore }}</td>
+      <tr *ngFor="let data of seflAssessmentListTable.data; let i = index">
+        <td>{{ data?.index }}</td>
+        <td>{{ data?.month + '/' + data?.year }}</td>
+        <td>{{ data?.totalScore }}</td>
 
-      <td>
-        <nz-tag [nzColor]="'magenta'" *ngIf="data?.isSubmitted == false">Bản nháp</nz-tag>
-        <nz-tag [nzColor]="'blue'" *ngIf="data?.isSubmitted == true">Đã nộp</nz-tag>
-      </td>
-      <td>{{ data?.createdDate | date: 'dd/MM/yyyy hh:mm a'}}</td>
-      <td>
-        <button nz-button nzType="primary" nzShape="round"
-                (click)="updateSelfAssessment(data, !data.isSubmitted)">{{data.isSubmitted ? 'Thu hồi' : 'Nộp'}}
-        </button>
-        <button nz-button nzType="dashed" nzShape="round"
-                (click)="showModal(i)">Xem
-        </button>
-      </td>
-
-    </tr>
+        <td>
+          <nz-tag [nzColor]="'magenta'" *ngIf="data?.isSubmitted == false"
+            >Bản nháp</nz-tag
+          >
+          <nz-tag [nzColor]="'blue'" *ngIf="data?.isSubmitted == true"
+            >Đã nộp</nz-tag
+          >
+        </td>
+        <td>{{ data?.createdDate | date : 'dd/MM/yyyy hh:mm a' }}</td>
+        <td>
+          <button
+            nz-button
+            nzType="primary"
+            nzShape="round"
+            (click)="updateSelfAssessment(data, !data.isSubmitted)"
+          >
+            {{ data.isSubmitted ? 'Thu hồi' : 'Nộp' }}
+          </button>
+          <button
+            nz-button
+            nzType="dashed"
+            nzShape="round"
+            (click)="showModal(i)"
+          >
+            Xem
+          </button>
+        </td>
+      </tr>
     </tbody>
   </nz-table>
 
-  <nz-modal [(nzVisible)]="isVisible" nzTitle="Thông tin chi tiết" (nzOnCancel)="handleCancel()"
-            (nzOnOk)="handleOk()">
+  <nz-modal
+    [(nzVisible)]="isVisible"
+    nzTitle="Thông tin chi tiết"
+    (nzOnCancel)="handleCancel()"
+    (nzOnOk)="handleOk()"
+  >
     <ng-container *nzModalContent>
       <div class="flex flex-row">
         <div class="basis-1/2 font-semibold">Thời gian:</div>
         <div class="basis-1/2 text-right">
-          {{'T' + viewOfSelfAssessment?.month + '/' + viewOfSelfAssessment?.year}}
+          {{
+            'T' + viewOfSelfAssessment?.month + '/' + viewOfSelfAssessment?.year
+          }}
         </div>
       </div>
       <div class="flex flex-row">
         <div class="basis-1/2 font-semibold">Người tạo:</div>
         <div class="basis-1/2 text-right">
-          {{viewOfSelfAssessment?.teacher?.name}}
+          {{ viewOfSelfAssessment?.teacher?.name }}
         </div>
       </div>
       <div class="flex flex-row">
         <div class="basis-1/2 font-semibold">Điểm:</div>
         <div class="basis-1/2 text-right">
-          {{viewOfSelfAssessment?.totalScore}}
+          {{ viewOfSelfAssessment?.totalScore }}
         </div>
       </div>
       <div class="flex flex-row">
         <div class="basis-1/2 font-semibold">Trạng thái:</div>
         <div class="basis-1/2 text-right">
-          <nz-tag [nzColor]="'magenta'" *ngIf="viewOfSelfAssessment?.isSubmitted == false">Bản nháp</nz-tag>
-          <nz-tag [nzColor]="'blue'" *ngIf="viewOfSelfAssessment?.isSubmitted == true">Đã nộp</nz-tag>
+          <nz-tag
+            [nzColor]="'magenta'"
+            *ngIf="viewOfSelfAssessment?.isSubmitted == false"
+            >Bản nháp</nz-tag
+          >
+          <nz-tag
+            [nzColor]="'blue'"
+            *ngIf="viewOfSelfAssessment?.isSubmitted == true"
+            >Đã nộp</nz-tag
+          >
         </div>
-
       </div>
       <div class="flex flex-row">
         <div class="basis-1/2 font-semibold">Thời gian tạo:</div>
         <div class="basis-1/2 text-right">
-          {{viewOfSelfAssessment.createdDate | date: 'dd/MM/yyyy hh:mm a'}}
+          {{ viewOfSelfAssessment.createdDate | date : 'dd/MM/yyyy hh:mm a' }}
         </div>
       </div>
       <p class="font-semibold">Danh sách khai công việc</p>
       <nz-divider></nz-divider>
       <nz-timeline>
-        <nz-timeline-item *ngFor="let item of viewOfSelfAssessment.assessmentCriterias">
-          {{item?.name}}
+        <nz-timeline-item
+          *ngFor="let item of viewOfSelfAssessment.assessmentCriterias"
+        >
+          {{ item?.name }}
 
           <div>
-            <p class="text-pink-600" *ngIf="item?.isDeduct == true"> - {{item?.value}} điểm</p>
-            <p class="text-green-600" *ngIf="item?.isDeduct == false">{{item?.value}} điểm</p>
+            <p class="text-pink-600" *ngIf="item?.isDeduct == true">
+              - {{ item?.value }} điểm
+            </p>
+            <p class="text-green-600" *ngIf="item?.isDeduct == false">
+              {{ item?.value }} điểm
+            </p>
           </div>
-          <div>Ghi chú: {{item?.description}}</div>
+          <div>Ghi chú: {{ item?.description }}</div>
         </nz-timeline-item>
       </nz-timeline>
     </ng-container>
   </nz-modal>
 </nz-card>
-
-
