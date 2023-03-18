@@ -37,4 +37,12 @@ export class AdminComponent {
   goToTeacherGroupPage() {
     this.router.navigate(['admin/teacher-group']);
   }
+
+  goToCriteriaGroupPage() {
+    this.router.navigate(['admin/criteria-group']);
+  }
+
+  goToCriteriaPage() {
+    this.router.navigate(['admin/criteria']);
+  }
 }

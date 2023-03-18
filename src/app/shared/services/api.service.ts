@@ -8,6 +8,8 @@ import { User } from '../../core/models/user';
 import { ɵFormGroupValue, ɵTypedOrUntyped } from '@angular/forms';
 import { Role } from '../../core/models/role';
 import { TeacherGroup } from '../../core/models/teacher-group';
+import { CriteriaGroup } from "../../core/models/criteria-group";
+import { Criteria } from "../../core/models/criteria";
 
 @Injectable({
   providedIn: 'root',
@@ -138,5 +140,63 @@ export class ApiService {
 
   public getAllSchool() {
     return this.http.get<ResponseApi<any>>(`${this.domain}/api/School/get-all`);
+  }
+
+  //nhom tieu chi
+
+  public getCriteriaGroups() {
+    return this.http.get<ResponseApi<CriteriaGroup[]>>(
+      `${this.domain}/api/CriteriaGroups`
+    );
+  }
+
+
+  public postCriteriaGroups(criteriaGroup: CriteriaGroup) {
+    return this.http.post<ResponseApi<any>>(
+      `${this.domain}/api/CriteriaGroups/create`,
+      criteriaGroup
+    );
+  }
+
+  public putCriteriaGroups(criteriaGroup: CriteriaGroup) {
+    return this.http.put<ResponseApi<any>>(
+      `${this.domain}/api/CriteriaGroups/update/${criteriaGroup.id}`,
+      criteriaGroup
+    );
+  }
+
+  public removeCriteriaGroup(id: string) {
+    return this.http.delete<ResponseApi<any>>(
+      `${this.domain}/api/CriteriaGroups/${id}`
+    );
+  }
+
+  // tieu chi
+
+  public getCriteria() {
+    return this.http.get<ResponseApi<Criteria[]>>(
+      `${this.domain}/api/Criterias`
+    );
+  }
+
+
+  public postCriteria(criteriaGroup: Criteria) {
+    return this.http.post<ResponseApi<any>>(
+      `${this.domain}/api/Criteria/create`,
+      criteriaGroup
+    );
+  }
+
+  public putCriterias(criteriaGroup: Criteria) {
+    return this.http.put<ResponseApi<any>>(
+      `${this.domain}/api/Criteria/update/${criteriaGroup.id}`,
+      criteriaGroup
+    );
+  }
+
+  public removeCriteria(id: string) {
+    return this.http.delete<ResponseApi<any>>(
+      `${this.domain}/api/Criteria/${id}`
+    );
   }
 }

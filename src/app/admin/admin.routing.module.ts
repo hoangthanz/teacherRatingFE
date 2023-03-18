@@ -5,6 +5,8 @@ import { SelfAssessmentComponent } from './pages/self-assessment/self-assessment
 import { SelfAssessmentListComponent } from './pages/self-assessment-list/self-assessment-list.component';
 import { UserManagementComponent } from './pages/user-management/user-management.component';
 import { TeacherGroupComponent } from './pages/teacher-group/teacher-group.component';
+import { CriteriaGroupComponent } from "./pages/criteria-group/criteria-group.component";
+import { CriteriaComponent } from "./pages/criteria/criteria.component";
 
 const routes: Routes = [
   {
@@ -15,6 +17,8 @@ const routes: Routes = [
       { path: 'self-assessment-list', component: SelfAssessmentListComponent },
       { path: 'user', component: UserManagementComponent },
       { path: 'teacher-group', component: TeacherGroupComponent },
+      { path: 'criteria-group', component: CriteriaGroupComponent },
+      { path: 'criteria', component: CriteriaComponent },
     ],
   },
 ];

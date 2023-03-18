@@ -1,4 +1,4 @@
-<nz-card nzTitle="{{ 'Quản lý nhóm tiêu chí' }}">
+<nz-card nzTitle="{{ 'Quản lý tiêu chí' }}">
   <div class="w-full flex mb-3">
     <div class="basis-1/2">
       <div>
@@ -15,7 +15,7 @@
         nz-button
         nzType="primary"
         class="text-right flex-1"
-        (click)="showModelCriteriaGroup()"
+        (click)="showModelCriteria()"
       >
         Thêm
       </button>
@@ -29,21 +29,21 @@
       >
         <div class="py-2 px-3 bg-gray-200 rounded-md">
           <div class="font-medium text-gray-900 py-1">STT: {{ i + 1 }}</div>
-          <div class="text-sm text-gray-500 py-1">Tên nhóm tiêu chí: {{ data?.name }}</div>
+          <div class="text-sm text-gray-500 py-1">Tên tiêu chí: {{ data?.name }}</div>
           <div class="text-sm text-gray-500 py-1">
             Ngày tạo: {{ data?.createdDate| date: "dd-MM-yyyy" }}
           </div>
 
           <div class="text-sm text-gray-500 py-1">
             <button nz-button nzType="primary" nzShape="round"
-                    (click)="showModelCriteriaGroup(data?.id)"
+                    (click)="showModelCriteria(data?.id)"
             >Sửa
             </button>
             <!--            <button nz-button nzType="dashed" nzShape="round">Xem</button>-->
             <a nz-button
                nzType="link"
                nzShape="round" nz-popconfirm nzPopconfirmTitle="Bạn chắc chắn xoá nhóm tiêu chí này ?"
-               (nzOnConfirm)="removeCriteriaGroup(data.id)">Xóa</a>
+               (nzOnConfirm)="removeCriteria(data.id)">Xóa</a>
           </div>
         </div>
       </div>
@@ -53,14 +53,14 @@
   <div class="hidden sm:block">
     <nz-table
       #listTable
-      [nzData]="criteriaGroups"
+      [nzData]="criteria"
       nzTableLayout="fixed"
       class="w-full flex flex-col sm:flex-row"
     >
       <thead>
       <tr>
         <th>STT</th>
-        <th>Tên nhóm tiêu chí</th>
+        <th>Tên tiêu chí</th>
         <th>Ngày tạo</th>
         <th>Ngày cập nhật</th>
         <th></th>
@@ -77,7 +77,7 @@
             nz-button
             nzType="primary"
             nzShape="round"
-            (click)="showModelCriteriaGroup(data?.id)"
+            (click)="showModelCriteria(data?.id)"
           >
             Sửa
           </button>
@@ -85,8 +85,8 @@
 
           <a nz-button
              nzType="link"
-             nzShape="round" nz-popconfirm nzPopconfirmTitle="Bạn chắc chắn xoá nhóm tiêu chí này ?"
-             (nzOnConfirm)="removeCriteriaGroup(data.id)">Xóa</a>
+             nzShape="round" nz-popconfirm nzPopconfirmTitle="Bạn chắc chắn xoá tiêu chí này ?"
+             (nzOnConfirm)="removeCriteria(data.id)">Xóa</a>
         </td>
       </tr>
       </tbody>
@@ -98,19 +98,27 @@
 
 <nz-modal
   [(nzVisible)]="isVisible"
-  nzTitle="{{ isCreate == true ? 'Tạo nhóm tiêu chí' : 'Cập nhật nhóm tiêu chí' }}"
+  nzTitle="{{ isCreate == true ? 'Tạo tiêu chí' : 'Cập nhật tiêu chí' }}"
   [nzFooter]="null"
   (nzOnCancel)="handleCancel()"
 >
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="validateForm"
-          (ngSubmit)="submitForm();isCreate == true ? postCriteriaGroups() : putCriteriaGroups()">
+          (ngSubmit)="submitForm();isCreate == true ? postCriterias() : putCriterias()">
       <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="name">Tên nhóm tiêu chí</nz-form-label>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="name">Tên tiêu chí</nz-form-label>
         <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Vui lòng nhập thông tin">
           <nz-input-group nzPrefixIcon="user">
             <input type="text" nz-input formControlName="name" id="name" placeholder="Tên nhóm tiêu chí" />
           </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="criteriaGroupId">Chọn nhóm tiêu chí</nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Vui lòng nhập thông tin">
+          <nz-select formControlName="criteriaGroupId">
+            <nz-option *ngFor="let data of criteriaGroups" nzValue="{{data?.id}}" nzLabel="{{data?.name}}"></nz-option>
+          </nz-select>
         </nz-form-control>
       </nz-form-item>
       <button nz-button class="float-end" [nzType]="'primary'">

@@ -11,6 +11,7 @@ import { ViewSeflAssessmentComponent } from './pages/self-assessment-list/compon
 import { UserManagementComponent } from './pages/user-management/user-management.component';
 import { TeacherGroupComponent } from './pages/teacher-group/teacher-group.component';
 import { CriteriaGroupComponent } from "./pages/criteria-group/criteria-group.component";
+import { CriteriaComponent } from "./pages/criteria/criteria.component";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { CriteriaGroupComponent } from "./pages/criteria-group/criteria-group.co
     ViewSeflAssessmentComponent,
     UserManagementComponent,
     TeacherGroupComponent,
-    CriteriaGroupComponent
+    CriteriaGroupComponent,
+    CriteriaComponent,
   ],
   imports: [CommonModule, FormsModule, AdminRoutingModule, SharedModule],
   providers: [ApiService],
