@@ -27,4 +27,5 @@ export class User {
   lockoutEnabled: boolean | undefined;
   accessFailedCount: number | undefined;
   schoolId: string | any;
+  isDeleted?: boolean;
 }

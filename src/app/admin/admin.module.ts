@@ -10,6 +10,7 @@ import { SelfAssessmentListComponent } from './pages/self-assessment-list/self-a
 import { ViewSeflAssessmentComponent } from './pages/self-assessment-list/components/view-sefl-assessment/view-sefl-assessment.component';
 import { UserManagementComponent } from './pages/user-management/user-management.component';
 import { TeacherGroupComponent } from './pages/teacher-group/teacher-group.component';
+import { CriteriaGroupComponent } from "./pages/criteria-group/criteria-group.component";
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { TeacherGroupComponent } from './pages/teacher-group/teacher-group.compo
     ViewSeflAssessmentComponent,
     UserManagementComponent,
     TeacherGroupComponent,
+    CriteriaGroupComponent
   ],
   imports: [CommonModule, FormsModule, AdminRoutingModule, SharedModule],
   providers: [ApiService],
