@@ -1,36 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../../shared/services/api.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { User } from '../../../core/models/user';
-import { ResultRespond } from '../../../core/enums/result-respond';
-import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
-import { NzFormTooltipIcon } from 'ng-zorro-antd/form';
-import { Role } from '../../../core/models/role';
-import { BaseComponent } from '../../../shared/components/base/base.component';
-import { Router } from '@angular/router';
-import { School } from '../../../core/models/school';
+import { Component, OnInit } from "@angular/core";
+import { ApiService } from "../../../shared/services/api.service";
+import { NzMessageService } from "ng-zorro-antd/message";
+import { User } from "../../../core/models/user";
+import { ResultRespond } from "../../../core/enums/result-respond";
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import { NzFormTooltipIcon } from "ng-zorro-antd/form";
+import { Role } from "../../../core/models/role";
+import { BaseComponent } from "../../../shared/components/base/base.component";
+import { Router } from "@angular/router";
+import { School } from "../../../core/models/school";
 
 @Component({
-  selector: 'app-user-management',
-  templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.css'],
+  selector: "app-user-management",
+  templateUrl: "./user-management.component.html",
+  styleUrls: ["./user-management.component.css"]
 })
 export class UserManagementComponent extends BaseComponent implements OnInit {
   userList: User[] = [];
   isVisible = false;
   validateForm!: UntypedFormGroup;
   captchaTooltipIcon: NzFormTooltipIcon = {
-    type: 'info-circle',
-    theme: 'twotone',
+    type: "info-circle",
+    theme: "twotone"
   };
   roles: Role[] = [];
   schools: School[] = [];
   currentSchool: any;
+  keySearch = "";
+  isCreate = true;
 
   constructor(
     public apiService: ApiService,
@@ -42,19 +39,14 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
     this.getSchools();
   }
 
+  search() {
+    // this.getCriteriaGroup();
+    // this.criteriaGroups = this.criteriaGroupsOld.filter((x) => x.name?.includes(this.keySearch));
+  }
+
   ngOnInit(): void {
-    this.validateForm = this.fb.group({
-      userName: [null, [Validators.required]],
-      email: [null, [Validators.email, Validators.required]],
-      password: [null, [Validators.required]],
-      confirmPassword: [
-        null,
-        [Validators.required, this.confirmationValidator],
-      ],
-      displayName: [null, [Validators.required]],
-      phoneNumberPrefix: ['+84'],
-      phoneNumber: [null, [Validators.required]],
-    });
+    this.showModalUser();
+    this.isVisible = false;
   }
 
   getAllUser() {
@@ -81,6 +73,7 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
 
   showCreateUser(): void {
     this.isVisible = true;
+    this.isCreate = true;
   }
 
   handleOk(): void {
@@ -123,18 +116,31 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
   };
 
   submit() {
-    let data = this.validateForm.value;
-    data.schoolId = this.currentSchool.id ?? '';
-
-    this.apiService.postUser(data).subscribe((res) => {
-      if (res.result == ResultRespond.Success) {
-        this.message.create('success', 'Tạo tài khoản thành công');
-        this.getAllUser();
-        this.isVisible = false;
-      } else {
-        this.message.create('error', `${res.message}`);
-      }
-    });
+    if (this.isCreate) {
+      let data = this.validateForm.value;
+      data.schoolId = this.currentSchool.id ?? "";
+      this.apiService.postUser(data).subscribe((res) => {
+        if (res.result == ResultRespond.Success) {
+          this.message.create("success", "Tạo tài khoản thành công");
+          this.getAllUser();
+          this.isVisible = false;
+        } else {
+          this.message.create("error", `${res.message}`);
+        }
+      });
+    } else {
+      let data = this.validateForm.value;
+      data.schoolId = this.currentSchool.id ?? "";
+      this.apiService.putUser(data).subscribe((res) => {
+        if (res.result == ResultRespond.Success) {
+          this.message.create("success", "Cập nhật tài khoản thành công");
+          this.getAllUser();
+          this.isVisible = false;
+        } else {
+          this.message.create("error", `${res.message}`);
+        }
+      });
+    }
   }
 
   getRoles = () => {
@@ -144,28 +150,61 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
 
         this.roles = r.data;
       },
-      () => {}
+      () => {
+      }
     );
   };
 
-  removeUser(id: string | undefined) {
-    if (typeof id == 'undefined') return;
+  showModalUser(id = ""): void {
+    const user = this.userList.find((x) => x.id == id);
+    if (id != "" && user) {
+      this.isCreate = false;
+      this.validateForm = this.fb.group({
+        userName: [user?.userName, [Validators.required]],
+        email: [user?.email, [Validators.email, Validators.required]],
+        password: [null, [Validators.required]],
+        confirmPassword: [
+          null,
+          [Validators.required, this.confirmationValidator]
+        ],
+        displayName: [user?.displayName, [Validators.required]],
+        phoneNumberPrefix: ["+84"],
+        phoneNumber: [user?.phoneNumber, [Validators.required]],
+        id: [id]
+      });
+    } else {
+      this.isCreate = true;
+      this.validateForm = this.fb.group({
+        userName: [null, [Validators.required]],
+        email: [null, [Validators.email, Validators.required]],
+        password: [null, [Validators.required]],
+        confirmPassword: [
+          null,
+          [Validators.required, this.confirmationValidator]
+        ],
+        displayName: [null, [Validators.required]],
+        phoneNumberPrefix: ["+84"],
+        phoneNumber: [null, [Validators.required]],
+        id: [null]
+      });
+    }
+    this.isVisible = true;
+  }
 
+  removeUser(id: string | undefined) {
+    if (typeof id == "undefined") return;
     this.apiService.removeUser(id).subscribe((r) => {
       if (r.result != ResultRespond.Success)
-        this.createMessage('error', 'Lỗi không cập nhật được!');
-
-      this.createMessage('success', 'Cập nhật thành công!');
+        this.createMessage("error", "Lỗi không cập nhật được!");
+      this.createMessage("success", "Cập nhật thành công!");
       this.getAllUser();
     });
   }
 
   getSchools() {
     // call api get all school
-
     this.apiService.getAllSchool().subscribe((r) => {
       if (r.result != ResultRespond.Success) return;
-
       this.schools = r.data;
       const schoolId = localStorage.getItem('school_id');
 

@@ -5,7 +5,6 @@ import { ResponseApi } from '../../core/models/response-api';
 import { AssessmentCriteriaGroup } from '../../core/models/assessment-criteria-group';
 import { SelfCriticism } from '../../core/models/self-criticism';
 import { User } from '../../core/models/user';
-import { ɵFormGroupValue, ɵTypedOrUntyped } from '@angular/forms';
 import { Role } from '../../core/models/role';
 import { TeacherGroup } from '../../core/models/teacher-group';
 import { CriteriaGroup } from "../../core/models/criteria-group";
@@ -100,6 +99,22 @@ export class ApiService {
     );
   }
 
+  public putUser(createUser: any) {
+    return this.http.post<ResponseApi<User>>(
+      `${this.domain}/api/User/update-user`,
+      {
+        userName: createUser.userName,
+        displayName: createUser.displayName,
+        email: createUser.email,
+        password: createUser.password,
+        confirmPassword: createUser.confirmPassword,
+        name: createUser.displayName,
+        phoneNumber: createUser.phoneNumber,
+        id: createUser.id,
+        schoolId: createUser.schoolId,
+      }
+    );
+  }
   public removeUser(id: string) {
     return this.http.delete<ResponseApi<any>>(
       `${this.domain}/api/User/remove-user/${id}`
