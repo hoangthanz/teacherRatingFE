@@ -7,6 +7,7 @@ import { UserManagementComponent } from './pages/user-management/user-management
 import { TeacherGroupComponent } from './pages/teacher-group/teacher-group.component';
 import { CriteriaGroupComponent } from "./pages/criteria-group/criteria-group.component";
 import { CriteriaComponent } from "./pages/criteria/criteria.component";
+import { TeacherComponent } from "./pages/teacher/teacher.component";
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
       { path: 'teacher-group', component: TeacherGroupComponent },
       { path: 'criteria-group', component: CriteriaGroupComponent },
       { path: 'criteria', component: CriteriaComponent },
+      { path: 'teacher', component: TeacherComponent },
     ],
   },
 ];

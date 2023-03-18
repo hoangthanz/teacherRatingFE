@@ -9,6 +9,7 @@ import { Role } from '../../core/models/role';
 import { TeacherGroup } from '../../core/models/teacher-group';
 import { CriteriaGroup } from "../../core/models/criteria-group";
 import { Criteria } from "../../core/models/criteria";
+import { Teacher } from "../../core/models/teacher";
 
 @Injectable({
   providedIn: 'root',
@@ -212,6 +213,35 @@ export class ApiService {
   public removeCriteria(id: string) {
     return this.http.delete<ResponseApi<any>>(
       `${this.domain}/api/Criteria/${id}`
+    );
+  }
+
+  // giao vien
+
+  public getTeacher() {
+    return this.http.get<ResponseApi<Teacher[]>>(
+      `${this.domain}/api/Teachers`
+    );
+  }
+
+
+  public postTeacher(model: Teacher) {
+    return this.http.post<ResponseApi<any>>(
+      `${this.domain}/api/Teacher/create`,
+      model
+    );
+  }
+
+  public putTeachers(model: Teacher) {
+    return this.http.put<ResponseApi<any>>(
+      `${this.domain}/api/Teacher/update/${model.id}`,
+      model
+    );
+  }
+
+  public removeTeacher(id: string) {
+    return this.http.delete<ResponseApi<any>>(
+      `${this.domain}/api/Teacher/${id}`
     );
   }
 }

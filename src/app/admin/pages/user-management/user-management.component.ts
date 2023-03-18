@@ -52,7 +52,7 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
   getAllUser() {
     this.apiService.getAllUser().subscribe((res) => {
       if (res.result == ResultRespond.Success) {
-        this.userList = res.data;
+        this.userList = res.data.filter((x) => x.isDeleted != true);
         for (let i = 0; i < this.userList.length; i++) {
           this.userList[i].index = i + 1;
         }

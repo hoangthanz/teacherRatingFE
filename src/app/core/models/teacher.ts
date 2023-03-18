@@ -1,13 +1,13 @@
 import { AssessmentRecord } from './assessment-record';
 
 export class Teacher {
-  id!: string;
-  description!: string;
-  name!: string;
-  phoneNumber!: string;
-  email!: string;
-  assessmentRecords: AssessmentRecord[] = [];
-  userId!: string;
-  user: any;
-  schoolId: string | any;
+  id?: string;
+  description?: string;
+  name?: string;
+  phoneNumber?: string;
+  email?: string;
+  assessmentRecords?: AssessmentRecord[] = [];
+  userId?: string;
+  user?: any;
+  schoolId?: string | any;
 }

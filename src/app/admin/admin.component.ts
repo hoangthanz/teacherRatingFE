@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { TeacherComponent } from "./pages/teacher/teacher.component";
 
 @Component({
   selector: 'app-admin',
@@ -44,5 +45,8 @@ export class AdminComponent {
 
   goToCriteriaPage() {
     this.router.navigate(['admin/criteria']);
+  }
+  goToTeacherPage() {
+    this.router.navigate(['admin/teacher']);
   }
 }
