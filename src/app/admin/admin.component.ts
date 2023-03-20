@@ -35,6 +35,10 @@ export class AdminComponent {
     this.router.navigate(['admin/user']);
   }
 
+  goToSchoolPage() {
+    this.router.navigate(['admin/school']);
+  }
+
   goToTeacherGroupPage() {
     this.router.navigate(['admin/teacher-group']);
   }

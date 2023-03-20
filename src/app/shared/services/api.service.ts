@@ -10,6 +10,7 @@ import { TeacherGroup } from '../../core/models/teacher-group';
 import { CriteriaGroup } from "../../core/models/criteria-group";
 import { Criteria } from "../../core/models/criteria";
 import { Teacher } from "../../core/models/teacher";
+import { RequestCreateSchoolModel } from 'src/app/core/models/request/request-create-school.model';
 
 @Injectable({
   providedIn: 'root',
@@ -244,4 +245,19 @@ export class ApiService {
       `${this.domain}/api/Teacher/${id}`
     );
   }
+
+  public createSchool(request: RequestCreateSchoolModel) {
+    return this.http.post<ResponseApi<any>>(`${this.domain}/api/School`,
+      request);
+  }
+
+  public updateSchool(id: string, request: RequestCreateSchoolModel) {
+    return this.http.put<ResponseApi<any>>(`${this.domain}/api/School/${id}`,
+      request);
+  }
+
+  public deleteSchool(id: string) {
+    return this.http.delete<ResponseApi<any>>(`${this.domain}/api/School/${id}`);
+  }
+
 }

@@ -8,6 +8,7 @@ import { TeacherGroupComponent } from './pages/teacher-group/teacher-group.compo
 import { CriteriaGroupComponent } from "./pages/criteria-group/criteria-group.component";
 import { CriteriaComponent } from "./pages/criteria/criteria.component";
 import { TeacherComponent } from "./pages/teacher/teacher.component";
+import {SchoolManagementComponent} from "./pages/school-management/school-management.component";
 
 const routes: Routes = [
   {
@@ -17,6 +18,7 @@ const routes: Routes = [
       { path: 'self-assessment', component: SelfAssessmentComponent },
       { path: 'self-assessment-list', component: SelfAssessmentListComponent },
       { path: 'user', component: UserManagementComponent },
+      { path: 'school', component: SchoolManagementComponent },
       { path: 'teacher-group', component: TeacherGroupComponent },
       { path: 'criteria-group', component: CriteriaGroupComponent },
       { path: 'criteria', component: CriteriaComponent },
