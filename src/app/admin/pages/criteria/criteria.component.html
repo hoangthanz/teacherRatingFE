@@ -30,9 +30,7 @@
         <div class="py-2 px-3 bg-gray-200 rounded-md">
           <div class="font-medium text-gray-900 py-1">STT: {{ i + 1 }}</div>
           <div class="text-sm text-gray-500 py-1">Tên tiêu chí: {{ data?.name }}</div>
-          <div class="text-sm text-gray-500 py-1">
-            Ngày tạo: {{ data?.createdDate| date: "dd-MM-yyyy" }}
-          </div>
+
 
           <div class="text-sm text-gray-500 py-1">
             <button nz-button nzType="primary" nzShape="round"
@@ -59,20 +57,22 @@
     >
       <thead>
       <tr>
-        <th>STT</th>
-        <th>Tên tiêu chí</th>
-        <th>Ngày tạo</th>
-        <th>Ngày cập nhật</th>
-        <th></th>
+        <th class="w-20">STT</th>
+        <th class="w-5/12">Tên tiêu chí</th>
+        <th class="w-1/12">Đơn vị</th>
+        <th class="w-2/12">Số lần vi phạm</th>
+        <th class="w-2/12">Giá trị</th>
+        <th class="w-2/12"></th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let data of listTable.data; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ data?.name }}</td>
-        <td>{{ data?.createdDate | date: "dd-MM-yyyy" }}</td>
-        <td>{{ data?.updatedDate | date: "dd-MM-yyyy" }}</td>
-        <td>
+        <td class="w-20">{{ i + 1 }}</td>
+        <td class="w-5/12">{{ data?.name }}</td>
+        <td class="w-1/12">{{ data?.unit }}</td>
+        <td class="w-2/12">{{ data?.quantity  }}</td>
+        <td class="w-2/12">{{ (data?.isDeduct ? "- " : "+ ") + data?.value}}</td>
+        <td class="w-2/12">
           <button
             nz-button
             nzType="primary"
@@ -114,11 +114,45 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="criteriaGroupId">Chọn nhóm tiêu chí</nz-form-label>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="assessmentCriteriaGroupId">Chọn nhóm tiêu chí
+        </nz-form-label>
         <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Vui lòng nhập thông tin">
-          <nz-select formControlName="criteriaGroupId">
+          <nz-select formControlName="assessmentCriteriaGroupId">
             <nz-option *ngFor="let data of criteriaGroups" nzValue="{{data?.id}}" nzLabel="{{data?.name}}"></nz-option>
           </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="unit">Đơn vị</nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Vui lòng nhập thông tin">
+          <nz-input-group nzPrefixIcon="user">
+            <input type="text" nz-input formControlName="unit" id="unit" placeholder="Nhập thông tin" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="quantity">Số lần vi phạm</nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Vui lòng nhập thông tin">
+          <nz-input-group nzPrefixIcon="user">
+            <input nz-input type="number" formControlName="quantity" id="quantity" placeholder="Nhập thông tin" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24">Tiêu chí</nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24">
+          <nz-radio-group formControlName="isDeduct">
+            <label nz-radio-button [nzValue]="false">Tăng</label>
+            <label nz-radio-button [nzValue]="true">Giảm</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="value">Giá trị</nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Vui lòng nhập thông tin">
+          <nz-input-group nzPrefixIcon="user">
+            <input nz-input type="number" formControlName="value" id="value" placeholder="Nhập thông tin" />
+          </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <button nz-button class="float-end" [nzType]="'primary'">

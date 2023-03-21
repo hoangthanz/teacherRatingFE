@@ -163,28 +163,27 @@ export class ApiService {
 
   public getCriteriaGroups() {
     return this.http.get<ResponseApi<CriteriaGroup[]>>(
-      `${this.domain}/api/CriteriaGroups`
+      `${this.domain}/api/AssessmentCriteriaGroup/get-all-assessment-criteria-group`
     );
   }
 
-
   public postCriteriaGroups(criteriaGroup: CriteriaGroup) {
     return this.http.post<ResponseApi<any>>(
-      `${this.domain}/api/CriteriaGroups/create`,
+      `${this.domain}/api/AssessmentCriteriaGroup/create-assessment-criteria-group`,
       criteriaGroup
     );
   }
 
   public putCriteriaGroups(criteriaGroup: CriteriaGroup) {
     return this.http.put<ResponseApi<any>>(
-      `${this.domain}/api/CriteriaGroups/update/${criteriaGroup.id}`,
+      `${this.domain}/api/AssessmentCriteriaGroup/update-assessment-criteria-group`,
       criteriaGroup
     );
   }
 
   public removeCriteriaGroup(id: string) {
     return this.http.delete<ResponseApi<any>>(
-      `${this.domain}/api/CriteriaGroups/${id}`
+      `${this.domain}/api/AssessmentCriteriaGroup/delete-assessment-criteria-group/${id}`
     );
   }
 
@@ -192,36 +191,36 @@ export class ApiService {
 
   public getCriteria() {
     return this.http.get<ResponseApi<Criteria[]>>(
-      `${this.domain}/api/Criterias`
+      `${this.domain}/api/AssessmentCriteriaGroup/get-all-assessment-criteria`
     );
   }
 
 
   public postCriteria(criteriaGroup: Criteria) {
     return this.http.post<ResponseApi<any>>(
-      `${this.domain}/api/Criteria/create`,
+      `${this.domain}/api/AssessmentCriteriaGroup/create-assessment-criteria`,
       criteriaGroup
     );
   }
 
   public putCriterias(criteriaGroup: Criteria) {
     return this.http.put<ResponseApi<any>>(
-      `${this.domain}/api/Criteria/update/${criteriaGroup.id}`,
+      `${this.domain}/api/AssessmentCriteriaGroup/update-assessment-criteria`,
       criteriaGroup
     );
   }
 
   public removeCriteria(id: string) {
     return this.http.delete<ResponseApi<any>>(
-      `${this.domain}/api/Criteria/${id}`
+      `${this.domain}/api/AssessmentCriteriaGroup/delete-assessment-criteria/${id}`
     );
   }
 
   // giao vien
 
-  public getTeacher() {
+  public getTeacher(schoolId: string) {
     return this.http.get<ResponseApi<Teacher[]>>(
-      `${this.domain}/api/Teachers`
+      `${this.domain}/api/Teacher/get-by-school/${schoolId}`
     );
   }
 

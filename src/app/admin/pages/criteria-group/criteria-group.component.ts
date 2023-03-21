@@ -6,6 +6,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms
 import { Router } from "@angular/router";
 import { ResultRespond } from "../../../core/enums/result-respond";
 import { CriteriaGroup } from "../../../core/models/criteria-group";
+import { School } from "../../../core/models/school";
 
 @Component({
   selector: "app-criteria-group",
@@ -19,6 +20,8 @@ export class CriteriaGroupComponent extends BaseComponent implements OnInit {
   validateForm!: UntypedFormGroup;
   isCreate = true;
   keySearch = "";
+  schools: School[] = [];
+  currentSchool: any;
 
   constructor(
     public apiService: ApiService,
@@ -27,6 +30,7 @@ export class CriteriaGroupComponent extends BaseComponent implements OnInit {
     public override router: Router
   ) {
     super(router, message);
+    this.getSchools();
     this.getCriteriaGroup();
   }
 
@@ -35,10 +39,21 @@ export class CriteriaGroupComponent extends BaseComponent implements OnInit {
     this.criteriaGroups = this.criteriaGroupsOld.filter((x) => x.name?.includes(this.keySearch));
   }
 
+  getSchools() {
+    // call api get all school
+    this.apiService.getAllSchool().subscribe((r) => {
+      if (r.result != ResultRespond.Success) return;
+      this.schools = r.data;
+      const schoolId = localStorage.getItem("school_id");
+      this.currentSchool = this.schools[0];
+    });
+  }
+
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       id: [""],
-      name: ["", [Validators.required]]
+      name: ["", [Validators.required]],
+      description: [""]
     });
   }
 
@@ -59,13 +74,17 @@ export class CriteriaGroupComponent extends BaseComponent implements OnInit {
       const criteriaGroup = this.criteriaGroups.find((x) => x.id == id);
       this.validateForm = this.fb.group({
         id: [criteriaGroup?.id],
-        name: [criteriaGroup?.name, [Validators.required]]
+        name: [criteriaGroup?.name, [Validators.required]],
+        description: [criteriaGroup?.description],
+        schoolId: [criteriaGroup?.schoolId]
       });
     } else {
       this.isCreate = true;
       this.validateForm = this.fb.group({
         id: [""],
-        name: ["", [Validators.required]]
+        name: ["", [Validators.required]],
+        description: [""],
+        schoolId: [this.currentSchool?.id]
       });
     }
     this.isVisible = true;

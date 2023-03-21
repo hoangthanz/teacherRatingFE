@@ -31,7 +31,7 @@
           <div class="font-medium text-gray-900 py-1">STT: {{ i + 1 }}</div>
           <div class="text-sm text-gray-500 py-1">Tên nhóm tiêu chí: {{ data?.name }}</div>
           <div class="text-sm text-gray-500 py-1">
-            Ngày tạo: {{ data?.createdDate| date: "dd-MM-yyyy" }}
+            Mô tả: {{ data?.description }}
           </div>
 
           <div class="text-sm text-gray-500 py-1">
@@ -59,20 +59,20 @@
     >
       <thead>
       <tr>
-        <th>STT</th>
-        <th>Tên nhóm tiêu chí</th>
-        <th>Ngày tạo</th>
-        <th>Ngày cập nhật</th>
-        <th></th>
+        <th class="w-20">STT</th>
+        <th class="w-7/12">Tên nhóm tiêu chí</th>
+        <th class="w-2/12">Ngày tạo</th>
+        <th class="w-1/12">Mô tả</th>
+        <th class="w-2/12"></th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let data of listTable.data; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ data?.name }}</td>
-        <td>{{ data?.createdDate | date: "dd-MM-yyyy" }}</td>
-        <td>{{ data?.updatedDate | date: "dd-MM-yyyy" }}</td>
-        <td>
+        <td class="w-20">{{ i + 1 }}</td>
+        <td class="w-7/12">{{ data?.name }}</td>
+        <td class="w-2/12">{{ data?.createdDate | date: "dd-MM-yyyy" }}</td>
+        <td class="w-1/12">{{ data?.description }}</td>
+        <td  class="w-2/12">
           <button
             nz-button
             nzType="primary"
@@ -110,6 +110,14 @@
         <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Vui lòng nhập thông tin">
           <nz-input-group nzPrefixIcon="user">
             <input type="text" nz-input formControlName="name" id="name" placeholder="Tên nhóm tiêu chí" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="description">Mô tả</nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Vui lòng nhập thông tin">
+          <nz-input-group nzPrefixIcon="user">
+            <input type="text" nz-input formControlName="description" id="description" placeholder="Nhập thông tin" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>

@@ -1,10 +1,12 @@
-import { CriteriaGroup } from "./criteria-group";
-
 export class Criteria {
   id?: string;
   name?: string;
-  createdDate?: string;
-  updatedDate?: string;
-  criteriaGroupId?: string;
-  criteriaGroup?: CriteriaGroup;
+  deductScore?: any;
+  isDeduct?: boolean;
+  value?: number;
+  unit?: string;
+  assessmentCriteriaGroupId?: string;
+  schoolId?: string;
+  quantity?: number;
+
 }

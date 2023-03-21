@@ -7,6 +7,7 @@ import { Router } from "@angular/router";
 import { ResultRespond } from "../../../core/enums/result-respond";
 import { Criteria } from "../../../core/models/criteria";
 import { CriteriaGroup } from "../../../core/models/criteria-group";
+import { School } from "../../../core/models/school";
 
 @Component({
   selector: "app-criteria",
@@ -22,6 +23,8 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
   keySearch = "";
   criteriaGroups: CriteriaGroup[] = [];
 
+  schools: School[] = [];
+  currentSchool: any;
   constructor(
     public apiService: ApiService,
     public override message: NzMessageService,
@@ -30,6 +33,7 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
   ) {
     super(router, message);
     this.getCriteria();
+    this.getSchools();
     this.getCriteriaGroup();
   }
 
@@ -42,10 +46,18 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
     this.validateForm = this.fb.group({
       id: [""],
       name: ["", [Validators.required]],
-      criteriaGroupId: [""]
+      assessmentCriteriaGroupId: [""]
     });
   }
-
+  getSchools() {
+    // call api get all school
+    this.apiService.getAllSchool().subscribe((r) => {
+      if (r.result != ResultRespond.Success) return;
+      this.schools = r.data;
+      const schoolId = localStorage.getItem("school_id");
+      this.currentSchool = this.schools[0];
+    });
+  }
   getCriteriaGroup() {
     this.apiService.getCriteriaGroups().subscribe((r) => {
       if (r.result != ResultRespond.Success) {
@@ -54,14 +66,6 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
       this.criteriaGroups = r.data;
     }, () => {
       this.criteriaGroups = [];
-      for (let i = 0; i < 10; i++) {
-        this.criteriaGroups.push({
-          id: i.toString(),
-          name: "Nhoms tiêu chí " + i.toString(),
-          createdDate: "2023-03-17T16:43:40.252371",
-          updatedDate: "2023-03-17T16:43:40.252371"
-        });
-      }
     });
   }
 
@@ -83,14 +87,24 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
       this.validateForm = this.fb.group({
         id: [criteriaGroup?.id],
         name: [criteriaGroup?.name, [Validators.required]],
-        criteriaGroupId: [criteriaGroup?.criteriaGroupId]
+        assessmentCriteriaGroupId: [criteriaGroup?.assessmentCriteriaGroupId],
+        schoolId: [criteriaGroup?.schoolId],
+        isDeduct: [criteriaGroup?.isDeduct],
+        value: [criteriaGroup?.value],
+        unit: [criteriaGroup?.unit],
+        quantity: [criteriaGroup?.quantity],
       });
     } else {
       this.isCreate = true;
       this.validateForm = this.fb.group({
         id: [""],
         name: ["", [Validators.required]],
-        criteriaGroupId: [this.criteriaGroups[0].id]
+        assessmentCriteriaGroupId: [this.criteriaGroups[0].id],
+        schoolId: [this.currentSchool.id],
+        isDeduct: [false],
+        value: [0],
+        unit: [""],
+        quantity: [0],
       });
     }
     this.isVisible = true;
@@ -104,18 +118,10 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
       }
 
       this.criteria = r.data;
+      this.criteriaOld = JSON.parse(JSON.stringify(this.criteria));
     }, () => {
       this.createMessage("error", "Lỗi không lấy được dữ liệu");
-      this.criteria = [];
-      for (let i = 0; i < 100; i++) {
-        this.criteria.push({
-          id: i.toString(),
-          name: "Tiêu chí " + i.toString(),
-          createdDate: "2023-03-17T16:43:40.252371",
-          updatedDate: "2023-03-17T16:43:40.252371"
-        });
-      }
-      this.criteriaOld = JSON.parse(JSON.stringify(this.criteria));
+
     });
   }
 
@@ -151,13 +157,7 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
       this.createMessage("success", "Tạo thành công");
       this.getCriteria();
     }, () => {
-      this.isVisible = false;
-      this.criteria.push({
-        id: Date().toString(),
-        name: valueOfForm.name,
-        createdDate: "2023-03-17T16:43:40.252371",
-        updatedDate: "2023-03-17T16:43:40.252371"
-      });
+
     });
   }
 
@@ -173,14 +173,6 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
       this.createMessage("success", "Cập nhật thành công");
       this.getCriteria();
     }, () => {
-      this.isVisible = false;
-      this.criteria = this.criteria.map(x => {
-        if (x.id == valueOfForm.id) {
-          x.name = valueOfForm.name;
-          x.criteriaGroupId = valueOfForm.criteriaGroupId;
-        }
-        return x;
-      });
     });
   }
 

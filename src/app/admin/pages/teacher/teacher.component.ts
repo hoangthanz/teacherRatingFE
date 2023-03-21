@@ -32,7 +32,7 @@ export class TeacherComponent extends BaseComponent implements OnInit {
     public override router: Router
   ) {
     super(router, message);
-    this.getTeacher();
+    // this.getTeacher();
   }
 
   search() {
@@ -61,6 +61,7 @@ export class TeacherComponent extends BaseComponent implements OnInit {
       const schoolId = localStorage.getItem("school_id");
 
       this.currentSchool = this.schools[0];
+      this.getTeacher();
       if (this.currentSchool != null) {
         this.getUserBySchool(this.currentSchool.id);
       }
@@ -116,7 +117,7 @@ export class TeacherComponent extends BaseComponent implements OnInit {
   }
 
   getTeacher() {
-    this.apiService.getTeacher().subscribe((r) => {
+    this.apiService.getTeacher(this.currentSchool?.id).subscribe((r) => {
       if (r.result != ResultRespond.Success) {
         this.teachers = [];
         this.createMessage("error", "Lỗi không lấy được dữ liệu");
