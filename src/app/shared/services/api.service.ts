@@ -1,19 +1,19 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { ResponseApi } from '../../core/models/response-api';
-import { AssessmentCriteriaGroup } from '../../core/models/assessment-criteria-group';
-import { SelfCriticism } from '../../core/models/self-criticism';
-import { User } from '../../core/models/user';
-import { Role } from '../../core/models/role';
-import { TeacherGroup } from '../../core/models/teacher-group';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../environments/environment";
+import { ResponseApi } from "../../core/models/response-api";
+import { AssessmentCriteriaGroup } from "../../core/models/assessment-criteria-group";
+import { SelfCriticism } from "../../core/models/self-criticism";
+import { User } from "../../core/models/user";
+import { Role } from "../../core/models/role";
+import { TeacherGroup } from "../../core/models/teacher-group";
 import { CriteriaGroup } from "../../core/models/criteria-group";
 import { Criteria } from "../../core/models/criteria";
 import { Teacher } from "../../core/models/teacher";
-import { RequestCreateSchoolModel } from 'src/app/core/models/request/request-create-school.model';
+import { RequestCreateSchoolModel } from "src/app/core/models/request/request-create-school.model";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root"
 })
 export class ApiService {
   private domain = environment.domain;
@@ -257,6 +257,15 @@ export class ApiService {
 
   public deleteSchool(id: string) {
     return this.http.delete<ResponseApi<any>>(`${this.domain}/api/School/${id}`);
+  }
+
+  public getAllSelfCriticism(param: any) {
+    return this.http.get<ResponseApi<any[]>>(
+      `${this.domain}/api/SelfCriticism/get-by-condition`,
+      {
+        params: param
+      }
+    );
   }
 
 }

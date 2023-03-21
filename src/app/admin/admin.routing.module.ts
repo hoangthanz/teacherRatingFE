@@ -9,6 +9,7 @@ import { CriteriaGroupComponent } from "./pages/criteria-group/criteria-group.co
 import { CriteriaComponent } from "./pages/criteria/criteria.component";
 import { TeacherComponent } from "./pages/teacher/teacher.component";
 import {SchoolManagementComponent} from "./pages/school-management/school-management.component";
+import { ShowAllComponent } from "./pages/show-all/show-all.component";
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
       { path: 'criteria-group', component: CriteriaGroupComponent },
       { path: 'criteria', component: CriteriaComponent },
       { path: 'teacher', component: TeacherComponent },
+      { path: 'show-all', component: ShowAllComponent },
     ],
   },
 ];

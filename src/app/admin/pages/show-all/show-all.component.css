@@ -1,0 +1,10 @@
+.head-title{
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.demo{
+  @apply bg-white rounded-lg shadow-lg p-4;
+}

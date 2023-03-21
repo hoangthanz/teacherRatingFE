@@ -14,6 +14,7 @@ import { CriteriaGroupComponent } from "./pages/criteria-group/criteria-group.co
 import { CriteriaComponent } from "./pages/criteria/criteria.component";
 import { TeacherComponent } from "./pages/teacher/teacher.component";
 import {SchoolManagementComponent} from "./pages/school-management/school-management.component";
+import { ShowAllComponent } from "./pages/show-all/show-all.component";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {SchoolManagementComponent} from "./pages/school-management/school-manage
     CriteriaGroupComponent,
     CriteriaComponent,
     TeacherComponent,
-    SchoolManagementComponent
+    SchoolManagementComponent,
+    ShowAllComponent,
   ],
   imports: [CommonModule, FormsModule, AdminRoutingModule, SharedModule],
   providers: [ApiService],

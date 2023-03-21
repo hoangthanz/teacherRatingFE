@@ -53,4 +53,9 @@ export class AdminComponent {
   goToTeacherPage() {
     this.router.navigate(['admin/teacher']);
   }
+
+
+  goShowALlPage() {
+    this.router.navigate(['admin/show-all']);
+  }
 }

@@ -1,0 +1,77 @@
+<nz-card nzTitle="{{ 'Quản lý nhóm tiêu chí' }}">
+  <div class="w-full flex mb-3">
+    <div class="basis-1/2">
+      <div>
+        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+          <input type="text" nz-input placeholder="Tìm kiếm" (keyup.enter)="search()" [(ngModel)]="keySearch" />
+        </nz-input-group>
+        <ng-template #suffixIconButton>
+          <button nz-button nzType="primary" (click)="search()" nzSearch><span nz-icon nzType="search"></span></button>
+        </ng-template>
+      </div>
+    </div>
+    <div class="basis-1/2 text-right">
+
+    </div>
+  </div>
+
+
+  <div class="hidden sm:block">
+    <nz-table
+      #listTable
+      [nzData]="data"
+      nzTableLayout="fixed"
+      class="w-full flex flex-col sm:flex-row"
+    >
+      <thead>
+      <tr>
+        <th class="w-20">STT</th>
+        <th class="">Tháng/Năm</th>
+        <th class="">Giáo viên</th>
+        <th class="">Ngày tạo</th>
+        <th class="">Tiêu chí</th>
+        <th class="">Đơn vị</th>
+        <th class="">Giá trị</th>
+        <th class="">Tổng giá trị</th>
+        <th class="">Mô tả</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let invoice of listTable.data; index as j">
+        <tr class="border-b border-gray-300 hover:bg-slate-100"
+            *ngFor="let item of  invoice.assessmentCriterias; index as i">
+          <td class="w-10 p-1 font-normal text-center" [attr.rowspan]="invoice?.assessmentCriterias?.length"
+              [style.display]="i === 0 ?'':'none'">
+            {{j + 1}}
+          </td>
+          <td class="font-normal text-center" [attr.rowspan]="invoice?.assessmentCriterias.length"
+              [style.display]="i === 0 ?'':'none'">
+            {{invoice?.month}} / {{invoice?.year}}
+          </td>
+          <td class="font-normal text-center" [attr.rowspan]="invoice?.assessmentCriterias.length"
+              [style.display]="i === 0 ?'':'none'">
+            {{invoice?.teacher?.name}}
+          </td>
+          <td class="font-normal text-center" [attr.rowspan]="invoice?.assessmentCriterias?.length"
+              [style.display]="i === 0 ?'':'none'">
+            {{invoice?.createdDate | date: 'dd/MM/yyyy hh:mm a'}}
+          </td>
+          <td class="font-normal text-center">{{item?.name}}</td>
+          <td class="font-normal text-center">{{item?.unit}}</td>
+          <td class="font-normal text-center">{{ (item?.isDeduct ? "- " : "+ ") + item?.value}}</td>
+
+          <td class="font-normal text-center" [attr.rowspan]="invoice?.assessmentCriterias.length"
+              [style.display]="i === 0 ?'':'none'">
+            {{invoice?.totalScore}}
+          </td>
+          <td class="font-normal text-center" [attr.rowspan]="invoice?.assessmentCriterias.length"
+              [style.display]="i === 0 ?'':'none'">
+            {{invoice?.description}}
+          </td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </nz-table>
+  </div>
+  <!--  {{teacherGroups | json}}-->
+</nz-card>
