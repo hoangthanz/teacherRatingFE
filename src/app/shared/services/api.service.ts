@@ -268,4 +268,10 @@ export class ApiService {
     );
   }
 
+  public getTeacherBySchoolId(schoolId: string) {
+    return this.http.get<ResponseApi<Teacher[]>>(
+      `${this.domain}/api/Teacher/get-by-school/${schoolId}`
+    );
+  }
+
 }

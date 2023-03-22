@@ -111,7 +111,7 @@
   (nzOnCancel)="handleCancel()"
 >
   <ng-container *nzModalContent>
-    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <form nz-form [formGroup]="validateForm" >
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="userName"
           >Tên tài khoản</nz-form-label
@@ -219,7 +219,7 @@
       </nz-form-item>
 
       <nz-form-item nz-row class="register-area">
-        <nz-form-control [nzSpan]="14" [nzOffset]="6" class="text-right">
+        <nz-form-control [nzSpan]="14" [nzOffset]="6">
           <button nz-button nzType="primary" (click)="submit()">
             Xác nhận
           </button>

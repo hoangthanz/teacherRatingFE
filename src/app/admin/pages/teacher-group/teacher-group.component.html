@@ -1,142 +1,169 @@
 <nz-card nzTitle="{{ 'PHÂN TỔ GIÁO VIÊN' }}">
-  <div class="w-full flex">
-    <div class="basis-1/2">
-      <p
-        style="
-          font-size: 14px;
-          color: rgba(0, 0, 0, 0.85);
-          margin-bottom: 16px;
-          font-weight: 500;
-        "
-        class="flex"
-      >
-        Thông tin giáo viên trong các tổ
-      </p>
-    </div>
-    <div class="basis-1/2 text-right">
-      <button
-        nz-button
-        nzType="primary"
-        class="text-right flex-1"
-        (click)="showModelTeacherGroup()"
-      >
-        Thêm
-      </button>
-    </div>
-  </div>
-
-  <div class="block sm:hidden">
-    <div class="mt-2 space-y-2">
-      <div
-        class="flex flex-col sm:justify-center sm:items-center max-w-xs mx-auto"
-        *ngFor="let data of teacherGroupListTable.data; let i = index"
-      >
-        <div class="py-2 px-3 bg-gray-200 rounded-md">
-          <div class="font-medium text-gray-900">STT: {{ data?.index }}</div>
-          <div class="text-sm text-gray-500">Tên tổ: {{ data?.name }}</div>
-          <div class="text-sm text-gray-500">
-            Thành viên: {{ data?.totalMember }}
+  <div class="bg-white rounded mt-4 p-2">
+    <div>
+      <div>
+        <div class="flex mb-4 gap-5">
+          <div class="flex flex-col w-1/2 md:w-1/3 lg:w-1/5 xl:w-1/6 justify-between">
+            <div>
+              <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+                <input type="text" nz-input placeholder="Tìm kiếm" (keyup.enter)="searchName()" [(ngModel)]="nameSearch" />
+              </nz-input-group>
+              <ng-template #suffixIconButton>
+                <button nz-button nzType="primary" (click)="searchName()" nzSearch><span nz-icon nzType="search"></span></button>
+              </ng-template>
+            </div>
           </div>
-
-          <div class="text-sm text-gray-500">
-            <button nz-button nzType="primary" nzShape="round">Sửa</button>
-            <button nz-button nzType="dashed" nzShape="round">Xem</button>
-            <button
-              nz-button
-              nzType="link"
-              nzShape="round"
-              (click)="removerTeacherGroup(data?.id)"
-            >
-              Xóa
+          <div class="flex-grow"></div>
+          <div class="flex justify-end gap-2">
+            <button nz-button style="background-color: #00875a; color: white"  (click)="getTeacherGroups()">
+              Làm mới
+            </button>
+            <button nz-button nzType="primary" (click)="openCreateUpdateDialog(true)">
+              Thêm mới
             </button>
           </div>
         </div>
       </div>
+      <div>
+
+        <div class="block sm:hidden">
+          <div class="mt-2 space-y-2">
+            <div
+              *ngFor="let teacherGroup of teacherGroups; let i = index">
+              <div class="py-2 px-3 bg-gray-200 rounded-md">
+                <div class="font-medium text-gray-900"> STT: {{ i + 1}}</div>
+                <div class="text-sm text-gray-500"> Tên tổ: {{ teacherGroup.name }}</div>
+                <div class="text-sm text-gray-500"> Điểm kỳ 1: {{ teacherGroup.period1Score }}</div>
+                <div class="text-sm text-gray-500"> Điểm kỳ 2: {{ teacherGroup.period2Score }}</div>
+                <div class="text-sm text-gray-500"> Năm: {{ teacherGroup.yearScore }}</div>
+                <div class="text-sm text-gray-500">Mô tả: {{ teacherGroup.description }}</div>
+                <div class="text-sm text-gray-500 py-1">
+                  <button nz-button nzType="primary" nzShape="round"
+                          (click)="openCreateUpdateDialog(false, teacherGroup)"
+                  >Sửa
+                  </button>
+                  <a nz-button
+                     nzType="link"
+                     (click)="openDeleteDialog(teacherGroup)"
+                  >Xóa</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden sm:block">
+          <nz-table [nzData]="teacherGroups" nzTableLayout="fixed" class="w-full flex flex-col sm:flex-row">
+            <thead>
+            <tr>
+              <th class=" header-center">STT</th>
+              <th class=" header-center">Tên tổ</th>
+              <th class=" header-center">Điểm kỳ 1</th>
+              <th class=" header-center">Điểm kỳ 2</th>
+              <th class=" header-center">Năm</th>
+              <th class=" header-center">Mô tả</th>
+              <th class=" header-center">Tác vụ</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let teacherGroup of teacherGroups; let i = index">
+              <td >{{ i + 1 }}</td>
+              <td >{{ teacherGroup.name }}</td>
+              <td >{{ teacherGroup.period1Score }}</td>
+              <td >{{ teacherGroup.period2Score }}</td>
+              <td >{{ teacherGroup.yearScore }}</td>
+              <td >{{ teacherGroup.description }}</td>
+              <td >
+                <div class="text-sm text-gray-500 py-1">
+                  <button nz-button nzType="primary" nzShape="round"
+                          (click)="openCreateUpdateDialog(false, teacherGroup)"
+                  >Sửa
+                  </button>
+                  <a nz-button
+                     nzType="link"
+                     (click)="openDeleteDialog(teacherGroup)"
+                  >Xóa</a>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="hidden sm:block">
-    <nz-table
-      #teacherGroupListTable
-      [nzData]="teacherGroups"
-      nzTableLayout="fixed"
-      class="w-full flex flex-col sm:flex-row"
-    >
-      <thead>
-        <tr>
-          <th>STT</th>
-          <th>Tên tổ</th>
-          <th>Thành viên</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of teacherGroupListTable.data; let i = index">
-          <td>{{ data?.index }}</td>
-          <td>{{ data?.name }}</td>
-          <td>{{ data?.totalMember }}</td>
-          <td>
-            <button
-              nz-button
-              nzType="primary"
-              nzShape="round"
-              (click)="showModelTeacherGroup(data?.id)"
-            >
-              Sửa
-            </button>
-            <button nz-button nzType="dashed" nzShape="round">Xem</button>
-            <button
-              nz-button
-              nzType="link"
-              nzShape="round"
-              (click)="removerTeacherGroup(data?.id)"
-            >
-              Xóa
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
   </div>
-
-  <!--  {{teacherGroups | json}}-->
 </nz-card>
 
-<nz-modal
-  [(nzVisible)]="isVisible"
-  nzTitle="{{ isCreate == true ? 'Tạo tổ' : 'Cập nhật tổ' }}"
-  [nzFooter]="null"
-  centered
-  (nzOnCancel)="handleCancel()"
->
+<nz-modal [(nzVisible)]="isVisibleCreateUpdate" nzTitle="{{isCreate ? 'Thêm mới thông tin tổ' : 'Cập nhật thông tin tổ'}}"
+          [nzFooter]="null" centered (nzOnCancel)="handleCancelCreateUpdate()">
   <ng-container *nzModalContent>
-    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <form nz-form [formGroup]="validateForm">
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="name"
-          >Tên tổ</nz-form-label
-        >
-        <nz-form-control
-          [nzSm]="14"
-          [nzXs]="24"
-          nzErrorTip="Tên tổ không để trống!"
-        >
-          <input nz-input formControlName="name" id="name" />
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="name">Tên tổ</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Tên tổ không được để trống!">
+          <input nz-input formControlName="name" id="name"/>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="teacherIds">Giáo viên</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-select
+            formControlName="teacherIds" id="teacherIds"
+            nzMode="multiple"
+            nzPlaceHolder="Chọn giáo viên"
+            [nzOptions]="listShowTeacher"
+            [(ngModel)]="listSelectedTeacher"
+          ></nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="period1Score">Điểm kỳ 1</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Điểm kỳ 1 không được để trống!">
+          <input type="number" nz-input formControlName="period1Score" id="period1Score"/>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="period2Score">Điểm kỳ 2</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Điểm kỳ 2 không được để trống!">
+          <input type="number" nz-input formControlName="period2Score" id="period2Score"/>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="yearScore">Năm</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Năm không được để trống!">
+          <input type="number" nz-input formControlName="yearScore" id="yearScore"/>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="description">Mô tả</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input nz-input formControlName="description" id="description"/>
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item nz-row class="register-area">
-        <nz-form-control [nzSpan]="14" [nzOffset]="6" class="text-right">
-          <button
-            nz-button
-            nzType="primary"
-            (click)="
-              isCreate == true ? createTeacherGroup() : updateTeacherGroup()
-            "
-          >
-            Xác nhận
-          </button>
+        <nz-form-control [nzSpan]="14" [nzOffset]="6">
+          <button nz-button nzType="primary" (click)="submit()">Xác nhận</button>
         </nz-form-control>
+
       </nz-form-item>
     </form>
   </ng-container>
 </nz-modal>
+
+<nz-modal
+  [(nzVisible)]="isVisibleDelete"
+  nzTitle="Xóa thông tin tổ"
+  (nzOnCancel)="handleCancelDelete()"
+  (nzOnOk)="confirmDelete()"
+  [nzOkLoading]="isDeleteLoading"
+>
+  <p *nzModalContent>Bạn chắc chắn muốn xóa thông tin tổ: <strong>{{nameDelete}}</strong> </p>
+</nz-modal>
+

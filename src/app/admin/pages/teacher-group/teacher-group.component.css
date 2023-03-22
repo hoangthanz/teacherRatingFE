@@ -1,0 +1,7 @@
+.card-content {
+  @apply bg-white rounded mt-4 p-2;
+}
+
+.header-center {
+  text-align: center;
+}

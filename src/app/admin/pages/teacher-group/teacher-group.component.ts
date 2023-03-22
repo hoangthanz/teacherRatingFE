@@ -10,6 +10,8 @@ import {
 import { Router } from '@angular/router';
 import { TeacherGroup } from '../../../core/models/teacher-group';
 import { ResultRespond } from '../../../core/enums/result-respond';
+import {ResponseApi} from "../../../core/models/response-api";
+import {Teacher} from "../../../core/models/teacher";
 
 @Component({
   selector: 'app-teacher-group',
@@ -17,10 +19,26 @@ import { ResultRespond } from '../../../core/enums/result-respond';
   styleUrls: ['./teacher-group.component.css'],
 })
 export class TeacherGroupComponent extends BaseComponent implements OnInit {
+
+  nameSearch = '';
+  isVisibleCreateUpdate = false;
+  isCreate = true;
+
+  isVisibleDelete = false;
+  isDeleteLoading = false;
+
+  idUpdate = '';
+  idDelete = '';
+  nameDelete = '';
+
+  listTeacher: Teacher[] = [];
+  listShowTeacher: Array<{ value: string; label: string }> = [];
+  listSelectedTeacher: Teacher[] = [];
+
   teacherGroups: TeacherGroup[] = [];
+  allTeacherGroups: TeacherGroup[] = [];
   isVisible = false;
   validateForm!: UntypedFormGroup;
-  isCreate = true;
 
   currentSchoolId = localStorage.getItem('school_id');
   constructor(
@@ -34,112 +52,102 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.validateForm = this.fb.group({
-      id: [null],
-      name: [null, [Validators.required]],
-    });
-  }
-
-  submitForm(): void {
-    if (this.validateForm.valid) {
-    } else {
-      Object.values(this.validateForm.controls).forEach((control) => {
-        if (control.invalid) {
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
-    }
-  }
-
-  showModelTeacherGroup(id = ''): void {
-    if (id != '') {
-      this.isCreate = false;
-      const teacherGroup = this.teacherGroups.find((x) => x.id == id);
-      this.validateForm = this.fb.group({
-        id: [teacherGroup?.id],
-        name: [teacherGroup?.name, [Validators.required]],
-      });
-    } else {
-      this.isCreate = true;
-      this.validateForm = this.fb.group({
-        id: [null],
-        name: [null, [Validators.required]],
-      });
-    }
-    this.isVisible = true;
+    this.getTeachersBySchool()
   }
 
   getTeacherGroups() {
     this.apiService.getTeacherGroups().subscribe((r) => {
       if (r.result != ResultRespond.Success) {
         this.teacherGroups = [];
+        this.allTeacherGroups = [];
         this.createMessage('error', 'Lỗi không lấy được dữ liệu');
       }
-
-      // set index for teacherGroups
-      for (let i = 0; i < r.data.length; i++) {
-        r.data[i].index = i + 1;
-      }
-
       this.teacherGroups = r.data;
+      this.allTeacherGroups = r.data;
     });
   }
 
-  removerTeacherGroup(id: string | undefined) {
-    if (typeof id == 'undefined') return;
-
-    this.apiService.removeTeacherGroup(id).subscribe((r) => {
-      if (r.result != ResultRespond.Success) {
-        this.teacherGroups = [];
-        this.getTeacherGroups();
-        this.createMessage('error', 'Lỗi không lấy được dữ liệu');
+  getTeachersBySchool = () => {
+    this.apiService.getTeacherBySchoolId(this.currentSchoolId ?? '').subscribe(
+      (res: ResponseApi<Teacher[]>) => {
+        this.listTeacher = res.data;
+        this.listShowTeacher = this.listTeacher.map(item => ({
+          value: item.id ?? '',
+          label: item.name ?? ''
+        }));
+      },error => {
+        this.listTeacher = [];
       }
-
-      this.createMessage('success', 'Xóa tổ thành công');
-      this.getTeacherGroups();
-    });
+    )
   }
 
-  createTeacherGroup() {
-    const valueOfForm = this.validateForm.value;
-
-    // call api create teacher-group
-    var teacherGroup = new TeacherGroup();
-    teacherGroup.id = '';
-    teacherGroup.name = valueOfForm.name;
-    teacherGroup.schoolId = this.currentSchoolId ?? '';
-    this.apiService.postTeacherGroup(teacherGroup).subscribe((r) => {
-      if (r.result != ResultRespond.Success) {
-        this.createMessage('error', r.message);
-        return;
-      }
-      this.createMessage('success', 'Tạo tổ thành công');
-      this.getTeacherGroups();
-    });
+  public searchName = () => {
+    this.teacherGroups = this.allTeacherGroups;
+    if(this.nameSearch !== '')
+      this.teacherGroups = this.teacherGroups.filter(x => x.name.includes(this.nameSearch.trim().toLowerCase()));
   }
 
-  updateTeacherGroup() {
-    const valueOfForm = this.validateForm.value;
+  openCreateUpdateDialog = (isCreate: boolean, data?: TeacherGroup) => {
+    this.isVisibleCreateUpdate = true;
+    this.isCreate = isCreate;
 
-    // call api create teacher-group
-
-    valueOfForm.schoolId = this.currentSchoolId ?? '';
-    this.apiService.putTeacherGroup(valueOfForm).subscribe((r) => {
-      if (r.result != ResultRespond.Success) {
-        this.createMessage('error', r.message);
-        return;
-      }
-      this.createMessage('success', 'Cập nhật tổ thành công');
-      this.getTeacherGroups();
-      this.isVisible = false;
-    });
+    if(isCreate){
+      this.idUpdate = '';
+      this.validateForm = this.fb.group({
+        name: [null, [Validators.required]],
+        teacherIds: [[]],
+        period1Score: [0, [Validators.required]],
+        period2Score: [0, [Validators.required]],
+        yearScore: [ new Date().getFullYear(), [Validators.required]],
+        description: [null],
+      });
+    }
+    else{
+      this.idUpdate = data?.id ?? '';
+      this.validateForm = this.fb.group({
+        name: [data?.name, [Validators.required]],
+        teacherIds: [data?.teacherIds],
+        period1Score: [data?.period1Score, [Validators.required]],
+        period2Score: [data?.period2Score, [Validators.required]],
+        yearScore: [ data?.yearScore, [Validators.required]],
+        description: [data?.description],
+      });
+    }
   }
 
-  handleOk(): void {
-    this.isVisible = false;
+  openDeleteDialog = (data: TeacherGroup) => {
+    this.isVisibleDelete = true;
+    this.idDelete = data.id;
+    this.nameDelete =  data.name;
   }
 
-  handleCancel(): void {
-    this.isVisible = false;
+  handleCancelCreateUpdate = (): void => {
+    this.isVisibleCreateUpdate = false;
   }
+
+  submit = () => {
+
+    if (this.validateForm.invalid) {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({onlySelf: true});
+        }
+      });
+      return;
+    }
+
+  }
+
+  handleCancelDelete = (): void => {
+    this.idDelete = '';
+    this.nameDelete = '';
+    this.isVisibleDelete = false;
+  }
+
+  confirmDelete = () => {
+    this.isDeleteLoading = true;
+  }
+
+
 }

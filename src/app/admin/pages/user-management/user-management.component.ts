@@ -84,18 +84,6 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
     this.isVisible = false;
   }
 
-  submitForm(): void {
-    if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
-    } else {
-      Object.values(this.validateForm.controls).forEach((control) => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
-    }
-  }
 
   updateConfirmValidator(): void {
     /** wait for refresh value */
@@ -116,6 +104,16 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
   };
 
   submit() {
+    if (this.validateForm.invalid) {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({onlySelf: true});
+        }
+      });
+      return;
+    }
+
     if (this.isCreate) {
       let data = this.validateForm.value;
       data.schoolId = this.currentSchool.id ?? "";
