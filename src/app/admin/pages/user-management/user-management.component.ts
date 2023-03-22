@@ -40,7 +40,6 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
   }
 
   search() {
-    // this.getCriteriaGroup();
     // this.criteriaGroups = this.criteriaGroupsOld.filter((x) => x.name?.includes(this.keySearch));
   }
 
@@ -207,7 +206,7 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
       const schoolId = localStorage.getItem('school_id');
 
       if (schoolId != null) {
-        this.currentSchool = this.schools.find((s) => s.id == schoolId);
+        this.currentSchool = this.schools.find((s) => s.id == schoolId) ?? this.schools[0];
         if (this.currentSchool != null) {
           this.getUserBySchool(this.currentSchool.id);
         }
