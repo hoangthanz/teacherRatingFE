@@ -10,6 +10,7 @@ import { CriteriaComponent } from "./pages/criteria/criteria.component";
 import { TeacherComponent } from "./pages/teacher/teacher.component";
 import {SchoolManagementComponent} from "./pages/school-management/school-management.component";
 import { ShowAllComponent } from "./pages/show-all/show-all.component";
+import {GradeConfigurationComponent} from "./pages/grade-configuration/grade-configuration.component";
 
 const routes: Routes = [
   {
@@ -25,6 +26,7 @@ const routes: Routes = [
       { path: 'criteria', component: CriteriaComponent },
       { path: 'teacher', component: TeacherComponent },
       { path: 'show-all', component: ShowAllComponent },
+      { path: 'grade', component: GradeConfigurationComponent },
     ],
   },
 ];

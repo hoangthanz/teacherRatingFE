@@ -1,16 +1,16 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "../../../environments/environment";
-import { ResponseApi } from "../../core/models/response-api";
-import { AssessmentCriteriaGroup } from "../../core/models/assessment-criteria-group";
-import { SelfCriticism } from "../../core/models/self-criticism";
-import { User } from "../../core/models/user";
-import { Role } from "../../core/models/role";
-import { TeacherGroup } from "../../core/models/teacher-group";
-import { CriteriaGroup } from "../../core/models/criteria-group";
-import { Criteria } from "../../core/models/criteria";
-import { Teacher } from "../../core/models/teacher";
-import { RequestCreateSchoolModel } from "src/app/core/models/request/request-create-school.model";
+import {Injectable} from "@angular/core";
+import {HttpClient} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
+import {ResponseApi} from "../../core/models/response-api";
+import {AssessmentCriteriaGroup} from "../../core/models/assessment-criteria-group";
+import {SelfCriticism} from "../../core/models/self-criticism";
+import {User} from "../../core/models/user";
+import {Role} from "../../core/models/role";
+import {TeacherGroup} from "../../core/models/teacher-group";
+import {CriteriaGroup} from "../../core/models/criteria-group";
+import {Criteria, GradeConfiguration} from "../../core/models/criteria";
+import {Teacher} from "../../core/models/teacher";
+import {RequestCreateSchoolModel} from "src/app/core/models/request/request-create-school.model";
 
 @Injectable({
   providedIn: "root"
@@ -18,7 +18,8 @@ import { RequestCreateSchoolModel } from "src/app/core/models/request/request-cr
 export class ApiService {
   private domain = environment.domain;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   public getAssessmentCriteriaGroups() {
     return this.http.get<ResponseApi<AssessmentCriteriaGroup>>(
@@ -175,7 +176,7 @@ export class ApiService {
   }
 
   public putCriteriaGroups(criteriaGroup: CriteriaGroup) {
-    return this.http.put<ResponseApi<any>>(
+    return this.http.post<ResponseApi<any>>(
       `${this.domain}/api/AssessmentCriteriaGroup/update-assessment-criteria-group`,
       criteriaGroup
     );
@@ -204,7 +205,7 @@ export class ApiService {
   }
 
   public putCriterias(criteriaGroup: Criteria) {
-    return this.http.put<ResponseApi<any>>(
+    return this.http.post<ResponseApi<any>>(
       `${this.domain}/api/AssessmentCriteriaGroup/update-assessment-criteria`,
       criteriaGroup
     );
@@ -213,6 +214,33 @@ export class ApiService {
   public removeCriteria(id: string) {
     return this.http.delete<ResponseApi<any>>(
       `${this.domain}/api/AssessmentCriteriaGroup/delete-assessment-criteria/${id}`
+    );
+  }
+
+  public getGradeConfiguration() {
+    return this.http.get<ResponseApi<GradeConfiguration[]>>(
+      `${this.domain}/api/GradeConfiguration`
+    );
+  }
+
+
+  public postGradeConfiguration(body: GradeConfiguration) {
+    return this.http.post<ResponseApi<any>>(
+      `${this.domain}/api/GradeConfiguration`,
+      body
+    );
+  }
+
+  public putGradeConfiguration(body: GradeConfiguration) {
+    return this.http.post<ResponseApi<any>>(
+      `${this.domain}/api/GradeConfiguration/${body.id}`,
+      body
+    );
+  }
+
+  public removeGradeConfiguration(id: string) {
+    return this.http.delete<ResponseApi<any>>(
+      `${this.domain}/api/GradeConfiguration/${id}`
     );
   }
 

@@ -1,13 +1,13 @@
-import { Component, OnInit } from "@angular/core";
-import { BaseComponent } from "../../../shared/components/base/base.component";
-import { ApiService } from "../../../shared/services/api.service";
-import { NzMessageService } from "ng-zorro-antd/message";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
-import { ResultRespond } from "../../../core/enums/result-respond";
-import { Criteria } from "../../../core/models/criteria";
-import { CriteriaGroup } from "../../../core/models/criteria-group";
-import { School } from "../../../core/models/school";
+import {Component, OnInit} from "@angular/core";
+import {BaseComponent} from "../../../shared/components/base/base.component";
+import {ApiService} from "../../../shared/services/api.service";
+import {NzMessageService} from "ng-zorro-antd/message";
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
+import {ResultRespond} from "../../../core/enums/result-respond";
+import {Criteria} from "../../../core/models/criteria";
+import {CriteriaGroup} from "../../../core/models/criteria-group";
+import {School} from "../../../core/models/school";
 
 @Component({
   selector: "app-criteria",
@@ -55,7 +55,7 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
       if (r.result != ResultRespond.Success) return;
       this.schools = r.data;
       const schoolId = localStorage.getItem("school_id");
-      this.currentSchool = this.schools[0];
+      this.currentSchool = this.schools.find(x=>x?.id == schoolId) ?? this.schools[0];
     });
   }
   getCriteriaGroup() {
@@ -145,12 +145,12 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
   postCriterias() {
     const valueOfForm = this.validateForm.value;
     // call api create teacher-group
-    var teacherGroup = new Criteria();
-    teacherGroup.name = valueOfForm.name;
-    this.apiService.postCriteria(teacherGroup).subscribe((r) => {
-      if (r.result != ResultRespond.Success) {
 
+    delete valueOfForm?.id;
+    this.apiService.postCriteria(valueOfForm).subscribe((r) => {
+      if (r.result != ResultRespond.Success) {
         this.createMessage("error", r.message);
+        this.getCriteria();
         return;
       }
       this.isVisible = false;
@@ -167,6 +167,7 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
     this.apiService.putCriterias(valueOfForm).subscribe((r) => {
       if (r.result != ResultRespond.Success) {
         this.createMessage("error", r.message);
+        this.getCriteria();
         return;
       }
       this.isVisible = false;

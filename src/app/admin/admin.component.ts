@@ -9,8 +9,21 @@ import { TeacherComponent } from "./pages/teacher/teacher.component";
   styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
 
+  }
+
+  checkAdmin() {
+    const helper = new JwtHelperService();
+    const token = sessionStorage.getItem('access_token');
+    if (token) {
+      const decodedToken = helper.decodeToken(token);
+      const roles = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return roles.includes('Admin');
+    }
+    return false;
+  }
+  role = this.getRole();
   goToSelfAssessment() {
     this.router.navigate(['admin/self-assessment']);
   }
@@ -19,6 +32,15 @@ export class AdminComponent {
     this.router.navigate(['login']);
   }
 
+  getRole() {
+    const helper = new JwtHelperService();
+    const token = sessionStorage.getItem('access_token');
+    if (token) {
+      const decodedToken = helper.decodeToken(token);
+      return decodedToken.role;
+    }
+    return null;
+  }
   logout() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('current_email');
@@ -57,5 +79,8 @@ export class AdminComponent {
 
   goShowALlPage() {
     this.router.navigate(['admin/show-all']);
+  }
+  goGradePage() {
+    this.router.navigate(['admin/grade']);
   }
 }

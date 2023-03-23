@@ -45,7 +45,7 @@ export class CriteriaGroupComponent extends BaseComponent implements OnInit {
       if (r.result != ResultRespond.Success) return;
       this.schools = r.data;
       const schoolId = localStorage.getItem("school_id");
-      this.currentSchool = this.schools[0];
+      this.currentSchool = this.schools.find(x=>x?.id == schoolId) ?? this.schools[0];
     });
   }
 
@@ -133,12 +133,11 @@ export class CriteriaGroupComponent extends BaseComponent implements OnInit {
   postCriteriaGroups() {
     const valueOfForm = this.validateForm.value;
     // call api create teacher-group
-    var teacherGroup = new CriteriaGroup();
-    teacherGroup.name = valueOfForm.name;
-    this.apiService.postCriteriaGroups(teacherGroup).subscribe((r) => {
+    delete valueOfForm?.id;
+    this.apiService.postCriteriaGroups(valueOfForm).subscribe((r) => {
       if (r.result != ResultRespond.Success) {
-
         this.createMessage("error", r.message);
+        this.getCriteriaGroup();
         return;
       }
       this.isVisible = false;
@@ -161,6 +160,7 @@ export class CriteriaGroupComponent extends BaseComponent implements OnInit {
     this.apiService.putCriteriaGroups(valueOfForm).subscribe((r) => {
       if (r.result != ResultRespond.Success) {
         this.createMessage("error", r.message);
+        this.getCriteriaGroup();
         return;
       }
       this.isVisible = false;

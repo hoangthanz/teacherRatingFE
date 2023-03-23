@@ -10,3 +10,16 @@ export class Criteria {
   quantity?: number;
 
 }
+
+export class GradeConfiguration {
+  id?: string;
+  name?: string;
+  description?: string;
+  isDeleted?: boolean;
+  minimumScore?: number;
+  maximumScore?: number;
+
+  schoolId?: string;
+
+
+}
