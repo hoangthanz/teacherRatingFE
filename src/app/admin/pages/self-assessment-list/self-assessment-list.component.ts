@@ -21,7 +21,7 @@ export class SelfAssessmentListComponent implements OnInit {
   viewOfSelfAssessment: SelfCriticism = new SelfCriticism();
   schools: any[] = [];
   schoolId = '';
-
+  date = new Date();
   ngOnInit(): void {
     this.getSchools();
   }
@@ -42,8 +42,7 @@ export class SelfAssessmentListComponent implements OnInit {
   }
 
   download() {
-    const date = new Date();
-    this.apiService.download(this.schoolId, date.getFullYear().toString(), date.getMonth().toString()).subscribe((response: any) => {
+    this.apiService.download(this.schoolId, this.date.getFullYear().toString(), (this.date.getMonth() + 1).toString()).subscribe((response: any) => {
         const blob = new Blob([response],
           {type: 'application/vnd.ms-excel'});
         const link = document.createElement('a');

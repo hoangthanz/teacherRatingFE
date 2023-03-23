@@ -1,14 +1,21 @@
 <nz-card nzTitle="{{ 'DANH SÁCH ĐÃ KHAI BÁO' }}">
 
-  <div class="">
-    <button
-      nz-button
-      nzType="primary"
-      class="text-right flex-1"
-      (click)="download()"
-    >
-     Tải danh sách khai báo
-    </button>
+  <div class="flex justify-end items-end">
+    <div>
+      <nz-date-picker nzMode="month" [(ngModel)]="date"></nz-date-picker>
+    </div>
+
+    <div>
+      <button
+        nz-button
+        nzType="primary"
+        class="text-right flex-1"
+        (click)="download()"
+      >
+        Tải danh sách khai báo
+      </button>
+    </div>
+
   </div>
   <p
     style="

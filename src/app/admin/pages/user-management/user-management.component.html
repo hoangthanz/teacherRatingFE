@@ -124,6 +124,16 @@
           <input nz-input formControlName="userName" id="userName" [readOnly]="!isCreate"/>
         </nz-form-control>
       </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="schoolId">Chọn trường học
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng nhập thông tin">
+          <nz-select formControlName="schoolId">
+            <nz-option *ngFor="let data of schools" nzValue="{{data?.id}}" nzLabel="{{data?.name}}"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email"
           >E-mail</nz-form-label

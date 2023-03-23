@@ -119,7 +119,6 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
 
     if (this.isCreate) {
       let data = this.validateForm.value;
-      data.schoolId = this.currentSchool.id ?? "";
       this.apiService.postUser(data).subscribe((res) => {
         if (res.result == ResultRespond.Success) {
           this.message.create("success", "Tạo tài khoản thành công");
@@ -131,7 +130,6 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
       });
     } else {
       let data = this.validateForm.value;
-      data.schoolId = this.currentSchool.id ?? "";
       this.apiService.putUser(data).subscribe((res) => {
         if (res.result == ResultRespond.Success) {
           this.message.create("success", "Cập nhật tài khoản thành công");
@@ -171,6 +169,7 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
         displayName: [user?.displayName, [Validators.required]],
         phoneNumberPrefix: ["+84"],
         phoneNumber: [user?.phoneNumber, [Validators.required]],
+        schoolId: [user?.schoolId],
         id: [id]
       });
     } else {
@@ -186,6 +185,7 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
         displayName: [null, [Validators.required]],
         phoneNumberPrefix: ["+84"],
         phoneNumber: [null, [Validators.required]],
+        schoolId: [this.currentSchool?.id],
         id: [null]
       });
     }
