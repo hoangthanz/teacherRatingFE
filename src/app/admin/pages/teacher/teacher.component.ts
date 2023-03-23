@@ -35,11 +35,9 @@ export class TeacherComponent extends BaseComponent implements OnInit {
   ) {
     super(router, message);
     this.currentSchoolId = localStorage.getItem('school_id');
-    // this.getTeacher();
   }
 
   search() {
-    // this.getTeacher();
     this.teachers = this.allTeachers;
     if(this.keySearch !== ""){
       this.teachers = this.teachers.filter((x) => x.name?.includes(this.keySearch));
@@ -57,34 +55,9 @@ export class TeacherComponent extends BaseComponent implements OnInit {
       address: [""],
       userId: [""]
     });
-    this.getSchools();
+
   }
 
-  getSchools() {
-    // call api get all school
-    this.apiService.getAllSchool().subscribe((r) => {
-      if (r.result != ResultRespond.Success) return;
-      this.schools = r.data;
-      const schoolId = localStorage.getItem("school_id");
-
-      this.currentSchool = this.schools[0];
-      this.getTeacher();
-      if (this.currentSchool != null) {
-        this.getUserBySchool(this.currentSchool.id);
-      }
-    });
-  }
-
-  getUserBySchool(id: string) {
-    this.apiService.getUserBySchool(id).subscribe((res) => {
-      if (res.result == ResultRespond.Success) {
-        this.userList = res.data.filter((x) => x.isDeleted != true);
-        for (let i = 0; i < this.userList.length; i++) {
-          this.userList[i].index = i + 1;
-        }
-      }
-    });
-  }
 
   submitForm(): void {
     if (this.validateForm.valid) {
