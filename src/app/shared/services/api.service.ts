@@ -161,6 +161,13 @@ export class ApiService {
     );
   }
 
+  public addTeacherToGroup(request: any) {
+    return this.http.put<ResponseApi<any>>(
+      `${this.domain}/api/TeacherGroup/add-teacher-to-group`,
+      request
+    );
+  }
+
   public removeTeacherGroup(id: string) {
     return this.http.delete<ResponseApi<any>>(
       `${this.domain}/api/TeacherGroup/${id}`

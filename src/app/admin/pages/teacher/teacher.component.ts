@@ -23,7 +23,6 @@ export class TeacherComponent extends BaseComponent implements OnInit {
   isCreate = true;
   keySearch = "";
   schools: School[] = [];
-  currentSchool: any;
   userList: User[] = [];
   currentSchoolId = localStorage.getItem('school_id');
 
@@ -46,6 +45,9 @@ export class TeacherComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getTeacher();
+    this.getUserBySchool(this.currentSchoolId ?? '');
+
     this.validateForm = this.fb.group({
       id: [""],
       phoneNumber: [""],
@@ -56,6 +58,17 @@ export class TeacherComponent extends BaseComponent implements OnInit {
       userId: [""]
     });
 
+  }
+
+  getUserBySchool(id: string) {
+    this.apiService.getUserBySchool(id).subscribe((res) => {
+      if (res.result == ResultRespond.Success) {
+        this.userList = res.data.filter((x) => x.isDeleted != true);
+        for (let i = 0; i < this.userList.length; i++) {
+          this.userList[i].index = i + 1;
+        }
+      }
+    });
   }
 
 
@@ -97,7 +110,7 @@ export class TeacherComponent extends BaseComponent implements OnInit {
   }
 
   getTeacher() {
-    this.apiService.getTeacher(this.currentSchool?.id).subscribe((r:Teacher[]) => {
+    this.apiService.getTeacher(this.currentSchoolId ?? '').subscribe((r:Teacher[]) => {
       if (r.length === 0) {
         this.teachers = [];
         this.allTeachers = [];

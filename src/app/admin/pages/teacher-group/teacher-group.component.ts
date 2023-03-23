@@ -159,7 +159,25 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
           }
           this.message.create('success', 'Thêm mới thông tin tổ thành công');
           this.isVisibleCreateUpdate = false;
+
+          const request = {
+            groupId: res.data.id,
+            teacherIds: this.validateForm.controls['teacherIds'].value
+          }
+
+          this.apiService.addTeacherToGroup(request).subscribe(
+            (res:ResponseApi<any>) => {
+              if(res.result === 0){
+                this.getTeacherGroups();
+              }
+              else {
+                this.message.create('error', 'Thêm mới thông tin tổ thất bại');
+              }
+            }
+          );
+
           this.getTeacherGroups();
+
         },error => {
         this.message.create('error', 'Xảy ra lỗi trong quá trình thêm mới thông tin tổ');
       }
@@ -175,7 +193,24 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
           }
           this.message.create('success', 'Cập nhật thông tin tổ thành công');
           this.isVisibleCreateUpdate = false;
-          this.getTeacherGroups();
+
+
+          const request = {
+            groupId: this.idUpdate,
+            teacherIds: this.validateForm.controls['teacherIds'].value
+          }
+
+          this.apiService.addTeacherToGroup(request).subscribe(
+            (res:ResponseApi<any>) => {
+              if(res.result === 0){
+                this.getTeacherGroups();
+              }
+              else {
+                this.message.create('error', 'Thêm mới thông tin tổ thất bại');
+              }
+            }
+          );
+
         },error => {
           this.message.create('error', 'Xảy ra lỗi trong quá trình cập nhật thông tin tổ');
         }
