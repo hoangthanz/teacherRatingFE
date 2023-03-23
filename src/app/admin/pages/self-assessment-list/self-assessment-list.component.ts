@@ -105,10 +105,13 @@ export class SelfAssessmentListComponent implements OnInit {
           this.getSelfAssessmentList();
           this.createMessage('success', 'Cập nhật thành công');
         }
+        this.getSelfAssessmentList();
+        this.createMessage('warning', response.message);
       });
   }
 
   createMessage(type: string, message: string): void {
     this.message.create(type, `${message}`);
   }
+
 }
