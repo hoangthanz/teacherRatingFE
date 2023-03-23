@@ -3,6 +3,7 @@ import {ApiService} from '../../../shared/services/api.service';
 import {ResultRespond} from '../../../core/enums/result-respond';
 import {SelfCriticism} from '../../../core/models/self-criticism';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {JwtHelperService} from "@auth0/angular-jwt";
 
 @Component({
   selector: 'app-self-assessment-list',
@@ -22,6 +23,7 @@ export class SelfAssessmentListComponent implements OnInit {
   schools: any[] = [];
   schoolId = '';
   date = new Date();
+
   ngOnInit(): void {
     this.getSchools();
   }
@@ -41,18 +43,29 @@ export class SelfAssessmentListComponent implements OnInit {
     });
   }
 
+  getUserId() {
+    const helper = new JwtHelperService();
+    const token = sessionStorage.getItem('access_token');
+    if (token) {
+      const decodedToken = helper.decodeToken(token);
+      return decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+    }
+    return '';
+  }
+
   download() {
-    this.apiService.download(this.schoolId, this.date.getFullYear().toString(), (this.date.getMonth() + 1).toString()).subscribe((response: any) => {
-        const blob = new Blob([response],
-          {type: 'application/vnd.ms-excel'});
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = `Báo_cáo.xlsx`;
-        link.click();
-      },
-      err => {
-        this.message.warning("Tải báo cáo thất bại");
-      },
+    this.apiService.download(this.schoolId, this.date.getFullYear().toString(), (this.date.getMonth() + 1).toString(), this.getUserId(),)
+      .subscribe((response: any) => {
+          const blob = new Blob([response],
+            {type: 'application/vnd.ms-excel'});
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = `Báo_cáo.xlsx`;
+          link.click();
+        },
+        err => {
+          this.message.warning("Tải báo cáo thất bại");
+        },
     );
   }
 

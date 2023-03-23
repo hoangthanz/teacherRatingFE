@@ -22,9 +22,9 @@ export class ApiService {
   constructor(private http: HttpClient) {
   }
 
-  public download(schoolId: string, year: string, month: string,): Observable<Blob> {
+  public download(schoolId: string, year: string, month: string, userId: string,): Observable<Blob> {
     return this.http.post(
-      `${this.domain}/api/SelfCriticism/get-excel/${schoolId}/${year}/${month}`,
+      `${this.domain}/api/SelfCriticism/get-excel/${schoolId}/${year}/${month}/${userId}`,
       null,
       {responseType: 'blob'}
     );
