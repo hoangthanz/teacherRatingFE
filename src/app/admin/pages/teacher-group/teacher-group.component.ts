@@ -48,6 +48,7 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
     public override router: Router
   ) {
     super(router, message);
+    this.currentSchoolId = localStorage.getItem('school_id');
     this.getTeacherGroups();
   }
 

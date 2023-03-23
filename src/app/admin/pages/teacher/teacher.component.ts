@@ -8,6 +8,7 @@ import { ResultRespond } from "../../../core/enums/result-respond";
 import { Teacher } from "../../../core/models/teacher";
 import { School } from "../../../core/models/school";
 import { User } from "../../../core/models/user";
+import {RequsetCreateTeacherModel} from "../../../core/models/request/requset-create-teacher.model";
 
 @Component({
   selector: "app-teacher",
@@ -16,7 +17,7 @@ import { User } from "../../../core/models/user";
 })
 export class TeacherComponent extends BaseComponent implements OnInit {
   teachers: Teacher[] = [];
-  teachers1: Teacher[] = [];
+  allTeachers: Teacher[] = [];
   isVisible = false;
   validateForm!: UntypedFormGroup;
   isCreate = true;
@@ -24,6 +25,7 @@ export class TeacherComponent extends BaseComponent implements OnInit {
   schools: School[] = [];
   currentSchool: any;
   userList: User[] = [];
+  currentSchoolId = localStorage.getItem('school_id');
 
   constructor(
     public apiService: ApiService,
@@ -32,12 +34,17 @@ export class TeacherComponent extends BaseComponent implements OnInit {
     public override router: Router
   ) {
     super(router, message);
+    this.currentSchoolId = localStorage.getItem('school_id');
     // this.getTeacher();
   }
 
   search() {
     // this.getTeacher();
-    this.teachers = this.teachers1.filter((x) => x.name?.includes(this.keySearch));
+    this.teachers = this.allTeachers;
+    if(this.keySearch !== ""){
+      this.teachers = this.teachers.filter((x) => x.name?.includes(this.keySearch));
+    }
+
   }
 
   ngOnInit(): void {
@@ -117,26 +124,19 @@ export class TeacherComponent extends BaseComponent implements OnInit {
   }
 
   getTeacher() {
-    this.apiService.getTeacher(this.currentSchool?.id).subscribe((r) => {
-      if (r.result != ResultRespond.Success) {
+    this.apiService.getTeacher(this.currentSchool?.id).subscribe((r:Teacher[]) => {
+      if (r.length === 0) {
         this.teachers = [];
+        this.allTeachers = [];
         this.createMessage("error", "Lỗi không lấy được dữ liệu");
+        return;
       }
-      this.teachers = r.data;
+      this.allTeachers = r;
+      this.teachers = r;
     }, () => {
       this.createMessage("error", "Lỗi không lấy được dữ liệu");
       this.teachers = [];
-      for (let i = 0; i < 100; i++) {
-        this.teachers.push({
-          id: i.toString(),
-          name: "Giáo viên " + i.toString(),
-          description: "Mô tả " + i.toString(),
-          phoneNumber: "090606335" + i.toString(),
-          email: "Email" + i.toString() + "@gmail.com",
-          userId: "User Id " + i.toString()
-        });
-      }
-      this.teachers1 = JSON.parse(JSON.stringify(this.teachers));
+      this.allTeachers = [];
     });
   }
 
@@ -158,11 +158,19 @@ export class TeacherComponent extends BaseComponent implements OnInit {
   }
 
   postTeachers() {
-    const valueOfForm = this.validateForm.value;
-    valueOfForm.schoolId = this.currentSchool.id;
-    this.apiService.postTeacher(valueOfForm).subscribe((r) => {
-      if (r.result != ResultRespond.Success) {
 
+    const request: RequsetCreateTeacherModel = {
+      name: this.validateForm.controls['name'].value,
+      phoneNumber: this.validateForm.controls['phoneNumber'].value,
+      email: this.validateForm.controls['email'].value,
+      userId: this.validateForm.controls['userId'].value,
+      schoolId: this.currentSchoolId ?? '',
+      groupId: ''
+    }
+
+
+    this.apiService.postTeacher(request).subscribe((r) => {
+      if (r.result != ResultRespond.Success) {
         this.createMessage("error", r.message);
         return;
       }
@@ -171,15 +179,22 @@ export class TeacherComponent extends BaseComponent implements OnInit {
       this.getTeacher();
     }, () => {
       this.isVisible = false;
-      this.teachers.push(valueOfForm);
     });
   }
 
   putTeachers() {
-    const valueOfForm = this.validateForm.value;
-    valueOfForm.schoolId = this.currentSchool.id;
+    const request: RequsetCreateTeacherModel = {
+      id: this.validateForm.controls['id'].value,
+      name: this.validateForm.controls['name'].value,
+      phoneNumber: this.validateForm.controls['phoneNumber'].value,
+      email: this.validateForm.controls['email'].value,
+      userId: this.validateForm.controls['userId'].value,
+      schoolId: this.currentSchoolId ?? '',
+      groupId: ''
+    }
+
     // call api create teacher-group
-    this.apiService.putTeachers(valueOfForm).subscribe((r) => {
+    this.apiService.putTeachers(request).subscribe((r) => {
       if (r.result != ResultRespond.Success) {
         this.createMessage("error", r.message);
         return;
@@ -189,12 +204,6 @@ export class TeacherComponent extends BaseComponent implements OnInit {
       this.getTeacher();
     }, () => {
       this.isVisible = false;
-      this.teachers = this.teachers.map(x => {
-        if (x.id == valueOfForm.id) {
-          x.name = valueOfForm.name;
-        }
-        return x;
-      });
     });
   }
 

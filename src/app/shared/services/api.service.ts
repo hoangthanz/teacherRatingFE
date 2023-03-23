@@ -13,6 +13,7 @@ import {Teacher} from "../../core/models/teacher";
 import {RequestCreateSchoolModel} from "src/app/core/models/request/request-create-school.model";
 import {Observable} from "rxjs";
 import {RequestCreateTeacherGroupModel} from "../../core/models/request/request-create-teacher-group.model";
+import {RequsetCreateTeacherModel} from "../../core/models/request/requset-create-teacher.model";
 
 @Injectable({
   providedIn: "root"
@@ -257,22 +258,22 @@ export class ApiService {
   // giao vien
 
   public getTeacher(schoolId: string) {
-    return this.http.get<ResponseApi<Teacher[]>>(
+    return this.http.get<Teacher[]>(
       `${this.domain}/api/Teacher/get-by-school/${schoolId}`
     );
   }
 
 
-  public postTeacher(model: Teacher) {
+  public postTeacher(model: RequsetCreateTeacherModel) {
     return this.http.post<ResponseApi<any>>(
-      `${this.domain}/api/Teacher/create`,
+      `${this.domain}/api/Teacher`,
       model
     );
   }
 
-  public putTeachers(model: Teacher) {
+  public putTeachers(model: RequsetCreateTeacherModel) {
     return this.http.put<ResponseApi<any>>(
-      `${this.domain}/api/Teacher/update/${model.id}`,
+      `${this.domain}/api/Teacher`,
       model
     );
   }
