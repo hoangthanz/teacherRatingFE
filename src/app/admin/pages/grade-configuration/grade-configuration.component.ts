@@ -36,7 +36,7 @@ export class GradeConfigurationComponent extends BaseComponent implements OnInit
 
   search() {
     // this.getCriteria();
-    this.grade = this.gradeOld.filter((x) => x.name?.includes(this.keySearch));
+    this.grade = this.gradeOld.filter((x) => x.name?.toLowerCase()?.includes(this.keySearch?.toLowerCase()));
   }
 
   ngOnInit(): void {

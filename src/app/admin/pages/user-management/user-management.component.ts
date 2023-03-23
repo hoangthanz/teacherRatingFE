@@ -1,14 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { ApiService } from "../../../shared/services/api.service";
-import { NzMessageService } from "ng-zorro-antd/message";
-import { User } from "../../../core/models/user";
-import { ResultRespond } from "../../../core/enums/result-respond";
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
-import { NzFormTooltipIcon } from "ng-zorro-antd/form";
-import { Role } from "../../../core/models/role";
-import { BaseComponent } from "../../../shared/components/base/base.component";
-import { Router } from "@angular/router";
-import { School } from "../../../core/models/school";
+import {Component, OnInit} from "@angular/core";
+import {ApiService} from "../../../shared/services/api.service";
+import {NzMessageService} from "ng-zorro-antd/message";
+import {User} from "../../../core/models/user";
+import {ResultRespond} from "../../../core/enums/result-respond";
+import {UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
+import {NzFormTooltipIcon} from "ng-zorro-antd/form";
+import {Role} from "../../../core/models/role";
+import {BaseComponent} from "../../../shared/components/base/base.component";
+import {Router} from "@angular/router";
+import {School} from "../../../core/models/school";
 
 @Component({
   selector: "app-user-management",
@@ -17,6 +17,7 @@ import { School } from "../../../core/models/school";
 })
 export class UserManagementComponent extends BaseComponent implements OnInit {
   userList: User[] = [];
+  userListOld: User[] = [];
   isVisible = false;
   validateForm!: UntypedFormGroup;
   captchaTooltipIcon: NzFormTooltipIcon = {
@@ -40,7 +41,8 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
   }
 
   search() {
-    // this.criteriaGroups = this.criteriaGroupsOld.filter((x) => x.name?.includes(this.keySearch));
+    this.userList = this.userListOld.filter((x) => x.userName?.toLowerCase()?.includes(this.keySearch?.toLowerCase())
+      || x.displayName?.toLowerCase()?.includes(this.keySearch?.toLowerCase()));
   }
 
   ngOnInit(): void {
@@ -55,6 +57,7 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
         for (let i = 0; i < this.userList.length; i++) {
           this.userList[i].index = i + 1;
         }
+        this.userListOld = JSON.parse(JSON.stringify(this.userList));
       }
     });
   }
@@ -66,6 +69,7 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
         for (let i = 0; i < this.userList.length; i++) {
           this.userList[i].index = i + 1;
         }
+        this.userListOld = JSON.parse(JSON.stringify(this.userList));
       }
     });
   }

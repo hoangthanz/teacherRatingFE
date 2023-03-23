@@ -36,7 +36,7 @@ export class CriteriaGroupComponent extends BaseComponent implements OnInit {
 
   search() {
     // this.getCriteriaGroup();
-    this.criteriaGroups = this.criteriaGroupsOld.filter((x) => x.name?.includes(this.keySearch));
+    this.criteriaGroups = this.criteriaGroupsOld.filter((x) => x.name?.toLowerCase()?.includes(this.keySearch?.toLowerCase()));
   }
 
   getSchools() {

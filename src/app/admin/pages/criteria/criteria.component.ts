@@ -39,7 +39,7 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
 
   search() {
     // this.getCriteria();
-    this.criteria = this.criteriaOld.filter((x) => x.name?.includes(this.keySearch));
+    this.criteria = this.criteriaOld.filter((x) => x.name?.toLowerCase()?.includes(this.keySearch?.toLowerCase()));
   }
 
   ngOnInit(): void {
