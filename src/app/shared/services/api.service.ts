@@ -12,6 +12,7 @@ import {Criteria, GradeConfiguration} from "../../core/models/criteria";
 import {Teacher} from "../../core/models/teacher";
 import {RequestCreateSchoolModel} from "src/app/core/models/request/request-create-school.model";
 import {Observable} from "rxjs";
+import {RequestCreateTeacherGroupModel} from "../../core/models/request/request-create-teacher-group.model";
 
 @Injectable({
   providedIn: "root"
@@ -145,14 +146,14 @@ export class ApiService {
     );
   }
 
-  public postTeacherGroup(teacherGroup: TeacherGroup) {
+  public postTeacherGroup(teacherGroup: RequestCreateTeacherGroupModel) {
     return this.http.post<ResponseApi<any>>(
       `${this.domain}/api/TeacherGroup/create`,
       teacherGroup
     );
   }
 
-  public putTeacherGroup(teacherGroup: TeacherGroup) {
+  public putTeacherGroup(teacherGroup: RequestCreateTeacherGroupModel) {
     return this.http.put<ResponseApi<any>>(
       `${this.domain}/api/TeacherGroup/update/${teacherGroup.id}`,
       teacherGroup
@@ -306,7 +307,7 @@ export class ApiService {
   }
 
   public getTeacherBySchoolId(schoolId: string) {
-    return this.http.get<ResponseApi<Teacher[]>>(
+    return this.http.get<Teacher[]>(
       `${this.domain}/api/Teacher/get-by-school/${schoolId}`
     );
   }

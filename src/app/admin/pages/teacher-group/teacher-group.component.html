@@ -33,6 +33,7 @@
               <div class="py-2 px-3 bg-gray-200 rounded-md">
                 <div class="font-medium text-gray-900"> STT: {{ i + 1}}</div>
                 <div class="text-sm text-gray-500"> Tên tổ: {{ teacherGroup.name }}</div>
+                <div class="text-sm text-gray-500"> Tổng giáo viên: {{ teacherGroup.totalMember }}</div>
                 <div class="text-sm text-gray-500"> Điểm kỳ 1: {{ teacherGroup.period1Score }}</div>
                 <div class="text-sm text-gray-500"> Điểm kỳ 2: {{ teacherGroup.period2Score }}</div>
                 <div class="text-sm text-gray-500"> Năm: {{ teacherGroup.yearScore }}</div>
@@ -58,6 +59,7 @@
             <tr>
               <th class=" header-center">STT</th>
               <th class=" header-center">Tên tổ</th>
+              <th class=" header-center">Tổng giáo viên</th>
               <th class=" header-center">Điểm kỳ 1</th>
               <th class=" header-center">Điểm kỳ 2</th>
               <th class=" header-center">Năm</th>
@@ -69,6 +71,7 @@
             <tr *ngFor="let teacherGroup of teacherGroups; let i = index">
               <td >{{ i + 1 }}</td>
               <td >{{ teacherGroup.name }}</td>
+              <td >{{ teacherGroup.totalMember }}</td>
               <td >{{ teacherGroup.period1Score }}</td>
               <td >{{ teacherGroup.period2Score }}</td>
               <td >{{ teacherGroup.yearScore }}</td>
@@ -107,14 +110,13 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="teacherIds">Giáo viên</nz-form-label>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="teacherIds">Giáo viên</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24">
           <nz-select
             formControlName="teacherIds" id="teacherIds"
             nzMode="multiple"
             nzPlaceHolder="Chọn giáo viên"
             [nzOptions]="listShowTeacher"
-            [(ngModel)]="listSelectedTeacher"
           ></nz-select>
         </nz-form-control>
       </nz-form-item>
@@ -141,7 +143,7 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="description">Mô tả</nz-form-label>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="description">Mô tả</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24">
           <input nz-input formControlName="description" id="description"/>
         </nz-form-control>

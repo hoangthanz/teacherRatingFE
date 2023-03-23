@@ -12,6 +12,7 @@ import { TeacherGroup } from '../../../core/models/teacher-group';
 import { ResultRespond } from '../../../core/enums/result-respond';
 import {ResponseApi} from "../../../core/models/response-api";
 import {Teacher} from "../../../core/models/teacher";
+import {RequestCreateTeacherGroupModel} from "../../../core/models/request/request-create-teacher-group.model";
 
 @Component({
   selector: 'app-teacher-group',
@@ -33,7 +34,6 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
 
   listTeacher: Teacher[] = [];
   listShowTeacher: Array<{ value: string; label: string }> = [];
-  listSelectedTeacher: Teacher[] = [];
 
   teacherGroups: TeacherGroup[] = [];
   allTeacherGroups: TeacherGroup[] = [];
@@ -69,8 +69,8 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
 
   getTeachersBySchool = () => {
     this.apiService.getTeacherBySchoolId(this.currentSchoolId ?? '').subscribe(
-      (res: ResponseApi<Teacher[]>) => {
-        this.listTeacher = res.data;
+      (res: Teacher[]) => {
+        this.listTeacher = res;
         this.listShowTeacher = this.listTeacher.map(item => ({
           value: item.id ?? '',
           label: item.name ?? ''
@@ -137,6 +137,52 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
       return;
     }
 
+    const request: RequestCreateTeacherGroupModel = {
+      name: this.validateForm.controls['name'].value,
+      teacherIds: this.validateForm.controls['teacherIds'].value,
+      period1Score: this.validateForm.controls['period1Score'].value,
+      period2Score: this.validateForm.controls['period2Score'].value,
+      yearScore: this.validateForm.controls['yearScore'].value,
+      description: this.validateForm.controls['description'].value,
+      isDeleted: false,
+      schoolId: this.currentSchoolId ?? '',
+      totalMember: this.validateForm.controls['teacherIds'].value.length
+    }
+
+    if(this.isCreate){
+      this.apiService.postTeacherGroup(request).subscribe(
+        (res:ResponseApi<any>) => {
+          if (res.result !== 0){
+            this.message.create('error', 'Thêm mới thông tin tổ thất bại');
+            return;
+          }
+          this.message.create('success', 'Thêm mới thông tin tổ thành công');
+          this.isVisibleCreateUpdate = false;
+          this.getTeacherGroups();
+        },error => {
+        this.message.create('error', 'Xảy ra lỗi trong quá trình thêm mới thông tin tổ');
+      }
+      );
+    }
+    else {
+      request.id = this.idUpdate;
+      this.apiService.putTeacherGroup(request).subscribe(
+        (res:ResponseApi<any>) => {
+          if (res.result !== 0){
+            this.message.create('error', 'Cập nhật thông tin tổ thất bại');
+            return;
+          }
+          this.message.create('success', 'Cập nhật thông tin tổ thành công');
+          this.isVisibleCreateUpdate = false;
+          this.getTeacherGroups();
+        },error => {
+          this.message.create('error', 'Xảy ra lỗi trong quá trình cập nhật thông tin tổ');
+        }
+      );
+
+    }
+
+
   }
 
   handleCancelDelete = (): void => {
@@ -147,6 +193,23 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
 
   confirmDelete = () => {
     this.isDeleteLoading = true;
+    this.apiService.removeTeacherGroup(this.idDelete).subscribe(
+      (res:ResponseApi<any>) => {
+        if(res.result !== 0) {
+          this.message.create('error', 'Xóa thông tin tổ thất bại');
+          this.isDeleteLoading = false;
+          return;
+        }
+        this.message.create('success', 'Xóa thông tin tổ thành công');
+        this.isVisibleDelete= false;
+        this.isDeleteLoading = false;
+        this.getTeacherGroups();
+      }, error => {
+        this.message.create('error', 'Xảy ra lỗi trong quá trình xóa thông tin tổ');
+        this.isDeleteLoading = false;
+      }
+    )
+
   }
 
 
