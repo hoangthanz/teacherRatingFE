@@ -11,6 +11,7 @@ import {CriteriaGroup} from "../../core/models/criteria-group";
 import {Criteria, GradeConfiguration} from "../../core/models/criteria";
 import {Teacher} from "../../core/models/teacher";
 import {RequestCreateSchoolModel} from "src/app/core/models/request/request-create-school.model";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -19,6 +20,14 @@ export class ApiService {
   private domain = environment.domain;
 
   constructor(private http: HttpClient) {
+  }
+
+  public download(schoolId: string, year: string, month: string,): Observable<Blob> {
+    return this.http.post(
+      `${this.domain}/api/SelfCriticism/get-excel/${schoolId}/${year}/${month}`,
+      null,
+      {responseType: 'blob'}
+    );
   }
 
   public getAssessmentCriteriaGroups() {

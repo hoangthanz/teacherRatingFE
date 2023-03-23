@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../../shared/services/api.service';
-import { ResultRespond } from '../../../core/enums/result-respond';
-import { SelfCriticism } from '../../../core/models/self-criticism';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import {Component, OnInit} from '@angular/core';
+import {ApiService} from '../../../shared/services/api.service';
+import {ResultRespond} from '../../../core/enums/result-respond';
+import {SelfCriticism} from '../../../core/models/self-criticism';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-self-assessment-list',
@@ -19,12 +19,42 @@ export class SelfAssessmentListComponent implements OnInit {
   isVisible = false;
 
   viewOfSelfAssessment: SelfCriticism = new SelfCriticism();
+  schools: any[] = [];
+  schoolId = '';
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getSchools();
+  }
 
   showModal(i: number): void {
     this.viewOfSelfAssessment = this.seflAssessmentList[i];
     this.isVisible = true;
+  }
+
+  getSchools() {
+    // call api get all school
+    this.apiService.getAllSchool().subscribe((r) => {
+      if (r.result != ResultRespond.Success) return;
+      this.schools = r.data;
+      const schoolId = localStorage.getItem("school_id");
+      this.schoolId = this.schools.find(x => x.id == schoolId)?.id ?? this.schools[0]?.id;
+    });
+  }
+
+  download() {
+    const date = new Date();
+    this.apiService.download(this.schoolId, date.getFullYear().toString(), date.getMonth().toString()).subscribe((response: any) => {
+        const blob = new Blob([response],
+          {type: 'application/vnd.ms-excel'});
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `Báo_cáo.xlsx`;
+        link.click();
+      },
+      err => {
+        this.message.warning("Tải báo cáo thất bại");
+      },
+    );
   }
 
   handleOk(): void {
