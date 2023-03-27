@@ -15,7 +15,7 @@
         nz-button
         nzType="dashed"
         class="text-right flex-1 mr-3"
-        (click)="getCriteriaGroup()"
+        (click)="getData()"
       >
         Làm mới
       </button>
@@ -23,7 +23,7 @@
         nz-button
         nzType="primary"
         class="text-right flex-1"
-        (click)="showModelCriteriaGroup()"
+        (click)="showModel()"
       >
         Thêm
       </button>
@@ -44,14 +44,14 @@
 
           <div class="text-sm text-gray-500 py-1">
             <button nz-button nzType="primary" nzShape="round"
-                    (click)="showModelCriteriaGroup(data?.id)"
+                    (click)="showModel(data?.id)"
             >Sửa
             </button>
             <!--            <button nz-button nzType="dashed" nzShape="round">Xem</button>-->
             <a nz-button
                nzType="link"
                nzShape="round" nz-popconfirm nzPopconfirmTitle="Bạn chắc chắn xoá?"
-               (nzOnConfirm)="removeCriteriaGroup(data.id)">Xóa</a>
+               (nzOnConfirm)="removeFile(data.id)">Xóa</a>
           </div>
         </div>
       </div>
@@ -61,7 +61,7 @@
   <div class="hidden sm:block">
     <nz-table
       #listTable
-      [nzData]="criteriaGroups"
+      [nzData]="fileArr"
       nzTableLayout="fixed"
       class="w-full flex flex-col sm:flex-row"
     >
@@ -81,19 +81,19 @@
         <td class="w-2/12">{{ data?.createdDate | date: "dd-MM-yyyy" }}</td>
         <td class="w-1/12">{{ data?.description }}</td>
         <td  class="w-2/12">
-          <button
+          <!--<button
             nz-button
             nzType="primary"
             nzShape="round"
             (click)="showModelCriteriaGroup(data?.id)"
           >
             Sửa
-          </button>
+          </button>-->
           <button
             nz-button
             nzType="primary"
             nzShape="round"
-            (click)="showModelCriteriaGroup(data?.id)"
+            (click)="showModel(data?.id)"
           >
             Tải về
           </button>
@@ -102,7 +102,7 @@
           <a nz-button
              nzType="link"
              nzShape="round" nz-popconfirm nzPopconfirmTitle="Bạn chắc chắn xoá ?"
-             (nzOnConfirm)="removeCriteriaGroup(data.id)">Xóa</a>
+             (nzOnConfirm)="removeFile(data.id)">Xóa</a>
         </td>
       </tr>
       </tbody>
@@ -114,18 +114,18 @@
 
 <nz-modal
   [(nzVisible)]="isVisible"
-  nzTitle="{{ isCreate == true ? 'Tạo nhóm tiêu chí' : 'Cập nhật nhóm tiêu chí' }}"
+  nzTitle="{{ isCreate == true ? 'Thêm tài liệu' : 'Cập nhật tài liệu' }}"
   [nzFooter]="null"
   (nzOnCancel)="handleCancel()"
 >
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="validateForm"
-          (ngSubmit)="submitForm();isCreate == true ? postCriteriaGroups() : putCriteriaGroups()">
+          (ngSubmit)="submitForm();">
       <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="name">Tên nhóm tiêu chí</nz-form-label>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired nzFor="name">Tên tài liệu</nz-form-label>
         <nz-form-control [nzSm]="16" [nzXs]="24" nzErrorTip="Vui lòng nhập thông tin">
           <nz-input-group nzPrefixIcon="user">
-            <input type="text" nz-input formControlName="name" id="name" placeholder="Tên nhóm tiêu chí" />
+            <input type="text" nz-input formControlName="name" id="name" placeholder="Vui lòng nhập thông tin" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -137,7 +137,30 @@
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
-      <button nz-button class="float-end" [nzType]="'primary'">
+      <div class="flex justify-end">
+
+        <div class="mb-4">
+          <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+            <button nz-button>
+              <span nz-icon nzType="upload"></span>
+              Chọn tài liệu
+            </button>
+          </nz-upload>
+        </div>
+      </div>
+
+      <!--<button
+        nz-button
+        [nzType]="'primary'"
+        [nzLoading]="uploading"
+        (click)="handleUpload()"
+        [disabled]="fileList.length === 0"
+        style="margin-top: 16px"
+      >
+        {{ uploading ? 'Uploading' : 'Start Upload' }}
+      </button>-->
+      <button nz-button class="float-end" [nzType]="'primary'"
+              (click)="isCreate == true ? createFile() : putCriteriaGroups()">
         {{ isCreate == true ? 'Tạo' : 'Cập nhật' }}
       </button>
     </form>

@@ -5,8 +5,8 @@ import { NzMessageService } from "ng-zorro-antd/message";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ResultRespond } from "../../../core/enums/result-respond";
-import { CriteriaGroup } from "../../../core/models/criteria-group";
 import { School } from "../../../core/models/school";
+import { NzUploadFile } from "ng-zorro-antd/upload";
 
 @Component({
   selector: "app-file-list",
@@ -14,14 +14,16 @@ import { School } from "../../../core/models/school";
   styleUrls: ["./file-list.component.css"]
 })
 export class FileListComponent extends BaseComponent implements OnInit {
-  criteriaGroups: CriteriaGroup[] = [];
-  criteriaGroupsOld: CriteriaGroup[] = [];
+  fileArr: any[] = [];
+  fileArrOld: any[] = [];
   isVisible = false;
   validateForm!: UntypedFormGroup;
   isCreate = true;
   keySearch = "";
   schools: School[] = [];
   currentSchool: any;
+  uploading = false;
+  fileList: NzUploadFile[] = [];
 
   constructor(
     public apiService: ApiService,
@@ -31,12 +33,18 @@ export class FileListComponent extends BaseComponent implements OnInit {
   ) {
     super(router, message);
     this.getSchools();
-    this.getCriteriaGroup();
+    this.getData();
   }
+
+  beforeUpload = (file: NzUploadFile): boolean => {
+    this.fileList = this.fileList.concat(file);
+    return false;
+  };
+
 
   search() {
     // this.getCriteriaGroup();
-    this.criteriaGroups = this.criteriaGroupsOld.filter((x) => x.name?.toLowerCase()?.includes(this.keySearch?.toLowerCase()));
+    this.fileArr = this.fileArrOld.filter((x) => x.name?.toLowerCase()?.includes(this.keySearch?.toLowerCase()));
   }
 
   getSchools() {
@@ -68,10 +76,10 @@ export class FileListComponent extends BaseComponent implements OnInit {
     }
   }
 
-  showModelCriteriaGroup(id = ""): void {
+  showModel(id = ""): void {
     if (id != "") {
       this.isCreate = false;
-      const criteriaGroup = this.criteriaGroups.find((x) => x.id == id);
+      const criteriaGroup = this.fileArr.find((x) => x.id == id);
       this.validateForm = this.fb.group({
         id: [criteriaGroup?.id],
         name: [criteriaGroup?.name, [Validators.required]],
@@ -90,91 +98,86 @@ export class FileListComponent extends BaseComponent implements OnInit {
     this.isVisible = true;
   }
 
-  getCriteriaGroup() {
-    this.apiService.getCriteriaGroups().subscribe((r) => {
+  getData() {
+    this.apiService.getFiles().subscribe((r) => {
       if (r.result != ResultRespond.Success) {
-        this.criteriaGroups = [];
+        this.fileArr = [];
         this.createMessage("error", "Lỗi không lấy được dữ liệu");
       }
 
-      this.criteriaGroups = r.data;
+      this.fileArr = r.data;
     }, () => {
       this.createMessage("error", "Lỗi không lấy được dữ liệu");
-      this.criteriaGroups = [];
+      this.fileArr = [];
       for (let i = 0; i < 100; i++) {
-        this.criteriaGroups.push({
+        this.fileArr.push({
           id: i.toString(),
-          name: "Nhoms tiêu chí " + i.toString(),
+          name: "Tài_liệu_" + i.toString() + ".pdf",
           createdDate: "2023-03-17T16:43:40.252371",
           updatedDate: "2023-03-17T16:43:40.252371"
         });
       }
-      this.criteriaGroupsOld = JSON.parse(JSON.stringify(this.criteriaGroups));
+      this.fileArrOld = JSON.parse(JSON.stringify(this.fileArr));
     });
   }
 
-  removeCriteriaGroup(id: string | undefined) {
+  removeFile(id: string) {
     if (typeof id == "undefined") return;
 
-    this.apiService.removeCriteriaGroup(id).subscribe((r) => {
+    this.apiService.removeFiles(id).subscribe((r) => {
       if (r.result != ResultRespond.Success) {
-        this.criteriaGroups = [];
-        this.getCriteriaGroup();
+        this.fileArr = [];
+        this.getData();
         this.createMessage("error", "Lỗi không lấy được dữ liệu");
       }
 
       this.createMessage("success", "Xóa  thành công");
-      this.getCriteriaGroup();
+      this.getData();
     }, () => {
-      this.criteriaGroups = this.criteriaGroups.filter(x => x.id != id);
+      this.fileArr = this.fileArr.filter(x => x.id != id);
     });
   }
 
-  postCriteriaGroups() {
+  createFile() {
     const valueOfForm = this.validateForm.value;
     // call api create teacher-group
     delete valueOfForm?.id;
-    this.apiService.postCriteriaGroups(valueOfForm).subscribe((r) => {
-      if (r.result != ResultRespond.Success) {
+    const formData = new FormData();
+    this.fileList.forEach((file: any) => {
+      formData.append("files[]", file);
+    });
+    formData.append("name", valueOfForm.name);
+    formData.append("description", valueOfForm.description);
+    this.uploading = true;
+    this.apiService.postFiles(formData).subscribe((r) => {
+      /*if (r.result != ResultRespond.Success) {
         this.createMessage("error", r.message);
-        this.getCriteriaGroup();
+        this.getData();
         return;
-      }
+      }*/
       this.isVisible = false;
       this.createMessage("success", "Tạo  thành công");
-      this.getCriteriaGroup();
+      this.getData();
     }, () => {
       this.isVisible = false;
-      this.criteriaGroups.push({
-        id: Date().toString(),
-        name: valueOfForm.name,
-        createdDate: "2023-03-17T16:43:40.252371",
-        updatedDate: "2023-03-17T16:43:40.252371"
-      });
     });
   }
 
   putCriteriaGroups() {
-    const valueOfForm = this.validateForm.value;
+    /*const valueOfForm = this.validateForm.value;
     // call api create teacher-group
     this.apiService.putCriteriaGroups(valueOfForm).subscribe((r) => {
       if (r.result != ResultRespond.Success) {
         this.createMessage("error", r.message);
-        this.getCriteriaGroup();
+        this.getData();
         return;
       }
       this.isVisible = false;
       this.createMessage("success", "Cập nhật  thành công");
-      this.getCriteriaGroup();
+      this.getData();
     }, () => {
       this.isVisible = false;
-      this.criteriaGroups = this.criteriaGroups.map(x => {
-        if (x.id == valueOfForm.id) {
-          x.name = valueOfForm.name;
-        }
-        return x;
-      });
-    });
+    });*/
   }
   handleCancel(): void {
     this.isVisible = false;

@@ -1,19 +1,19 @@
-import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../environments/environment";
-import {ResponseApi} from "../../core/models/response-api";
-import {AssessmentCriteriaGroup} from "../../core/models/assessment-criteria-group";
-import {SelfCriticism} from "../../core/models/self-criticism";
-import {User} from "../../core/models/user";
-import {Role} from "../../core/models/role";
-import {TeacherGroup} from "../../core/models/teacher-group";
-import {CriteriaGroup} from "../../core/models/criteria-group";
-import {Criteria, GradeConfiguration} from "../../core/models/criteria";
-import {Teacher} from "../../core/models/teacher";
-import {RequestCreateSchoolModel} from "src/app/core/models/request/request-create-school.model";
-import {Observable} from "rxjs";
-import {RequestCreateTeacherGroupModel} from "../../core/models/request/request-create-teacher-group.model";
-import {RequsetCreateTeacherModel} from "../../core/models/request/requset-create-teacher.model";
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../environments/environment";
+import { ResponseApi } from "../../core/models/response-api";
+import { AssessmentCriteriaGroup } from "../../core/models/assessment-criteria-group";
+import { SelfCriticism } from "../../core/models/self-criticism";
+import { User } from "../../core/models/user";
+import { Role } from "../../core/models/role";
+import { TeacherGroup } from "../../core/models/teacher-group";
+import { CriteriaGroup } from "../../core/models/criteria-group";
+import { Criteria, GradeConfiguration } from "../../core/models/criteria";
+import { Teacher } from "../../core/models/teacher";
+import { RequestCreateSchoolModel } from "src/app/core/models/request/request-create-school.model";
+import { Observable } from "rxjs";
+import { RequestCreateTeacherGroupModel } from "../../core/models/request/request-create-teacher-group.model";
+import { RequsetCreateTeacherModel } from "../../core/models/request/requset-create-teacher.model";
 
 @Injectable({
   providedIn: "root"
@@ -320,4 +320,20 @@ export class ApiService {
     );
   }
 
+  public getFiles() {
+    return this.http.get<ResponseApi<any[]>>(
+      `${this.domain}/api/Files/get-all`
+    );
+  }
+
+
+  public postFiles(body: FormData) {
+    return this.http.post(`${this.domain}/api/Files`, body);
+  }
+
+  public removeFiles(id: string) {
+    return this.http.delete<ResponseApi<any>>(
+      `${this.domain}/api/Files/${id}`
+    );
+  }
 }

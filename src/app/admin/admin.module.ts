@@ -19,6 +19,7 @@ import {SchoolManagementComponent} from "./pages/school-management/school-manage
 import {ShowAllComponent} from "./pages/show-all/show-all.component";
 import {GradeConfigurationComponent} from "./pages/grade-configuration/grade-configuration.component";
 import { FileListComponent } from "./pages/file-list/file-list.component";
+import { NzUploadModule } from "ng-zorro-antd/upload";
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import { FileListComponent } from "./pages/file-list/file-list.component";
     GradeConfigurationComponent,
     FileListComponent,
   ],
-  imports: [CommonModule, FormsModule, AdminRoutingModule, SharedModule],
+  imports: [CommonModule, FormsModule, AdminRoutingModule, SharedModule, NzUploadModule],
   providers: [ApiService],
 })
 export class AdminModule {}
