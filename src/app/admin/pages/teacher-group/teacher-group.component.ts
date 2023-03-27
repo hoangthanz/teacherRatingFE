@@ -36,7 +36,10 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
   isVisible = false;
   validateForm!: UntypedFormGroup;
 
-  currentSchoolId = localStorage.getItem('school_id');
+  currentSchoolId = localStorage.getItem("school_id");
+
+  date = new Date();
+
   constructor(
     public apiService: ApiService,
     public override message: NzMessageService,
@@ -44,12 +47,28 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
     public override router: Router
   ) {
     super(router, message);
-    this.currentSchoolId = localStorage.getItem('school_id');
+    this.currentSchoolId = localStorage.getItem("school_id");
     this.getTeacherGroups();
   }
 
+  download() {
+    this.apiService.downloadTeacherGroup(this.currentSchoolId ?? '', this.date.getFullYear().toString(), (this.date.getMonth() + 1).toString(), this.getUserId())
+      .subscribe((response: any) => {
+          const blob = new Blob([response],
+            { type: "application/vnd.ms-excel" });
+          const link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.download = `Báo_cáo.xlsx`;
+          link.click();
+        },
+        err => {
+          this.message.warning("Tải báo cáo thất bại");
+        }
+      );
+  }
+
   ngOnInit(): void {
-    this.getTeachersBySchool()
+    this.getTeachersBySchool();
   }
 
   getTeacherGroups() {
@@ -57,7 +76,7 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
       if (r.result != ResultRespond.Success) {
         this.teacherGroups = [];
         this.allTeacherGroups = [];
-        this.createMessage('error', 'Lỗi không lấy được dữ liệu');
+        this.createMessage("error", "Lỗi không lấy được dữ liệu");
       }
       this.teacherGroups = r.data;
       this.allTeacherGroups = r.data;

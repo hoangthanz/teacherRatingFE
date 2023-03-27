@@ -1,14 +1,13 @@
 <nz-card nzTitle="{{ 'Bản nhận xét' }}">
+
   <div class="w-full flex mb-3">
-    <div class="basis-1/2">
-      <div>
-        <nz-input-group nzSearch>
-          <input type="text" nz-input placeholder="Tìm kiếm" (keyup.enter)="search()" [(ngModel)]="keySearch" />
-        </nz-input-group>
-      </div>
-    </div>
-    <div class="basis-1/2 text-right">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+    <div class="">
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-2">
+        <div>
+          <nz-input-group nzSearch>
+            <input type="text" nz-input placeholder="Tìm kiếm" (keyup.enter)="search()" [(ngModel)]="keySearch" />
+          </nz-input-group>
+        </div>
         <div>
           <nz-date-picker nzMode="month" [(ngModel)]="date"></nz-date-picker>
         </div>
@@ -18,12 +17,19 @@
           <nz-option *ngFor="let item of teacherGroups" nzValue="{{item.id}}" nzLabel="{{item.name}}"></nz-option>
         </nz-select>
 
-        <div class="flex">
+        <div class="flex gap-2">
           <button nz-button nzType="primary" (click)="search()" nzSearch>
             Tìm kiếm
             <span nz-icon nzType="search"></span>
           </button>
-
+          <button
+            nz-button
+            nzType="primary"
+            class="text-right flex-1"
+            (click)="download()"
+          >
+            Tải danh sách khai báo
+          </button>
         </div>
       </div>
 

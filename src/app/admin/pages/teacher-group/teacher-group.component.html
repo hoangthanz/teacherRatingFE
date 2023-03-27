@@ -1,6 +1,25 @@
 <nz-card nzTitle="{{ 'PHÂN TỔ GIÁO VIÊN' }}">
   <div class="bg-white rounded mt-4 p-2">
     <div>
+      <div class="flex justify-end pb-3">
+        <div class="flex justify-end items-end">
+          <div>
+            <nz-date-picker nzMode="month" [(ngModel)]="date"></nz-date-picker>
+          </div>
+
+          <div>
+            <button
+              nz-button
+              nzType="primary"
+              class="text-right flex-1"
+              (click)="download()"
+            >
+              Tải danh sách thi đua
+            </button>
+          </div>
+
+        </div>
+      </div>
       <div>
         <div class="flex mb-4 gap-5">
           <div class="flex flex-col w-1/2 md:w-1/3 lg:w-1/5 xl:w-1/6 justify-between">

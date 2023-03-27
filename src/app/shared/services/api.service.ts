@@ -32,6 +32,19 @@ export class ApiService {
     );
   }
 
+  public downloadTeacherGroup(schoolId: string, year: string, month: string, userId: string,): Observable<Blob> {
+    return this.http.post(
+      `${this.domain}/api/TeacherGroup/get-teacher-by-group-by-grade`,
+      {
+        schoolId: schoolId,
+        year: year,
+        month: month,
+        userId: userId
+      },
+      {responseType: 'blob'}
+    );
+  }
+
   public getAssessmentCriteriaGroups() {
     return this.http.get<ResponseApi<AssessmentCriteriaGroup>>(
       `${this.domain}/api/AssessmentCriteriaGroup/get-all-assessment-criteria-group`

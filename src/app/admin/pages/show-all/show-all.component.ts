@@ -58,6 +58,22 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
 
   }
 
+  download() {
+    this.apiService.download(this.currentSchool?.id, this.date.getFullYear().toString(), (this.date.getMonth() + 1).toString(), this.getUserId())
+      .subscribe((response: any) => {
+          const blob = new Blob([response],
+            { type: "application/vnd.ms-excel" });
+          const link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.download = `Báo_cáo.xlsx`;
+          link.click();
+        },
+        err => {
+          this.message.warning("Tải báo cáo thất bại");
+        }
+      );
+  }
+
   search() {
     let request: any = {
       schoolId: this.currentSchool?.id,
