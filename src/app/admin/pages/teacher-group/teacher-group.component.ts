@@ -1,27 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { BaseComponent } from '../../../shared/components/base/base.component';
-import { ApiService } from '../../../shared/services/api.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
-import { Router } from '@angular/router';
-import { TeacherGroup } from '../../../core/models/teacher-group';
-import { ResultRespond } from '../../../core/enums/result-respond';
-import {ResponseApi} from "../../../core/models/response-api";
-import {Teacher} from "../../../core/models/teacher";
-import {RequestCreateTeacherGroupModel} from "../../../core/models/request/request-create-teacher-group.model";
+import { Component, OnInit } from "@angular/core";
+import { BaseComponent } from "../../../shared/components/base/base.component";
+import { ApiService } from "../../../shared/services/api.service";
+import { NzMessageService } from "ng-zorro-antd/message";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
+import { TeacherGroup } from "../../../core/models/teacher-group";
+import { ResultRespond } from "../../../core/enums/result-respond";
+import { ResponseApi } from "../../../core/models/response-api";
+import { Teacher } from "../../../core/models/teacher";
+import { RequestCreateTeacherGroupModel } from "../../../core/models/request/request-create-teacher-group.model";
 
 @Component({
-  selector: 'app-teacher-group',
-  templateUrl: './teacher-group.component.html',
-  styleUrls: ['./teacher-group.component.css'],
+  selector: "app-teacher-group",
+  templateUrl: "./teacher-group.component.html",
+  styleUrls: ["./teacher-group.component.css"]
 })
 export class TeacherGroupComponent extends BaseComponent implements OnInit {
 
-  nameSearch = '';
+  nameSearch = "";
   isVisibleCreateUpdate = false;
   isCreate = true;
 
@@ -72,9 +68,9 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
     this.apiService.getTeacherBySchoolId(this.currentSchoolId ?? '').subscribe(
       (res: Teacher[]) => {
         this.listTeacher = res;
-        this.listShowTeacher = this.listTeacher.map(item => ({
-          value: item.id ?? '',
-          label: item.name ?? ''
+        this.listShowTeacher = this.listTeacher.filter(x => x.groupId == null).map(item => ({
+          value: item.id ?? "",
+          label: item.name ?? ""
         }));
       },error => {
         this.listTeacher = [];
@@ -92,26 +88,36 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
     this.isVisibleCreateUpdate = true;
     this.isCreate = isCreate;
 
-    if(isCreate){
-      this.idUpdate = '';
+    if(isCreate) {
+      this.listShowTeacher = this.listTeacher.filter(x => x.groupId == null).map(item => ({
+        value: item.id ?? "",
+        label: item.name ?? ""
+      }));
+      this.idUpdate = "";
       this.validateForm = this.fb.group({
         name: [null, [Validators.required]],
         teacherIds: [[]],
         period1Score: [0, [Validators.required]],
         period2Score: [0, [Validators.required]],
-        yearScore: [ new Date().getFullYear(), [Validators.required]],
-        description: [null],
+        yearScore: [new Date().getFullYear(), [Validators.required]],
+        description: [null]
       });
     }
-    else{
-      this.idUpdate = data?.id ?? '';
+    else {
+      this.listShowTeacher = this.listTeacher.filter(x => x.groupId == null ||
+        data?.id == x.groupId
+      ).map(item => ({
+        value: item.id ?? "",
+        label: item.name ?? ""
+      }));
+      this.idUpdate = data?.id ?? "";
       this.validateForm = this.fb.group({
         name: [data?.name, [Validators.required]],
         teacherIds: [data?.teacherIds],
         period1Score: [data?.period1Score, [Validators.required]],
         period2Score: [data?.period2Score, [Validators.required]],
-        yearScore: [ data?.yearScore, [Validators.required]],
-        description: [data?.description],
+        yearScore: [data?.yearScore, [Validators.required]],
+        description: [data?.description]
       });
     }
   }

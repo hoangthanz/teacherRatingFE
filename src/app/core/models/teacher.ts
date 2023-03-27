@@ -8,6 +8,7 @@ export class Teacher {
   email?: string;
   assessmentRecords?: AssessmentRecord[] = [];
   userId?: string;
+  groupId?: string;
   user?: any;
   schoolId?: string | any;
 }
