@@ -11,6 +11,7 @@ import { TeacherComponent } from "./pages/teacher/teacher.component";
 import {SchoolManagementComponent} from "./pages/school-management/school-management.component";
 import { ShowAllComponent } from "./pages/show-all/show-all.component";
 import {GradeConfigurationComponent} from "./pages/grade-configuration/grade-configuration.component";
+import { FileListComponent } from "./pages/file-list/file-list.component";
 
 const routes: Routes = [
   {
@@ -27,6 +28,7 @@ const routes: Routes = [
       { path: 'teacher', component: TeacherComponent },
       { path: 'show-all', component: ShowAllComponent },
       { path: 'grade', component: GradeConfigurationComponent },
+      { path: 'files', component: FileListComponent },
     ],
   },
 ];

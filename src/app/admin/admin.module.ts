@@ -18,6 +18,7 @@ import {TeacherComponent} from "./pages/teacher/teacher.component";
 import {SchoolManagementComponent} from "./pages/school-management/school-management.component";
 import {ShowAllComponent} from "./pages/show-all/show-all.component";
 import {GradeConfigurationComponent} from "./pages/grade-configuration/grade-configuration.component";
+import { FileListComponent } from "./pages/file-list/file-list.component";
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {GradeConfigurationComponent} from "./pages/grade-configuration/grade-con
     TeacherComponent,
     SchoolManagementComponent,
     ShowAllComponent,
-    GradeConfigurationComponent
+    GradeConfigurationComponent,
+    FileListComponent,
   ],
   imports: [CommonModule, FormsModule, AdminRoutingModule, SharedModule],
   providers: [ApiService],

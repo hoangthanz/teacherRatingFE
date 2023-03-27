@@ -5,8 +5,8 @@ import { NzMessageService } from "ng-zorro-antd/message";
 import { UntypedFormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ResultRespond } from "../../../core/enums/result-respond";
-import { CriteriaGroup } from "../../../core/models/criteria-group";
 import { School } from "../../../core/models/school";
+import { TeacherGroup } from "../../../core/models/teacher-group";
 
 @Component({
   selector: "app-show-all",
@@ -17,8 +17,11 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
   data: any[] = [];
   criteriaGroupsOld: any[] = [];
   keySearch = "";
+  groupId = "";
   schools: School[] = [];
   currentSchool: any;
+  teacherGroups: TeacherGroup[] = [];
+  date = new Date();
 
   constructor(
     public apiService: ApiService,
@@ -28,12 +31,17 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
   ) {
     super(router, message);
     this.getSchools();
-    this.getCriteriaGroup();
+    this.search();
+    this.getTeacherGroups();
   }
 
-  search() {
-    // this.getCriteriaGroup();
-    this.data = this.criteriaGroupsOld.filter((x) => x.name?.includes(this.keySearch));
+  getTeacherGroups() {
+    this.apiService.getTeacherGroups().subscribe((r) => {
+      if (r.result != ResultRespond.Success) {
+        this.teacherGroups = [];
+      }
+      this.teacherGroups = r.data;
+    });
   }
 
   getSchools() {
@@ -42,7 +50,7 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
       if (r.result != ResultRespond.Success) return;
       this.schools = r.data;
       const schoolId = localStorage.getItem("school_id");
-      this.currentSchool = this.schools[0];
+      this.currentSchool = this.schools.find((x) => x.id == schoolId) || this.schools[0];
     });
   }
 
@@ -50,8 +58,21 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
 
   }
 
-  getCriteriaGroup() {
-    this.apiService.getAllSelfCriticism("").subscribe((r) => {
+  search() {
+    let request: any = {
+      schoolId: this.currentSchool?.id,
+      groupId: this.groupId,
+      assessmentCriteria: this.keySearch.toLowerCase().trim(),
+      month: this.date.getMonth() + 1,
+      year: this.date.getFullYear()
+    };
+    if (!this.groupId) {
+      delete request.groupId;
+    }
+    if (!this.keySearch) {
+      delete request.assessmentCriteria;
+    }
+    this.apiService.getAllSelfCriticism(request).subscribe((r) => {
       if (r.result != ResultRespond.Success) {
         this.data = [];
         this.createMessage("error", "Lỗi không lấy được dữ liệu");

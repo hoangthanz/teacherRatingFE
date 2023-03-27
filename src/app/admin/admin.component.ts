@@ -83,4 +83,7 @@ export class AdminComponent {
   goGradePage() {
     this.router.navigate(['admin/grade']);
   }
+  goFilePage() {
+    this.router.navigate(['admin/files']);
+  }
 }
