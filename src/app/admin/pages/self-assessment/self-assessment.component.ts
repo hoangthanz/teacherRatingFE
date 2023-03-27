@@ -91,6 +91,8 @@ export class SelfAssessmentComponent {
     this.apiService.postSelfCriticism(created).subscribe((response: any) => {
       if (response.result === ResultRespond.Success) {
         this.msg.create('success', `${response.message}`);
+        this.createdSelfCriticism.assessmentCriterias = [];
+        this.total = 0;
       } else {
         this.msg.create('error', `${response.message}`);
       }
