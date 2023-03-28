@@ -31,7 +31,6 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
   ) {
     super(router, message);
     this.getSchools();
-    this.search();
     this.getTeacherGroups();
   }
 
@@ -51,6 +50,8 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
       this.schools = r.data;
       const schoolId = localStorage.getItem("school_id");
       this.currentSchool = this.schools.find((x) => x.id == schoolId) || this.schools[0];
+
+      this.search();
     });
   }
 
