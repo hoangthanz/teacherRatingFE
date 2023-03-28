@@ -319,7 +319,7 @@ export class ApiService {
   }
 
   public getAllSelfCriticism(param: any) {
-    return this.http.post<ResponseApi<any[]>>(
+    return this.http.get<ResponseApi<any[]>>(
       `${this.domain}/api/SelfCriticism/get-by-condition`,
       {
         params: param

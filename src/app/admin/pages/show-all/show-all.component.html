@@ -12,7 +12,7 @@
           <nz-date-picker nzMode="month" [(ngModel)]="date"></nz-date-picker>
         </div>
 
-        <nz-select ngModel="{{groupId}}">
+        <nz-select [(ngModel)]="groupId">
           <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
           <nz-option *ngFor="let item of teacherGroups" nzValue="{{item.id}}" nzLabel="{{item.name}}"></nz-option>
         </nz-select>
