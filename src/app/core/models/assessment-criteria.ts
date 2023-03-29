@@ -9,4 +9,5 @@ export class AssessmentCriteria {
   assessmentCriteriaGroupId!: string;
   quantity!: number;
   schoolId: string | any;
+  allowUpdateScore!: boolean;
 }

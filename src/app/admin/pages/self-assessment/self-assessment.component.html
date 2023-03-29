@@ -115,6 +115,15 @@
                 />
               </div>
               <div class="col-span-5"></div>
+              <div class="col-span-1">
+                <nz-input-number *ngIf="selectedAssessmentCriteria[i].allowUpdateScore === true"
+                  [(ngModel)]="selectedAssessmentCriteria[i].value"
+                  [nzMin]="1"
+                  [nzStep]="1"
+                  (change)="calculateTotal()"
+                ></nz-input-number>
+              </div>
+              <div class="col-span-1"></div>
             </div>
           </div>
           <div class="col-span-1">
