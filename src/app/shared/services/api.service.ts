@@ -336,7 +336,7 @@ export class ApiService {
 
   public getFiles(schoolId: string) {
     return this.http.get<ResponseApi<any[]>>(
-      `${this.domain}/api/Upload/get-all?schoolId=${schoolId}`
+      `${this.domain}/api/Upload/get-all/${schoolId}`
     );
   }
 
