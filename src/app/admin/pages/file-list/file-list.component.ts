@@ -1,12 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { BaseComponent } from "../../../shared/components/base/base.component";
-import { ApiService } from "../../../shared/services/api.service";
-import { NzMessageService } from "ng-zorro-antd/message";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
-import { ResultRespond } from "../../../core/enums/result-respond";
-import { School } from "../../../core/models/school";
-import { NzUploadFile } from "ng-zorro-antd/upload";
+import {Component, OnInit} from "@angular/core";
+import {BaseComponent} from "../../../shared/components/base/base.component";
+import {ApiService} from "../../../shared/services/api.service";
+import {NzMessageService} from "ng-zorro-antd/message";
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
+import {ResultRespond} from "../../../core/enums/result-respond";
+import {School} from "../../../core/models/school";
+import {NzUploadFile} from "ng-zorro-antd/upload";
 
 @Component({
   selector: "app-file-list",
@@ -33,7 +33,7 @@ export class FileListComponent extends BaseComponent implements OnInit {
   ) {
     super(router, message);
     this.getSchools();
-    this.getData();
+    // this.getData();
   }
 
   beforeUpload = (file: NzUploadFile): boolean => {
@@ -44,7 +44,7 @@ export class FileListComponent extends BaseComponent implements OnInit {
 
   search() {
     // this.getCriteriaGroup();
-    this.fileArr = this.fileArrOld.filter((x) => x.name?.toLowerCase()?.includes(this.keySearch?.toLowerCase()));
+    this.fileArr = this.fileArrOld.filter((x) => x.fileName?.toLowerCase()?.includes(this.keySearch?.toLowerCase()));
   }
 
   getSchools() {
@@ -53,7 +53,8 @@ export class FileListComponent extends BaseComponent implements OnInit {
       if (r.result != ResultRespond.Success) return;
       this.schools = r.data;
       const schoolId = localStorage.getItem("school_id");
-      this.currentSchool = this.schools.find(x=>x?.id == schoolId) ?? this.schools[0];
+      this.currentSchool = this.schools.find(x => x?.id == schoolId) ?? this.schools[0];
+      this.getData();
     });
   }
 
@@ -70,10 +71,46 @@ export class FileListComponent extends BaseComponent implements OnInit {
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
-          control.updateValueAndValidity({ onlySelf: true });
+          control.updateValueAndValidity({onlySelf: true});
         }
       });
     }
+  }
+
+  dataURItoBlob(dataURI: any) {
+    const byteString = window.atob(dataURI);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([int8Array], {type: 'image/png'});
+    return blob;
+  }
+
+  downloadFile(data: any): void {
+    // this.apiService.downLoadFile(data?.id).subscribe((r) => {
+    //   const blob = new Blob([r],
+    //     {type: 'application/vnd.ms-excel'});
+    //   const link = document.createElement('a');
+    //   link.href = window.URL.createObjectURL(blob);
+    //   link.download = data?.fileName;
+    //   link.click();
+    // });
+    const byteString = window.atob(data?.fileData);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blobFile = new Blob([int8Array]);
+    const imageFile = new File([blobFile], data?.fileName);
+    // const blob = new Blob([r],
+    //   {type: 'application/vnd.ms-excel'});
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blobFile);
+    link.download = data?.fileName;
+    link.click();
   }
 
   showModel(id = ""): void {
@@ -99,25 +136,16 @@ export class FileListComponent extends BaseComponent implements OnInit {
   }
 
   getData() {
-    this.apiService.getFiles().subscribe((r) => {
+    this.apiService.getFiles(this.currentSchool?.id).subscribe((r) => {
       if (r.result != ResultRespond.Success) {
         this.fileArr = [];
         this.createMessage("error", "Lỗi không lấy được dữ liệu");
       }
 
       this.fileArr = r.data;
+      this.fileArrOld = JSON.parse(JSON.stringify(this.fileArr));
     }, () => {
       this.createMessage("error", "Lỗi không lấy được dữ liệu");
-      this.fileArr = [];
-      for (let i = 0; i < 100; i++) {
-        this.fileArr.push({
-          id: i.toString(),
-          name: "Tài_liệu_" + i.toString() + ".pdf",
-          createdDate: "2023-03-17T16:43:40.252371",
-          updatedDate: "2023-03-17T16:43:40.252371"
-        });
-      }
-      this.fileArrOld = JSON.parse(JSON.stringify(this.fileArr));
     });
   }
 
@@ -144,22 +172,27 @@ export class FileListComponent extends BaseComponent implements OnInit {
     delete valueOfForm?.id;
     const formData = new FormData();
     this.fileList.forEach((file: any) => {
-      formData.append("files[]", file);
+      formData.append("FileDetails", file);
+      // formData.append("FileType", file.type);
     });
-    formData.append("name", valueOfForm.name);
-    formData.append("description", valueOfForm.description);
+    formData.append("Name", valueOfForm.name);
+    formData.append("Description", valueOfForm.description);
+    formData.append("SchoolId", this.currentSchool?.id);
     this.uploading = true;
     this.apiService.postFiles(formData).subscribe((r) => {
-      /*if (r.result != ResultRespond.Success) {
-        this.createMessage("error", r.message);
+      if (r?.result != ResultRespond.Success) {
+        this.createMessage("error", r?.message);
         this.getData();
+        this.fileList = [];
         return;
-      }*/
+      }
+      this.fileList = [];
       this.isVisible = false;
       this.createMessage("success", "Tạo  thành công");
       this.getData();
     }, () => {
-      this.isVisible = false;
+      // this.isVisible = false;
+      this.fileList = [];
     });
   }
 

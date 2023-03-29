@@ -334,15 +334,22 @@ export class ApiService {
     );
   }
 
-  public getFiles() {
+  public getFiles(schoolId: string) {
     return this.http.get<ResponseApi<any[]>>(
-      `${this.domain}/api/Files/get-all`
+      `${this.domain}/api/Upload/get-all?schoolId=${schoolId}`
     );
   }
 
 
+  // public postFiles(body: FormData) {
+  //   return this.http.post<ResponseApi<any>>(`${this.domain}/api/Upload/PostMultipleFile`, body);
+  // }
   public postFiles(body: FormData) {
-    return this.http.post(`${this.domain}/api/Files`, body);
+    return this.http.post<ResponseApi<any>>(`${this.domain}/api/Upload/PostSingleFile`, body);
+  }
+
+  public downLoadFile(body: string) {
+    return this.http.post(`${this.domain}/api/Upload/DownloadFile`, [body], {responseType: 'blob'});
   }
 
   public removeFiles(id: string) {
