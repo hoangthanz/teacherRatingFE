@@ -8,6 +8,7 @@ export class Criteria {
   assessmentCriteriaGroupId?: string;
   schoolId?: string;
   quantity?: number;
+  allowUpdateScore?: boolean;
 
 }
 

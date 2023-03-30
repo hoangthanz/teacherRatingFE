@@ -109,7 +109,7 @@
 
 <nz-modal
   [(nzVisible)]="isVisible"
-  nzTitle="{{ isCreate == true ? 'Tạo tiêu chí' : 'Cập nhật tiêu chí' }}"
+  nzTitle="{{ isCreate == true ? 'Thêm mới tiêu chí' : 'Cập nhật tiêu chí' }}"
   [nzFooter]="null"
   (nzOnCancel)="handleCancel()"
 >
@@ -150,6 +150,12 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24">Điều chỉnh giá trị</nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24">
+          <label nz-checkbox formControlName="allowUpdateScore" [nzChecked]="checked" (change)="change()">{{checked === true ? 'Điều chỉnh' : 'Không điều chỉnh'}}</label>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item *ngIf="!checked">
         <nz-form-label [nzSm]="8" [nzXs]="24">Tiêu chí</nz-form-label>
         <nz-form-control [nzSm]="16" [nzXs]="24">
           <nz-radio-group formControlName="isDeduct">

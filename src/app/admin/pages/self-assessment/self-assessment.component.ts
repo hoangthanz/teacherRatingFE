@@ -131,10 +131,15 @@ export class SelfAssessmentComponent {
   calculateTotal() {
     this.total = 0;
     this.createdSelfCriticism.assessmentCriterias.forEach((item) => {
-      if (item.isDeduct) {
-        this.total -= item.value * item.quantity;
-      } else {
+      if(item.allowUpdateScore){
         this.total += item.value * item.quantity;
+      }
+      else{
+        if (item.isDeduct) {
+          this.total -= item.value * item.quantity;
+        } else {
+          this.total += item.value * item.quantity;
+        }
       }
     });
   }

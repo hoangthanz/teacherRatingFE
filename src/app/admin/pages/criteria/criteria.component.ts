@@ -22,6 +22,7 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
   isCreate = true;
   keySearch = "";
   criteriaGroups: CriteriaGroup[] = [];
+  checked = false;
 
   schools: School[] = [];
   currentSchool: any;
@@ -81,10 +82,11 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
   }
 
   showModelCriteria(id = ""): void {
+    this.checked = false;
     if (id != "") {
       this.isCreate = false;
       const criteriaGroup = this.criteria.find((x) => x.id == id);
-      this.validateForm = this.fb.group({
+        this.validateForm = this.fb.group({
         id: [criteriaGroup?.id],
         name: [criteriaGroup?.name, [Validators.required]],
         assessmentCriteriaGroupId: [criteriaGroup?.assessmentCriteriaGroupId],
@@ -93,7 +95,9 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
         value: [criteriaGroup?.value],
         unit: [criteriaGroup?.unit],
         quantity: [criteriaGroup?.quantity],
+        allowUpdateScore: [criteriaGroup?.allowUpdateScore],
       });
+        this.checked = this.validateForm.controls['allowUpdateScore'].value;
     } else {
       this.isCreate = true;
       this.validateForm = this.fb.group({
@@ -105,6 +109,7 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
         value: [0],
         unit: [""],
         quantity: [0],
+        allowUpdateScore: [false]
       });
     }
     this.isVisible = true;
@@ -175,6 +180,12 @@ export class CriteriaComponent extends BaseComponent implements OnInit {
       this.getCriteria();
     }, () => {
     });
+  }
+
+  change = () => {
+    this.checked = !this.checked;
+    this.validateForm.controls['allowUpdateScore'].setValue(this.checked);
+    console.log('hú: ', this.validateForm.controls['allowUpdateScore'].value)
   }
 
   handleCancel(): void {
