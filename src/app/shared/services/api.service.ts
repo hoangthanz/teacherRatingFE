@@ -24,10 +24,10 @@ export class ApiService {
   constructor(private http: HttpClient) {
   }
 
-  public download(schoolId: string, year: string, month: string, userId: string,): Observable<Blob> {
+  public download(schoolId: string, year: string, month: string, userId: string, groupIds : any): Observable<Blob> {
     return this.http.post(
       `${this.domain}/api/SelfCriticism/get-excel/${schoolId}/${year}/${month}/${userId}`,
-      null,
+      groupIds,
       {responseType: 'blob'}
     );
   }
