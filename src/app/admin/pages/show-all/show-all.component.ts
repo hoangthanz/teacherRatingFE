@@ -60,7 +60,8 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
   }
 
   download() {
-    this.apiService.download(this.currentSchool?.id, this.date.getFullYear().toString(), (this.date.getMonth() + 1).toString(), this.getUserId(), [this.groupId] )
+    const groups = (this.groupId ? [this.groupId] : [])
+    this.apiService.download(this.currentSchool?.id, this.date.getFullYear().toString(), (this.date.getMonth() + 1).toString(), this.getUserId(), groups )
       .subscribe((response: any) => {
           const blob = new Blob([response],
             { type: "application/vnd.ms-excel" });
