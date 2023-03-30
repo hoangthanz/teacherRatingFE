@@ -349,7 +349,7 @@ export class ApiService {
   }
 
   public downLoadFile(body: string) {
-    return this.http.post(`${this.domain}/api/Upload/DownloadFile`, [body], {responseType: 'blob'});
+    return this.http.get(`${this.domain}/api/Upload/download/${body}`, {responseType: 'blob'});
   }
 
   public removeFiles(id: string) {

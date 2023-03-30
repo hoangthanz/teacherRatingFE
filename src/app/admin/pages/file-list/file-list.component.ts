@@ -89,28 +89,28 @@ export class FileListComponent extends BaseComponent implements OnInit {
   }
 
   downloadFile(data: any): void {
-    // this.apiService.downLoadFile(data?.id).subscribe((r) => {
-    //   const blob = new Blob([r],
-    //     {type: 'application/vnd.ms-excel'});
-    //   const link = document.createElement('a');
-    //   link.href = window.URL.createObjectURL(blob);
-    //   link.download = data?.fileName;
-    //   link.click();
-    // });
-    const byteString = window.atob(data?.fileData);
-    const arrayBuffer = new ArrayBuffer(byteString.length);
-    const int8Array = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < byteString.length; i++) {
-      int8Array[i] = byteString.charCodeAt(i);
-    }
-    const blobFile = new Blob([int8Array]);
-    const imageFile = new File([blobFile], data?.fileName);
-    // const blob = new Blob([r],
-    //   {type: 'application/vnd.ms-excel'});
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blobFile);
-    link.download = data?.fileName;
-    link.click();
+    this.apiService.downLoadFile(data?.id).subscribe((r) => {
+      const blob = new Blob([r],
+        {type: 'application/vnd.ms-excel'});
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = data?.fileName;
+      link.click();
+    });
+    // const byteString = window.atob(data?.fileData);
+    // const arrayBuffer = new ArrayBuffer(byteString.length);
+    // const int8Array = new Uint8Array(arrayBuffer);
+    // for (let i = 0; i < byteString.length; i++) {
+    //   int8Array[i] = byteString.charCodeAt(i);
+    // }
+    // const blobFile = new Blob([int8Array]);
+    // const imageFile = new File([blobFile], data?.fileName);
+    // // const blob = new Blob([r],
+    // //   {type: 'application/vnd.ms-excel'});
+    // const link = document.createElement('a');
+    // link.href = window.URL.createObjectURL(blobFile);
+    // link.download = data?.fileName;
+    // link.click();
   }
 
   showModel(id = ""): void {
