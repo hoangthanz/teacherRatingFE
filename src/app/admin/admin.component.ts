@@ -1,28 +1,25 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { TeacherComponent } from "./pages/teacher/teacher.component";
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+import {JwtHelperService} from '@auth0/angular-jwt';
+import {BaseComponent} from "../shared/components/base/base.component";
+import {NzMessageService} from "ng-zorro-antd/message";
+import {ApiService} from "../shared/services/api.service";
+import {UntypedFormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css'],
 })
-export class AdminComponent {
-  constructor(private router: Router) {
-
+export class AdminComponent extends BaseComponent {
+  constructor(
+    public apiService: ApiService,
+    public override message: NzMessageService,
+    public override router: Router
+  ) {
+    super(router, message);
   }
 
-  checkAdmin() {
-    const helper = new JwtHelperService();
-    const token = sessionStorage.getItem('access_token');
-    if (token) {
-      const decodedToken = helper.decodeToken(token);
-      const roles = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-      return roles.includes('Admin');
-    }
-    return false;
-  }
   role = this.getRole();
   goToSelfAssessment() {
     this.router.navigate(['admin/self-assessment']);

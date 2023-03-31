@@ -19,11 +19,11 @@
       >
         Làm mới
       </button>
-      <button
-        nz-button
-        nzType="primary"
-        class="text-right flex-1"
-        (click)="showModel()"
+      <button *ngIf="checkAdmin()"
+              nz-button
+              nzType="primary"
+              class="text-right flex-1"
+              (click)="showModel()"
       >
         Thêm
       </button>

@@ -1,12 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { BaseComponent } from "../../../shared/components/base/base.component";
-import { ApiService } from "../../../shared/services/api.service";
-import { NzMessageService } from "ng-zorro-antd/message";
-import { UntypedFormBuilder } from "@angular/forms";
-import { Router } from "@angular/router";
-import { ResultRespond } from "../../../core/enums/result-respond";
-import { School } from "../../../core/models/school";
-import { TeacherGroup } from "../../../core/models/teacher-group";
+import {Component, OnInit} from "@angular/core";
+import {BaseComponent} from "../../../shared/components/base/base.component";
+import {ApiService} from "../../../shared/services/api.service";
+import {NzMessageService} from "ng-zorro-antd/message";
+import {UntypedFormBuilder} from "@angular/forms";
+import {Router} from "@angular/router";
+import {ResultRespond} from "../../../core/enums/result-respond";
+import {School} from "../../../core/models/school";
+import {TeacherGroup} from "../../../core/models/teacher-group";
 
 @Component({
   selector: "app-show-all",
@@ -39,7 +39,12 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
       if (r.result != ResultRespond.Success) {
         this.teacherGroups = [];
       }
-      this.teacherGroups = r.data;
+      if (this.checkAdmin()) {
+        this.teacherGroups = r.data;
+        return;
+      } else {
+        this.teacherGroups = r.data;
+      }
     });
   }
 
