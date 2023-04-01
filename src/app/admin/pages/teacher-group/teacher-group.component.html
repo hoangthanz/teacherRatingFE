@@ -117,8 +117,10 @@
   </div>
 </nz-card>
 
+
 <nz-modal [(nzVisible)]="isVisibleCreateUpdate" nzTitle="{{isCreate ? 'Thêm mới thông tin tổ' : 'Cập nhật thông tin tổ'}}"
           [nzFooter]="null" centered (nzOnCancel)="handleCancelCreateUpdate()">
+
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="validateForm">
       <nz-form-item>

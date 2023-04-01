@@ -53,7 +53,7 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
   getAllUser() {
     this.apiService.getAllUser().subscribe((res) => {
       if (res.result == ResultRespond.Success) {
-        this.userList = res.data.filter((x) => x.isDeleted != true);
+        this.userList = res.data.filter((x) => x.isDeleted != true && x.userName != "admin");
         for (let i = 0; i < this.userList.length; i++) {
           this.userList[i].index = i + 1;
         }
@@ -65,7 +65,7 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
   getUserBySchool(id: string) {
     this.apiService.getUserBySchool(id).subscribe((res) => {
       if (res.result == ResultRespond.Success) {
-        this.userList = res.data.filter((x) => x.isDeleted != true);
+        this.userList = res.data.filter((x) => x.isDeleted != true && x.userName != "admin");
         for (let i = 0; i < this.userList.length; i++) {
           this.userList[i].index = i + 1;
         }
