@@ -39,6 +39,16 @@ export class BaseComponent {
     return '';
   }
 
+  getGroupId() {
+    const helper = new JwtHelperService();
+    const token = sessionStorage.getItem('access_token');
+    if (token) {
+      const decodedToken = helper.decodeToken(token);
+      return decodedToken['GroupId'];
+    }
+    return '';
+  }
+
   checkAdmin() {
     const helper = new JwtHelperService();
     const token = sessionStorage.getItem('access_token');

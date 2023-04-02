@@ -43,7 +43,7 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
         this.teacherGroups = r.data;
         return;
       } else {
-        this.teacherGroups = r.data;
+        this.teacherGroups = r.data.filter((x) => x.id  == this.getGroupId());
       }
     });
   }
