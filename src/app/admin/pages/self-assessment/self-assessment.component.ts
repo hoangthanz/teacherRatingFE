@@ -100,6 +100,7 @@ export class SelfAssessmentComponent {
   }
 
   addAssessmentToList() {
+    this.total = 0;
     this.createdSelfCriticism.assessmentCriterias.push(
       new AssessmentCriteria()
     );

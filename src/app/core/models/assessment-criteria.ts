@@ -10,4 +10,5 @@ export class AssessmentCriteria {
   quantity!: number;
   schoolId: string | any;
   allowUpdateScore!: boolean;
+  totalScore!: number;
 }
