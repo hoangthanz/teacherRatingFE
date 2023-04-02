@@ -88,7 +88,8 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
       assessmentCriteria: this.keySearch.toLowerCase().trim(),
       month: this.date.getMonth() + 1,
       year: this.date.getFullYear(),
-      userId: this.getUserId()
+      userId: this.getUserId(),
+      isSubmitted : true
     };
     if (!this.groupId) {
       delete request.groupId;
