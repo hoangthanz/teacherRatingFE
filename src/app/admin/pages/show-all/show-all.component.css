@@ -8,3 +8,7 @@
 .demo{
   @apply bg-white rounded-lg shadow-lg p-4;
 }
+::ng-deep .ant-table.ant-table-default {
+  border-bottom: 2px solid black;
+
+}
