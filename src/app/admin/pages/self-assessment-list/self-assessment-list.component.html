@@ -151,7 +151,11 @@
   (nzOnCancel)="handleCancelUpdate()"
   (nzOnOk)="handleOkUpdate()"
 >
+
+
   <ng-container *nzModalContent>
+
+    {{assessmentCriteriaUpdate | json}}
     <div class="flex flex-row">
       <div class="basis-1/2 font-semibold">Thời gian:</div>
       <div class="basis-1/2 text-right">
@@ -233,4 +237,6 @@
       </nz-timeline-item>
     </nz-timeline>
   </ng-container>
+
+
 </nz-modal>

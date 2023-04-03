@@ -11,25 +11,22 @@ import {AssessmentCriteria} from "../../../core/models/assessment-criteria";
   styleUrls: ['./self-assessment-list.component.css'],
 })
 export class SelfAssessmentListComponent implements OnInit {
+
+  public seflAssessmentList: SelfCriticism[] = [];
+  public assessmentCriterias: AssessmentCriteria[] = [];
+  public selectedAssessmentCriterias: string[] = [];
+  public assessmentCriteriaUpdate: any[] = [];
+  public isVisible = false;
+  public isVisibleUpdate = false;
+  public viewOfSelfAssessment: SelfCriticism = new SelfCriticism();
+  public viewUpdateSelfAssessment: SelfCriticism = new SelfCriticism();
+  public schools: any[] = [];
+  public schoolId = '';
+  public date = new Date();
+
   constructor(public apiService: ApiService, public message: NzMessageService) {
     this.getSelfAssessmentList();
   }
-
-  seflAssessmentList: SelfCriticism[] = [];
-
-  assessmentCriterias: AssessmentCriteria[] = [];
-  selectedAssessmentCriterias: string[] = [];
-
-  assessmentCriteriaUpdate: any[] = [];
-
-  isVisible = false;
-  isVisibleUpdate = false;
-
-  viewOfSelfAssessment: SelfCriticism = new SelfCriticism();
-  viewUpdateSelfAssessment: SelfCriticism = new SelfCriticism();
-  schools: any[] = [];
-  schoolId = '';
-  date = new Date();
 
   ngOnInit(): void {
     this.getSchools();
@@ -43,15 +40,15 @@ export class SelfAssessmentListComponent implements OnInit {
 
   showUpdateModal(i: number): void {
     this.viewUpdateSelfAssessment = this.seflAssessmentList[i];
-    this.assessmentCriteriaUpdate =  [...this.viewUpdateSelfAssessment.assessmentCriterias]
+    this.assessmentCriteriaUpdate = [...this.viewUpdateSelfAssessment.assessmentCriterias]
 
-    for (let i = 0; i <  this.assessmentCriteriaUpdate.length; i++) {
-      const item = this.assessmentCriterias.find(x => x.name ==  this.assessmentCriteriaUpdate[i].name);
+    for (let i = 0; i < this.assessmentCriteriaUpdate.length; i++) {
+      const item = this.assessmentCriterias.find(x => x.name == this.assessmentCriteriaUpdate[i].name);
       if (item != null) {
         this.selectedAssessmentCriterias.push(item.id);
       }
     }
-    this.selectedAssessmentCriterias =  this.assessmentCriteriaUpdate.map(x => x.id);
+    this.selectedAssessmentCriterias = this.assessmentCriteriaUpdate.map(x => x.id);
 
     this.isVisibleUpdate = true;
   }
@@ -74,6 +71,14 @@ export class SelfAssessmentListComponent implements OnInit {
   handleOkUpdate(): void {
     console.log("submit")
     this.isVisibleUpdate = false;
+
+    const objectOfAssessment =  (JSON.parse(JSON.stringify(this.viewUpdateSelfAssessment)));
+
+    this.apiService.updateAssessment(objectOfAssessment).subscribe((r) => {
+      if (r.result != ResultRespond.Success) return;
+      this.getSelfAssessmentList();
+      this.createMessage('success', 'Cập nhật thành công');
+    });
   }
 
   handleCancel(): void {
@@ -135,7 +140,7 @@ export class SelfAssessmentListComponent implements OnInit {
   }
 
   deleteAssessmentCriteria = (index: number) => {
-    this.assessmentCriteriaUpdate.splice(index,1);
+    this.assessmentCriteriaUpdate.splice(index, 1);
   }
 
   changeAssessmentCriterias = (event: any, index: number) => {

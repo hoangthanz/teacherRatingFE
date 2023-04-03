@@ -14,6 +14,7 @@ import {RequestCreateSchoolModel} from "src/app/core/models/request/request-crea
 import {Observable} from "rxjs";
 import {RequestCreateTeacherGroupModel} from "../../core/models/request/request-create-teacher-group.model";
 import {RequsetCreateTeacherModel} from "../../core/models/request/requset-create-teacher.model";
+import {UpdateSelfCriticismModel} from "../../core/models/request/update-self-criticism.model";
 
 @Injectable({
   providedIn: "root"
@@ -88,6 +89,15 @@ export class ApiService {
         isSubmitted: isSubmitted,
         id: id,
       }
+    );
+  }
+
+  public updateAssessment(
+    request: UpdateSelfCriticismModel
+  ) {
+    return this.http.post<ResponseApi<any>>(
+      `${this.domain}/api/SelfCriticism/update-self-criticism-by-admin`,
+      request
     );
   }
 
