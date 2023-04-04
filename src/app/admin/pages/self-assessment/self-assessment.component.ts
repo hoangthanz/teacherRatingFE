@@ -6,6 +6,7 @@ import {AssessmentCriteria} from '../../../core/models/assessment-criteria';
 import {SelfCriticism} from '../../../core/models/self-criticism';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {GradeConfiguration} from "../../../core/models/criteria";
+import {JwtHelperService} from "@auth0/angular-jwt";
 
 @Component({
   selector: 'app-self-assessment',
@@ -59,11 +60,31 @@ export class SelfAssessmentComponent {
     this.createdSelfCriticism.id = '';
     this.createdSelfCriticism.month = this.currentMonth;
     this.createdSelfCriticism.year = new Date().getFullYear();
-    this.createdSelfCriticism.teacherId = teacherId ?? '';
+    this.createdSelfCriticism.teacherId = this.getTeacherId() ?? '';
     this.createdSelfCriticism.isSubmitted = false;
     this.createdSelfCriticism.createdDate = new Date().toISOString();
-    this.createdSelfCriticism.userId = currentUserId ?? '';
+    this.createdSelfCriticism.userId = this.getUserId();
     this.createdSelfCriticism.assessmentCriterias = [];
+  }
+
+  getTeacherId() {
+    const helper = new JwtHelperService();
+    const token = sessionStorage.getItem('access_token');
+    if (token) {
+      const decodedToken = helper.decodeToken(token);
+      return decodedToken['TeacherId'];
+    }
+    return '';
+  }
+
+  getUserId() {
+    const helper = new JwtHelperService();
+    const token = sessionStorage.getItem('access_token');
+    if (token) {
+      const decodedToken = helper.decodeToken(token);
+      return decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+    }
+    return '';
   }
 
   getGradeConfiguration() {
