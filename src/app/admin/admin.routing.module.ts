@@ -12,6 +12,7 @@ import {SchoolManagementComponent} from "./pages/school-management/school-manage
 import { ShowAllComponent } from "./pages/show-all/show-all.component";
 import {GradeConfigurationComponent} from "./pages/grade-configuration/grade-configuration.component";
 import { FileListComponent } from "./pages/file-list/file-list.component";
+import {SelfAssessmentUpdateComponent} from "./pages/self-assessment-update/self-assessment-update.component";
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
     component: AdminComponent,
     children: [
       { path: 'self-assessment', component: SelfAssessmentComponent },
+      { path: 'self-assessment-update', component: SelfAssessmentUpdateComponent },
       { path: 'self-assessment-list', component: SelfAssessmentListComponent },
       { path: 'user', component: UserManagementComponent },
       { path: 'school', component: SchoolManagementComponent },

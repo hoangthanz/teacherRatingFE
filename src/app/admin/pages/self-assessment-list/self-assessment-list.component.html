@@ -55,7 +55,7 @@
             nz-button
             nzType="default"
             nzShape="round"
-            (click)="showUpdateModal(i)"
+            (click)="sendTransportMessage(data, 'admin/self-assessment-update')"
           >
             Cập nhật
           </button>
@@ -146,14 +146,15 @@
 
 <!--Cập nhật tự đánh giá-->
 <nz-modal [nzWidth]="1500"
-  [(nzVisible)]="isVisibleUpdate"
-  nzTitle="Cập nhật tự đánh giá"
-  (nzOnCancel)="handleCancelUpdate()"
-  (nzOnOk)="handleOkUpdate()"
+          [(nzVisible)]="isVisibleUpdate"
+          nzTitle="Cập nhật tự đánh giá"
+          (nzOnCancel)="handleCancelUpdate()"
+          (nzOnOk)="handleOkUpdate()"
+          *ngIf="seflAssessmentSelect != null"
 >
 
-
-  <ng-container *nzModalContent>
+  <app-self-assessment-update [createdSelfCriticism]="seflAssessmentSelect"></app-self-assessment-update>
+  <!--<ng-container *nzModalContent>
 
     {{assessmentCriteriaUpdate | json}}
     <div class="flex flex-row">
@@ -236,7 +237,7 @@
         </div>
       </nz-timeline-item>
     </nz-timeline>
-  </ng-container>
+  </ng-container>-->
 
 
 </nz-modal>

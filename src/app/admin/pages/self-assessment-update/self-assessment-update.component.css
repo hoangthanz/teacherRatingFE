@@ -1,0 +1,9 @@
+::ng-deep .ant-select {
+  width: 100%;
+}
+
+.align-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

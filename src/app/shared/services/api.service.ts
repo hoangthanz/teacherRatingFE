@@ -11,7 +11,7 @@ import {CriteriaGroup} from "../../core/models/criteria-group";
 import {Criteria, GradeConfiguration} from "../../core/models/criteria";
 import {Teacher} from "../../core/models/teacher";
 import {RequestCreateSchoolModel} from "src/app/core/models/request/request-create-school.model";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {RequestCreateTeacherGroupModel} from "../../core/models/request/request-create-teacher-group.model";
 import {RequsetCreateTeacherModel} from "../../core/models/request/requset-create-teacher.model";
 import {UpdateSelfCriticismModel} from "../../core/models/request/update-self-criticism.model";
@@ -21,11 +21,16 @@ import {UpdateSelfCriticismModel} from "../../core/models/request/update-self-cr
 })
 export class ApiService {
   private domain = environment.domain;
+  public dataSource = new BehaviorSubject<any>(null);
+
+  public sendDataMessage(message: any) {
+    this.dataSource.next(message);
+  }
 
   constructor(private http: HttpClient) {
   }
 
-  public download(schoolId: string, year: string, month: string, userId: string, groupIds : any): Observable<Blob> {
+  public download(schoolId: string, year: string, month: string, userId: string, groupIds: any): Observable<Blob> {
     return this.http.post(
       `${this.domain}/api/SelfCriticism/get-excel/${schoolId}/${year}/${month}/${userId}`,
       groupIds,
@@ -67,6 +72,14 @@ export class ApiService {
   public postSelfCriticism(requestBody: SelfCriticism) {
     return this.http.post<ResponseApi<AssessmentCriteriaGroup>>(
       `${this.domain}/api/SelfCriticism/create-self-criticism`,
+      requestBody
+    );
+  }
+
+
+  public updateSelfCriticism(requestBody: SelfCriticism) {
+    return this.http.post<ResponseApi<AssessmentCriteriaGroup>>(
+      `${this.domain}/api/SelfCriticism/update-self-criticism`,
       requestBody
     );
   }

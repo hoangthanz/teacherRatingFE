@@ -20,6 +20,7 @@ import {ShowAllComponent} from "./pages/show-all/show-all.component";
 import {GradeConfigurationComponent} from "./pages/grade-configuration/grade-configuration.component";
 import { FileListComponent } from "./pages/file-list/file-list.component";
 import { NzUploadModule } from "ng-zorro-antd/upload";
+import {SelfAssessmentUpdateComponent} from "./pages/self-assessment-update/self-assessment-update.component";
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { NzUploadModule } from "ng-zorro-antd/upload";
     ShowAllComponent,
     GradeConfigurationComponent,
     FileListComponent,
+    SelfAssessmentUpdateComponent,
   ],
   imports: [CommonModule, FormsModule, AdminRoutingModule, SharedModule, NzUploadModule],
   providers: [ApiService],

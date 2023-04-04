@@ -4,6 +4,7 @@ import {ResultRespond} from '../../../core/enums/result-respond';
 import {SelfCriticism} from '../../../core/models/self-criticism';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {AssessmentCriteria} from "../../../core/models/assessment-criteria";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-self-assessment-list',
@@ -13,6 +14,7 @@ import {AssessmentCriteria} from "../../../core/models/assessment-criteria";
 export class SelfAssessmentListComponent implements OnInit {
 
   public seflAssessmentList: SelfCriticism[] = [];
+  public seflAssessmentSelect: SelfCriticism | any;
   public assessmentCriterias: AssessmentCriteria[] = [];
   public selectedAssessmentCriterias: string[] = [];
   public assessmentCriteriaUpdate: any[] = [];
@@ -24,7 +26,11 @@ export class SelfAssessmentListComponent implements OnInit {
   public schoolId = '';
   public date = new Date();
 
-  constructor(public apiService: ApiService, public message: NzMessageService) {
+  constructor(
+    public apiService: ApiService,
+    public router: Router,
+    public message: NzMessageService,
+  ) {
     this.getSelfAssessmentList();
   }
 
@@ -49,8 +55,13 @@ export class SelfAssessmentListComponent implements OnInit {
       }
     }
     this.selectedAssessmentCriterias = this.assessmentCriteriaUpdate.map(x => x.id);
-
+    this.seflAssessmentSelect = this.seflAssessmentList[i];
     this.isVisibleUpdate = true;
+  }
+
+  public sendTransportMessage(message: any, link: string) {
+    this.apiService.sendDataMessage(message);
+    this.router.navigateByUrl(link).then(r => console.log(r));
   }
 
   getSchools() {
@@ -72,7 +83,7 @@ export class SelfAssessmentListComponent implements OnInit {
     console.log("submit")
     this.isVisibleUpdate = false;
 
-    const objectOfAssessment =  (JSON.parse(JSON.stringify(this.viewUpdateSelfAssessment)));
+    const objectOfAssessment = (JSON.parse(JSON.stringify(this.viewUpdateSelfAssessment)));
 
     this.apiService.updateAssessment(objectOfAssessment).subscribe((r) => {
       if (r.result != ResultRespond.Success) return;
