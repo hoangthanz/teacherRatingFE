@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
-import { ApiService } from '../../../shared/services/api.service';
-import { AssessmentCriteriaGroup } from '../../../core/models/assessment-criteria-group';
-import { ResultRespond } from '../../../core/enums/result-respond';
-import { AssessmentCriteria } from '../../../core/models/assessment-criteria';
-import { SelfCriticism } from '../../../core/models/self-criticism';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import {Component} from '@angular/core';
+import {ApiService} from '../../../shared/services/api.service';
+import {AssessmentCriteriaGroup} from '../../../core/models/assessment-criteria-group';
+import {ResultRespond} from '../../../core/enums/result-respond';
+import {AssessmentCriteria} from '../../../core/models/assessment-criteria';
+import {SelfCriticism} from '../../../core/models/self-criticism';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {GradeConfiguration} from "../../../core/models/criteria";
 
 @Component({
   selector: 'app-self-assessment',
@@ -17,12 +18,14 @@ export class SelfAssessmentComponent {
   assessmentCriteriaGroups: AssessmentCriteriaGroup[] = [];
 
   assessmentCriteria: AssessmentCriteria[] = [];
-  selectedAssessmentCriteriaGroup: AssessmentCriteriaGroup[] = [];
-  selectedAssessmentCriteria: AssessmentCriteria[] = [];
 
-  assessmentCriteria1: AssessmentCriteria[][] = new Array<
-    Array<AssessmentCriteria>
-  >();
+  grade: GradeConfiguration[] = [];
+  /* selectedAssessmentCriteriaGroup: AssessmentCriteriaGroup[] = [];
+   selectedAssessmentCriteria: AssessmentCriteria[] = [];
+
+   assessmentCriteria1: AssessmentCriteria[][] = new Array<
+     Array<AssessmentCriteria>
+   >();*/
 
   createdSelfCriticism: SelfCriticism = new SelfCriticism();
 
@@ -47,6 +50,7 @@ export class SelfAssessmentComponent {
   constructor(public apiService: ApiService, public msg: NzMessageService) {
     this.getAssessmentCriteriaGroups();
     this.getAssessmentCriteria();
+    this.getGradeConfiguration();
 
     const currentUserId = localStorage.getItem('current_user_id');
     const teacherId = localStorage.getItem('teacher_id');
@@ -60,6 +64,15 @@ export class SelfAssessmentComponent {
     this.createdSelfCriticism.createdDate = new Date().toISOString();
     this.createdSelfCriticism.userId = currentUserId ?? '';
     this.createdSelfCriticism.assessmentCriterias = [];
+  }
+
+  getGradeConfiguration() {
+    this.apiService.getGradeConfiguration().subscribe((r) => {
+      if (r.result != ResultRespond.Success) {
+        this.grade = [];
+      }
+      this.grade = r.data;
+    });
   }
 
   // get all assessment criteria group
@@ -76,7 +89,7 @@ export class SelfAssessmentComponent {
     this.apiService.getAssessmentCriteria().subscribe((response: any) => {
       if (response.result === ResultRespond.Success) {
         this.assessmentCriteria = response.data;
-        this.assessmentCriteria1 = [];
+        // this.assessmentCriteria1 = [];
       }
     });
   }
@@ -86,6 +99,9 @@ export class SelfAssessmentComponent {
     created.schoolId = this.currentSchoolId;
     created.assessmentCriterias.forEach((item) => {
       item.schoolId = this.currentSchoolId;
+      if (!item.id) {
+        item.id = Guid.newGuid().toString();
+      }
     });
 
     this.apiService.postSelfCriticism(created).subscribe((response: any) => {
@@ -99,57 +115,67 @@ export class SelfAssessmentComponent {
     });
   }
 
-  addAssessmentToList() {
-    this.total = 0;
-    this.createdSelfCriticism.assessmentCriterias.push(
-      new AssessmentCriteria()
-    );
-    this.selectedAssessmentCriteriaGroup.push(new AssessmentCriteriaGroup());
-    this.selectedAssessmentCriteria.push(new AssessmentCriteria());
-    this.assessmentCriteria1.push(new Array<AssessmentCriteria>());
-
-    console.log(this.createdSelfCriticism);
+  public clone(object: unknown) {
+    const ObjStr = JSON.stringify(object);
+    return JSON.parse(ObjStr);
   }
 
-  selectChangeAssessmentCriteriaGroup(
-    selectedAssGroup: AssessmentCriteriaGroup,
-    i: number
-  ) {
-    if (!this.createdSelfCriticism.assessmentCriterias.length) {
-      return;
-    }
+  addAssessmentToList() {
+    const assessmentCriteriaGroupId = this.assessmentCriteriaGroups[0].id;
+    let assessmentCriteria: AssessmentCriteria = this.clone(this.assessmentCriteria)
+      .filter((x: any) => x.assessmentCriteriaGroupId == assessmentCriteriaGroupId)[0];
+    assessmentCriteria.assessmentCriteriaGroups = this.clone(this.assessmentCriteriaGroups);
+    assessmentCriteria.assessmentCriteria1 = this.clone(this.assessmentCriteria).filter((x: any) => x.assessmentCriteriaGroupId == assessmentCriteriaGroupId);
+    assessmentCriteria.actionDate = new Date();
+    this.createdSelfCriticism.assessmentCriterias.push(assessmentCriteria);
+  }
 
-    console.log(selectedAssGroup);
-    this.assessmentCriteria1[i] = this.assessmentCriteria.filter(
-      (item) => item.assessmentCriteriaGroupId == selectedAssGroup.id
-    );
-    this.createdSelfCriticism.assessmentCriterias[i] =
-      this.assessmentCriteria.filter(
-        (item) => item.assessmentCriteriaGroupId == selectedAssGroup.id
-      )[0];
+  selectChangeAssessmentCriteriaGroup(selectedAssGroup: string, i: number) {
+    const tempAss = this.assessmentCriteria.filter((x: any) => x.assessmentCriteriaGroupId == selectedAssGroup);
+    this.createdSelfCriticism.assessmentCriterias[i].assessmentCriteria1 = [];
+    this.createdSelfCriticism.assessmentCriterias[i].assessmentCriteria1 = tempAss;
+    this.createdSelfCriticism.assessmentCriterias[i].name = '';
+    this.createdSelfCriticism.assessmentCriterias[i].id = '';
+  }
+
+  changeValueOfIndexAssessment(id: string, index: number) {
+    const selected = this.createdSelfCriticism.assessmentCriterias[index].assessmentCriteria1.filter((x: any) => x.id == id)[0];
+    let i = this.createdSelfCriticism.assessmentCriterias[index];
+    i.id = selected.id;
+    i.name = selected.name;
+    i.value = selected.value;
+    i.unit = selected.unit;
+    i.isDeduct = selected.isDeduct;
+    i.quantity = selected.quantity;
+    i.allowUpdateScore = selected.allowUpdateScore;
   }
 
   calculateTotal() {
-    this.total = 0;
+    let total = 0;
     this.createdSelfCriticism.assessmentCriterias.forEach((item) => {
-      if(item.allowUpdateScore){
-        this.total += item.value * item.quantity;
-      }
-      else{
+      if (item?.assessmentCriteria1 == null || item?.assessmentCriteria1?.length == 0) {
+        total += item.value;
+      } else if (item.allowUpdateScore) {
+        total += item.value * item.quantity;
+      } else {
         if (item.isDeduct) {
-          this.total -= item.value * item.quantity;
+          total -= item.value * item.quantity;
         } else {
-          this.total += item.value * item.quantity;
+          total += item.value * item.quantity;
         }
       }
     });
+    return total;
   }
 
-  changeValueOfIndexAssessment(selected: AssessmentCriteria, i: number) {
-    this.createdSelfCriticism.assessmentCriterias[i] = selected;
-
-    console.log(selected);
-    this.calculateTotal();
+  getGradeName() {
+    this.grade.sort((a, b) => b.minimumScore! - a.minimumScore!);
+    const grade = this.grade.filter(x => this.calculateTotal() >= x.minimumScore!);
+    if (grade.length > 0) {
+      return grade[0].name;
+    } else {
+      return 'Không hoàn thành';
+    }
   }
 
   saveAssessmentCriteria() {
@@ -158,8 +184,18 @@ export class SelfAssessmentComponent {
 
   removeAssessment(i: number) {
     this.createdSelfCriticism.assessmentCriterias.splice(i, 1);
-    this.selectedAssessmentCriteriaGroup.splice(i, 1);
+    /*this.selectedAssessmentCriteriaGroup.splice(i, 1);
     this.selectedAssessmentCriteria.splice(i, 1);
-    this.assessmentCriteria1.splice(i, 1);
+    this.assessmentCriteria1.splice(i, 1);*/
+  }
+}
+
+class Guid {
+  static newGuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      const r = Math.random() * 16 | 0,
+        v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
   }
 }

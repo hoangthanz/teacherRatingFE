@@ -1,3 +1,5 @@
+import {AssessmentCriteriaGroup} from "./assessment-criteria-group";
+
 export class AssessmentCriteria {
   id!: string;
   name!: string;
@@ -11,4 +13,16 @@ export class AssessmentCriteria {
   schoolId: string | any;
   allowUpdateScore!: boolean;
   totalScore!: number;
+  actionDate: any;
+  // temp
+  assessmentCriteriaGroups: AssessmentCriteriaGroup[];
+  assessmentCriteria1: any[];
+  constructor() {
+    this.allowUpdateScore = false;
+    this.quantity = 1;
+    this.actionDate = new Date();
+    this.description = "";
+    this.assessmentCriteriaGroups = [];
+    this.assessmentCriteria1 = [];
+  }
 }
