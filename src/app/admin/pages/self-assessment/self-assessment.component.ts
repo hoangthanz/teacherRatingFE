@@ -172,7 +172,7 @@ export class SelfAssessmentComponent {
   }
 
   calculateTotal() {
-    let total = 0;
+    let total = 100;
     this.createdSelfCriticism.assessmentCriterias.forEach((item) => {
       if (item?.assessmentCriteria1 == null || item?.assessmentCriteria1?.length == 0) {
         total += item.value;
