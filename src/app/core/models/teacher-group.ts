@@ -9,4 +9,5 @@ export class TeacherGroup {
   schoolId?: string;
   totalMember?: number;
   description?: string;
+  leaderId?: string;
 }

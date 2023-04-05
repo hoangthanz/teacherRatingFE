@@ -9,4 +9,5 @@ export class RequestCreateTeacherGroupModel {
   totalMember?: number;
   description?: string;
   isDeleted?: boolean;
+  leaderId?: string;
 }

@@ -133,12 +133,16 @@
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="teacherIds">Giáo viên</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24">
-          <nz-select
-            formControlName="teacherIds" id="teacherIds"
-            nzMode="multiple"
-            nzPlaceHolder="Chọn giáo viên"
-            [nzOptions]="listShowTeacher"
-          ></nz-select>
+          <nz-select formControlName="teacherIds" id="teacherIds" nzMode="multiple" nzPlaceHolder="Chọn giáo viên"
+                     [nzOptions]="listShowTeacher"></nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item *ngIf="!isCreate">
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="leaderId">Giáo viên</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-select formControlName="leaderId" id="leaderId" nzPlaceHolder="Chọn tổ trưởng"
+                     [nzOptions]="listShowTeacher"></nz-select>
         </nz-form-control>
       </nz-form-item>
 

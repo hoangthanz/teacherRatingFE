@@ -1,14 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { BaseComponent } from "../../../shared/components/base/base.component";
-import { ApiService } from "../../../shared/services/api.service";
-import { NzMessageService } from "ng-zorro-antd/message";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
-import { TeacherGroup } from "../../../core/models/teacher-group";
-import { ResultRespond } from "../../../core/enums/result-respond";
-import { ResponseApi } from "../../../core/models/response-api";
-import { Teacher } from "../../../core/models/teacher";
-import { RequestCreateTeacherGroupModel } from "../../../core/models/request/request-create-teacher-group.model";
+import {Component, OnInit} from "@angular/core";
+import {BaseComponent} from "../../../shared/components/base/base.component";
+import {ApiService} from "../../../shared/services/api.service";
+import {NzMessageService} from "ng-zorro-antd/message";
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
+import {TeacherGroup} from "../../../core/models/teacher-group";
+import {ResultRespond} from "../../../core/enums/result-respond";
+import {ResponseApi} from "../../../core/models/response-api";
+import {Teacher} from "../../../core/models/teacher";
+import {RequestCreateTeacherGroupModel} from "../../../core/models/request/request-create-teacher-group.model";
 
 @Component({
   selector: "app-teacher-group",
@@ -29,6 +29,7 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
   nameDelete = '';
 
   listTeacher: Teacher[] = [];
+  listLeadTeacher: Array<{ value: string; label: string }> = [];
   listShowTeacher: Array<{ value: string; label: string }> = [];
 
   teacherGroups: TeacherGroup[] = [];
@@ -114,6 +115,7 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
       }));
       this.idUpdate = "";
       this.validateForm = this.fb.group({
+        leaderId: [null],
         name: [null, [Validators.required]],
         teacherIds: [[]],
         period1Score: [0, [Validators.required]],
@@ -129,8 +131,17 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
         value: item.id ?? "",
         label: item.name ?? ""
       }));
+
+      this.listLeadTeacher = this.listTeacher.filter(x => x.groupId == null ||
+        data?.id == x.groupId
+      ).map(item => ({
+        value: item.id ?? "",
+        label: item.name ?? ""
+      }));
+
       this.idUpdate = data?.id ?? "";
       this.validateForm = this.fb.group({
+        leaderId: [data?.leaderId],
         name: [data?.name, [Validators.required]],
         teacherIds: [data?.teacherIds],
         period1Score: [data?.period1Score, [Validators.required]],
@@ -172,7 +183,8 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
       description: this.validateForm.controls['description'].value,
       isDeleted: false,
       schoolId: this.currentSchoolId ?? '',
-      totalMember: this.validateForm.controls['teacherIds'].value.length
+      totalMember: this.validateForm.controls['teacherIds'].value.length,
+      leaderId: this.validateForm.controls['leaderId'].value,
     }
 
     if(this.isCreate){
