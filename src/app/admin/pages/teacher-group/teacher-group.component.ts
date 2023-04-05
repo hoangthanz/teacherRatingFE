@@ -113,6 +113,12 @@ export class TeacherGroupComponent extends BaseComponent implements OnInit {
         value: item.id ?? "",
         label: item.name ?? ""
       }));
+
+
+      this.listLeadTeacher = this.listTeacher.filter(x => x.groupId == null).map(item => ({
+        value: item.id ?? "",
+        label: item.name ?? ""
+      }));
       this.idUpdate = "";
       this.validateForm = this.fb.group({
         leaderId: [null],
