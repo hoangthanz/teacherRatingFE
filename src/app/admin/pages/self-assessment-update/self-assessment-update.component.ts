@@ -188,6 +188,8 @@ export class SelfAssessmentUpdateComponent implements OnInit {
     this.createdSelfCriticism.assessmentCriterias[i].assessmentCriteria1 = tempAss;
     this.createdSelfCriticism.assessmentCriterias[i].name = '';
     this.createdSelfCriticism.assessmentCriterias[i].id = '';
+    this.createdSelfCriticism.assessmentCriterias[i].isDeduct = false;
+    this.createdSelfCriticism.assessmentCriterias[i].quantity = 1;
   }
 
   changeValueOfIndexAssessment(id: string, index: number) {
@@ -195,10 +197,10 @@ export class SelfAssessmentUpdateComponent implements OnInit {
     let i = this.createdSelfCriticism.assessmentCriterias[index];
     i.id = selected.id;
     i.name = selected.name;
-    i.value = selected.value;
+    i.value = selected.isDeduct ? -1 * selected.value : selected.value;
     i.unit = selected.unit;
     i.isDeduct = selected.isDeduct;
-    i.quantity = selected.quantity;
+    i.quantity = 1;
     i.allowUpdateScore = selected.allowUpdateScore;
   }
 
