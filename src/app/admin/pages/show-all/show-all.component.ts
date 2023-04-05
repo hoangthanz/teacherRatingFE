@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {ResultRespond} from "../../../core/enums/result-respond";
 import {School} from "../../../core/models/school";
 import {TeacherGroup} from "../../../core/models/teacher-group";
+import {SelfCriticism} from "../../../core/models/self-criticism";
 
 @Component({
   selector: "app-show-all",
@@ -43,9 +44,17 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
         this.teacherGroups = r.data;
         return;
       } else {
-        this.teacherGroups = r.data.filter((x) => x.id  == this.getGroupId());
+        this.teacherGroups = r.data.filter((x) => x.id == this.getGroupId());
       }
     });
+  }
+
+  checkLeaderGroup() {
+    return this.teacherGroups.some(x => x.leaderId == this.getTeacherId());
+  }
+
+  checkLeader() {
+    return this.checkAdmin() || this.checkLeaderGroup();
   }
 
   getSchools() {
@@ -64,12 +73,33 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
 
   }
 
+  public sendTransportMessage(message: any, link: string) {
+    let createdSelfCriticism: SelfCriticism = new SelfCriticism();
+    createdSelfCriticism.id = message?.id;
+    createdSelfCriticism.assessmentCriterias = message?.assessmentCriterias;
+    createdSelfCriticism.assessmentCriterias?.forEach((item) => {
+      item.assessmentCriteriaGroups = [];
+      item.assessmentCriteria1 = [];
+    });
+    createdSelfCriticism.teacher = message?.teacher;
+    createdSelfCriticism.teacherId = message?.teacherId;
+    createdSelfCriticism.userId = message?.userId;
+    createdSelfCriticism.user = message?.user;
+    createdSelfCriticism.createdDate = message?.createdDate;
+    createdSelfCriticism.totalScore = message?.totalScore;
+    createdSelfCriticism.schoolId = message?.schoolId;
+    createdSelfCriticism.month = message?.month;
+    createdSelfCriticism.year = message?.year;
+    this.apiService.sendDataMessage(createdSelfCriticism);
+    this.router.navigateByUrl(link).then(r => console.log(r));
+  }
+
   download() {
     const groups = (this.groupId ? [this.groupId] : [])
-    this.apiService.download(this.currentSchool?.id, this.date.getFullYear().toString(), (this.date.getMonth() + 1).toString(), this.getUserId(), groups )
+    this.apiService.download(this.currentSchool?.id, this.date.getFullYear().toString(), (this.date.getMonth() + 1).toString(), this.getUserId(), groups)
       .subscribe((response: any) => {
           const blob = new Blob([response],
-            { type: "application/vnd.ms-excel" });
+            {type: "application/vnd.ms-excel"});
           const link = document.createElement("a");
           link.href = window.URL.createObjectURL(blob);
           link.download = `Báo_cáo.xlsx`;

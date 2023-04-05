@@ -5,7 +5,7 @@
       <div class="grid grid-cols-1 md:grid-cols-5 gap-2">
         <div>
           <nz-input-group nzSearch>
-            <input type="text" nz-input placeholder="Tìm kiếm" (keyup.enter)="search()" [(ngModel)]="keySearch" />
+            <input type="text" nz-input placeholder="Tìm kiếm" (keyup.enter)="search()" [(ngModel)]="keySearch"/>
           </nz-input-group>
         </div>
         <div>
@@ -18,9 +18,12 @@
         </nz-select>
 
         <div class="flex gap-2">
-          <button nz-button nzType="primary" (click)="search()" nzSearch>
+          <button nz-button nzType="primary" (click)="search();" nzSearch>
             Tìm kiếm
             <span nz-icon nzType="search"></span>
+          </button>
+          <button nz-button nzType="dashed" (click)="search();getTeacherGroups();">
+            Làm mới
           </button>
           <button
             nz-button
@@ -36,6 +39,50 @@
     </div>
   </div>
 
+  <div class="block sm:hidden">
+    <div class="mt-2 space-y-2">
+      <div class=""
+           *ngFor="let invoice of listTable.data; let i = index"
+      >
+        <div class="py-2 px-3 bg-gray-200 rounded-md">
+          <div class="font-medium text-gray-900 py-1">STT: {{ i + 1 }}</div>
+          <div class="text-sm text-gray-500 py-1">Tháng/Năm:  {{invoice?.month}} / {{invoice?.year}}</div>
+          <div class="text-sm text-gray-500 py-1">Giáo viên: {{invoice?.teacher?.name}}</div>
+          <div class="text-sm text-gray-500 py-1">Ngày tạo:  {{invoice?.createdDate | date: 'dd/MM/yyyy hh:mm a'}}</div>
+          <div class="text-sm text-gray-500 py-1">Tiêu chí:  {{invoice?.createdDate | date: 'dd/MM/yyyy hh:mm a'}}</div>
+          <div class="text-sm text-gray-500 py-1">Mô tả: {{ invoice?.description }}</div>
+          <div>
+            <table>
+              <tr>
+                <th class="w-3/5">Tiêu chí</th>
+                <th class="w-1/5">Đơn vị</th>
+                <th class="w-1/5">Giá trị</th>
+              </tr>
+              <tr *ngFor="let item of  invoice.assessmentCriterias; index as i">
+                <td class="w-3/5 font-normal text-center">{{item?.name}}</td>
+                <td class="w-1/5 font-normal text-center">{{item?.unit}}</td>
+                <td class="w-1/5 font-normal text-center">{{ (item?.isDeduct ? "- " : "+ ") + item?.value}}</td>
+              </tr>
+            </table>
+
+          </div>
+          <div class="text-sm text-gray-500 py-1">Tổng giá trị: {{ invoice?.totalScore }}</div>
+          <div class="text-sm text-gray-500 py-1">Xếp loại: {{ invoice?.competitiveRanking }}</div>
+
+          <div class="text-sm text-gray-500 py-1">
+            <button *ngIf="checkLeader()"
+                    nz-button
+                    nzType="default"
+                    nzShape="round"
+                    (click)="sendTransportMessage(invoice, 'admin/self-assessment-update')"
+            >
+              Cập nhật
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="hidden sm:block">
     <nz-table
@@ -57,6 +104,7 @@
         <th class="">Tổng giá trị</th>
         <th class="">Xếp loại</th>
         <th class="">Mô tả</th>
+        <th class=""></th>
       </tr>
       </thead>
       <tbody>
@@ -95,6 +143,18 @@
               [style.display]="i === 0 ?'':'none'">
             {{invoice?.description}}
           </td>
+          <td class="font-normal text-center" [attr.rowspan]="invoice?.assessmentCriterias.length"
+              [style.display]="i === 0 ?'':'none'">
+            <button *ngIf="checkLeader()"
+                    nz-button
+                    nzType="default"
+                    nzShape="round"
+                    (click)="sendTransportMessage(invoice, 'admin/self-assessment-update')"
+            >
+              Cập nhật
+            </button>
+          </td>
+
         </tr>
       </ng-container>
       </tbody>
