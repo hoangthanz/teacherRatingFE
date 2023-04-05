@@ -164,7 +164,7 @@ export class SelfAssessmentComponent {
   changeValueOfIndexAssessment(id: string, index: number) {
     const selected = this.createdSelfCriticism.assessmentCriterias[index].assessmentCriteria1.filter((x: any) => x.id == id)[0];
     let i = this.createdSelfCriticism.assessmentCriterias[index];
-    i.id = selected.id;
+    i.id = selected?.id ?? '';
     i.name = selected.name;
     i.value = selected.isDeduct ? -1 * selected.value : selected.value;
     i.unit = selected.unit;
