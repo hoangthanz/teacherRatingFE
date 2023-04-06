@@ -102,7 +102,7 @@ export class ShowAllComponent extends BaseComponent implements OnInit {
             {type: "application/vnd.ms-excel"});
           const link = document.createElement("a");
           link.href = window.URL.createObjectURL(blob);
-          link.download = `Báo_cáo_${this.date.getMonth() + 1}_${this.date.getFullYear().toString()}.xlsx`;
+          link.download = `Báo_cáo_${this.date.getMonth() + 1}_${this.date.getFullYear().toString()}_${this.getName()}.xlsx`;
           link.click();
         },
         err => {

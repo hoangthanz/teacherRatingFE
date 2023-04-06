@@ -29,6 +29,17 @@ export class BaseComponent {
     return '';
   }
 
+
+  getName() {
+    const helper = new JwtHelperService();
+    const token = sessionStorage.getItem('access_token');
+    if (token) {
+      const decodedToken = helper.decodeToken(token);
+      return decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+    }
+    return '';
+  }
+
   getTeacherId() {
     const helper = new JwtHelperService();
     const token = sessionStorage.getItem('access_token');
