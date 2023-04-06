@@ -190,6 +190,7 @@ export class SelfAssessmentUpdateComponent implements OnInit {
     this.createdSelfCriticism.assessmentCriterias[i].id = '';
     this.createdSelfCriticism.assessmentCriterias[i].isDeduct = false;
     this.createdSelfCriticism.assessmentCriterias[i].quantity = 1;
+    this.createdSelfCriticism.assessmentCriterias[i].value = 0;
   }
 
   changeValueOfIndexAssessment(id: string, index: number) {
@@ -213,9 +214,9 @@ export class SelfAssessmentUpdateComponent implements OnInit {
         total += item.value * item.quantity;
       } else {
         if (item.isDeduct) {
-          total -= item.value * item.quantity;
-        } else {
           total += item.value * item.quantity;
+        } else {
+          total -= item.value * item.quantity;
         }
       }
     });

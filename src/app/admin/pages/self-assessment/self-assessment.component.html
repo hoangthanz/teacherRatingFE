@@ -56,7 +56,12 @@
         </div>
 
         <div class="col-span-1">
-          <nz-input-number class="w-full" [(ngModel)]="item.value" nzPlaceHolder="Nhập điểm"></nz-input-number>
+          <ng-container *ngIf=" item?.assessmentCriteria1 == null || item?.assessmentCriteria1?.length == 0">
+            <nz-input-number class="w-full" [(ngModel)]="item.value" nzPlaceHolder="Nhập điểm"></nz-input-number>
+          </ng-container>
+          <ng-container *ngIf=" item?.assessmentCriteria1 != null &&  item.assessmentCriteria1.length >= 1">
+            <nz-input-number class="w-full" [(ngModel)]="item.value" nzPlaceHolder="Nhập điểm" [nzReadOnly]="true"></nz-input-number>
+          </ng-container>
         </div>
 
         <div class="col-span-1">
