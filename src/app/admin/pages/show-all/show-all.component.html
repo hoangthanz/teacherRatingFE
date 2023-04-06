@@ -61,7 +61,7 @@
               <tr *ngFor="let item of  invoice.assessmentCriterias; index as i">
                 <td class="w-3/5 font-normal text-center">{{item?.name}}</td>
                 <td class="w-1/5 font-normal text-center">{{item?.unit}}</td>
-                <td class="w-1/5 font-normal text-center">{{ (item?.isDeduct ? "- " : "+ ") + item?.value}}</td>
+                <td class="w-1/5 font-normal text-center">{{ item?.value}}</td>
               </tr>
             </table>
 
@@ -129,7 +129,7 @@
           </td>
           <td class="font-normal text-center">{{item?.name}}</td>
           <td class="font-normal text-center">{{item?.unit}}</td>
-          <td class="font-normal text-center">{{ (item?.isDeduct ? "- " : "+ ") + item?.value}}</td>
+          <td class="font-normal text-center">{{item?.value}}</td>
 
           <td class="font-normal text-center" [attr.rowspan]="invoice?.assessmentCriterias.length"
               [style.display]="i === 0 ?'':'none'">
