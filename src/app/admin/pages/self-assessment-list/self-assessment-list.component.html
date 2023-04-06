@@ -10,78 +10,95 @@
   >
     Các bản ghi do người dùng đã tạo
   </p>
+  <div class="block md:hidden">
+    <div class="mt-2 space-y-2">
+      <div class=""
+           *ngFor="let invoice of seflAssessmentListTable.data; let i = index"
+      >
+        <div class="py-2 px-3 bg-gray-200 rounded-md">
+          <div class="font-medium text-gray-900 py-1">STT: {{ i + 1 }}</div>
+          <div class="text-sm text-gray-500 py-1">Tháng/Năm:  {{invoice?.month}} / {{invoice?.year}}</div>
+          <div class="text-sm text-gray-500 py-1">Điểm: {{invoice?.totalScore}}</div>
+          <div class="text-sm text-gray-500 py-1">Trạng thái:
+            <nz-tag [nzColor]="'magenta'" *ngIf="invoice?.isSubmitted == false">Bản nháp</nz-tag>
+            <nz-tag [nzColor]="'blue'" *ngIf="invoice?.isSubmitted == true">Đã nộp</nz-tag>
+          </div>
+          <div class="text-sm text-gray-500 py-1">Ngày tạo:  {{invoice?.createdDate | date: 'dd/MM/yyyy hh:mm a'}}</div>
 
-  <nz-table
-    #seflAssessmentListTable
-    [nzData]="seflAssessmentList"
-    nzTableLayout="fixed"
-  >
-    <thead>
+          <div class="text-sm text-gray-500 py-1">
+            <div class="flex gap-2 flex-wrap">
+              <button nz-button nzType="primary" nzShape="round"
+                      (click)="updateSelfAssessment(invoice, !invoice.isSubmitted)">
+                {{ invoice.isSubmitted ? 'Thu hồi' : 'Nộp' }}
+              </button>
+
+              <button nz-button nzType="default" nzShape="round"
+                      (click)="sendTransportMessage(invoice, 'admin/self-assessment-update')">Cập nhật
+              </button>
+
+              <button nz-button nzType="dashed" nzShape="round" (click)="showModal(i)">Xem</button>
+
+              <button nz-button nzType="dashed" nzShape="round" (click)="download(invoice)">Tải xuống</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hidden md:block">
+    <nz-table
+      #seflAssessmentListTable
+      [nzData]="seflAssessmentList"
+      nzTableLayout="fixed"
+    >
+      <thead>
       <tr>
-        <th>STT</th>
-        <th>Tháng/Năm</th>
-        <th>Điểm</th>
-        <th>Trạng thái</th>
-        <th>Thời gian tạo</th>
-        <th></th>
+        <th class="w-20">STT</th>
+        <th class="w-1/6">Tháng/Năm</th>
+        <th class="w-1/6">Điểm</th>
+        <th class="w-1/6">Trạng thái</th>
+        <th class="w-1/6">Thời gian tạo</th>
+        <th class="w-2/6"></th>
       </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
       <tr *ngFor="let data of seflAssessmentListTable.data; let i = index">
-        <td>{{ data?.index }}</td>
-        <td>{{ data?.month + '/' + data?.year }}</td>
-        <td>{{ data?.totalScore }}</td>
+        <td class="w-20">{{ data?.index }}</td>
+        <td class="w-1/6">{{ data?.month + '/' + data?.year }}</td>
+        <td class="w-1/6">{{ data?.totalScore }}</td>
 
-        <td>
+        <td class="w-1/6">
           <nz-tag [nzColor]="'magenta'" *ngIf="data?.isSubmitted == false"
-            >Bản nháp</nz-tag
+          >Bản nháp
+          </nz-tag
           >
           <nz-tag [nzColor]="'blue'" *ngIf="data?.isSubmitted == true"
-            >Đã nộp</nz-tag
+          >Đã nộp
+          </nz-tag
           >
         </td>
-        <td>{{ data?.createdDate | date : 'dd/MM/yyyy hh:mm a' }}</td>
-        <td class="flex gap-2 flex-wrap">
-          <button
-            nz-button
-            nzType="primary"
-            nzShape="round"
-            (click)="updateSelfAssessment(data, !data.isSubmitted)"
-          >
-            {{ data.isSubmitted ? 'Thu hồi' : 'Nộp' }}
-          </button>
+        <td class="w-1/6">{{ data?.createdDate | date : 'dd/MM/yyyy hh:mm a' }}</td>
+        <td class="w-2/6">
+          <div class="flex gap-2 flex-wrap">
+            <button nz-button nzType="primary" nzShape="round" (click)="updateSelfAssessment(data, !data.isSubmitted)">
+              {{ data.isSubmitted ? 'Thu hồi' : 'Nộp' }}
+            </button>
 
-          <button
-            nz-button
-            nzType="default"
-            nzShape="round"
-            (click)="sendTransportMessage(data, 'admin/self-assessment-update')"
-          >
-            Cập nhật
-          </button>
+            <button nz-button nzType="default" nzShape="round"
+                    (click)="sendTransportMessage(data, 'admin/self-assessment-update')">Cập nhật
+            </button>
 
-          <button
-            nz-button
-            nzType="dashed"
-            nzShape="round"
-            (click)="showModal(i)"
-          >
-            Xem
-          </button>
+            <button nz-button nzType="dashed" nzShape="round" (click)="showModal(i)">Xem</button>
 
-          <button
-            nz-button
-            nzType="dashed"
-            nzShape="round"
-            (click)="download(data)"
-          >
-            Tải xuống
-          </button>
+            <button nz-button nzType="dashed" nzShape="round" (click)="download(data)">Tải xuống</button>
+          </div>
+
         </td>
       </tr>
-    </tbody>
-  </nz-table>
-
+      </tbody>
+    </nz-table>
+  </div>
   <nz-modal
     [(nzVisible)]="isVisible"
     nzTitle="Thông tin chi tiết"
@@ -93,7 +110,7 @@
         <div class="basis-1/2 font-semibold">Thời gian:</div>
         <div class="basis-1/2 text-right">
           {{
-            'T' + viewOfSelfAssessment?.month + '/' + viewOfSelfAssessment?.year
+          'T' + viewOfSelfAssessment?.month + '/' + viewOfSelfAssessment?.year
           }}
         </div>
       </div>
@@ -115,12 +132,14 @@
           <nz-tag
             [nzColor]="'magenta'"
             *ngIf="viewOfSelfAssessment?.isSubmitted == false"
-            >Bản nháp</nz-tag
+          >Bản nháp
+          </nz-tag
           >
           <nz-tag
             [nzColor]="'blue'"
             *ngIf="viewOfSelfAssessment?.isSubmitted == true"
-            >Đã nộp</nz-tag
+          >Đã nộp
+          </nz-tag
           >
         </div>
       </div>

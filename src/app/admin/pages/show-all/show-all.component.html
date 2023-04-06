@@ -1,45 +1,36 @@
 <nz-card nzTitle="{{ 'Bản nhận xét' }}">
 
-  <div class="w-full flex mb-3">
-    <div class="">
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-2">
-        <div>
-          <nz-input-group nzSearch>
-            <input type="text" nz-input placeholder="Tìm kiếm" (keyup.enter)="search()" [(ngModel)]="keySearch"/>
-          </nz-input-group>
-        </div>
-        <div>
-          <nz-date-picker nzMode="month" [(ngModel)]="date"></nz-date-picker>
-        </div>
+  <div class="w-full mb-3">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-5">
 
-        <nz-select [(ngModel)]="groupId">
-          <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
-          <nz-option *ngFor="let item of teacherGroups" nzValue="{{item.id}}" nzLabel="{{item.name}}"></nz-option>
-        </nz-select>
+      <nz-input-group nzSearch>
+        <input type="text" nz-input class="w-full" placeholder="Tìm kiếm" (keyup.enter)="search()"
+               [(ngModel)]="keySearch"/>
+      </nz-input-group>
 
-        <div class="flex gap-2">
-          <button nz-button nzType="primary" (click)="search();" nzSearch>
-            Tìm kiếm
-            <span nz-icon nzType="search"></span>
-          </button>
-          <button nz-button nzType="dashed" (click)="search();getTeacherGroups();">
-            Làm mới
-          </button>
-          <button
-            nz-button
-            nzType="primary"
-            class="text-right flex-1"
-            (click)="download()"
-          >
-            Tải danh sách khai báo
-          </button>
-        </div>
-      </div>
+      <nz-date-picker nzMode="month" class="w-full" [(ngModel)]="date"></nz-date-picker>
 
+      <nz-select [(ngModel)]="groupId" class="w-full">
+        <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
+        <nz-option *ngFor="let item of teacherGroups" nzValue="{{item.id}}" nzLabel="{{item.name}}"></nz-option>
+      </nz-select>
+
+      <button nz-button nzType="primary" class="w-full" (click)="search();" nzSearch>
+        Tìm kiếm
+        <span nz-icon nzType="search"></span>
+      </button>
+
+      <button nz-button nzType="dashed" class="w-full" (click)="search();getTeacherGroups();">
+        Làm mới
+      </button>
+
+      <button nz-button nzType="primary" class="w-full" (click)="download()">
+        Tải danh sách
+      </button>
     </div>
   </div>
 
-  <div class="block sm:hidden">
+  <div class="block md:hidden">
     <div class="mt-2 space-y-2">
       <div class=""
            *ngFor="let invoice of listTable.data; let i = index"
@@ -84,7 +75,7 @@
     </div>
   </div>
 
-  <div class="hidden sm:block">
+  <div class="hidden md:block">
     <nz-table
       #listTable
       [nzData]="data"
