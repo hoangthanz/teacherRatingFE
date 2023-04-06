@@ -26,7 +26,7 @@ export class LoginComponent {
   }
 
   // api call login here
-  headerContent = 'THPT Trần Nguyên Hãn';
+  headerContent = 'Trường THPT Trần Nguyên Hãn';
   login() {
     this.authenticationService.login(
       this.username,
