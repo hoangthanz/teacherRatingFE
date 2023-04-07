@@ -45,7 +45,7 @@ export class SelfAssessmentListComponent implements OnInit {
     this.isVisible = true;
   }
 
-  download(item: any) {
+  public download(item: any) {
     this.apiService.download(this.schoolId, this.date.getFullYear().toString(), (this.date.getMonth() + 1).toString(), this.getUserId(), [])
       .subscribe((response: any) => {
           const blob = new Blob([response],
