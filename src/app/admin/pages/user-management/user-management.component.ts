@@ -9,6 +9,7 @@ import {Role} from "../../../core/models/role";
 import {BaseComponent} from "../../../shared/components/base/base.component";
 import {Router} from "@angular/router";
 import {School} from "../../../core/models/school";
+import {NzUploadFile} from "ng-zorro-antd/upload";
 
 @Component({
   selector: "app-user-management",
@@ -154,6 +155,22 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
     );
   };
 
+  download() {
+    this.apiService.example((new Date()).getFullYear().toString())
+      .subscribe((response: any) => {
+          const blob = new Blob([response],
+            {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+          const link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.download = `Mẫu_import.xlsx`;
+          link.click();
+        },
+        err => {
+          this.message.warning("Tải báo cáo thất bại");
+        }
+      );
+  }
+
   showModalUser(id = ""): void {
     const user = this.userList.find((x) => x.id == id);
     if (id != "" && user) {
@@ -222,5 +239,40 @@ export class UserManagementComponent extends BaseComponent implements OnInit {
         this.getUserBySchool(this.currentSchool.id);
       }
     });
+  }
+
+  uploading = false;
+  fileList: NzUploadFile[] = [];
+
+  beforeUpload = (file: NzUploadFile): boolean => {
+    this.fileList = this.fileList.concat(file);
+    return false;
+  };
+
+  handleUpload(): void {
+    const formData = new FormData();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.fileList.forEach((file: any) => {
+      formData.append('files[]', file);
+    });
+    this.uploading = true;
+    // You can use any AJAX library you like
+    /*const req = new HttpRequest('POST', 'https://www.mocky.io/v2/5cc8019d300000980a055e76', formData, {
+      // reportProgress: true
+    });
+    this.http
+      .request(req)
+      .pipe(filter(e => e instanceof HttpResponse))
+      .subscribe(
+        () => {
+          this.uploading = false;
+          this.fileList = [];
+          this.msg.success('upload successfully.');
+        },
+        () => {
+          this.uploading = false;
+          this.msg.error('upload failed.');
+        }
+      );*/
   }
 }

@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpResponse} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {ResponseApi} from "../../core/models/response-api";
 import {AssessmentCriteriaGroup} from "../../core/models/assessment-criteria-group";
@@ -34,6 +34,14 @@ export class ApiService {
     return this.http.post(
       `${this.domain}/api/SelfCriticism/get-excel/${schoolId}/${year}/${month}/${userId}`,
       groupIds,
+      {responseType: 'blob'}
+    );
+  }
+
+  public example(year: string): Observable<Blob> {
+    return this.http.post(
+      `${this.domain}/api/SelfCriticism/get-sample-excel?year=${year}`,
+      year,
       {responseType: 'blob'}
     );
   }

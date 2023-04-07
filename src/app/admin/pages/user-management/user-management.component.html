@@ -1,27 +1,39 @@
 <nz-card nzTitle="{{ 'QUẢN TRỊ NGƯỜI DÙNG' }}">
-  <div class="w-full flex mb-3">
-    <div class="basis-1/2">
-      <div>
+  <div class="w-full mb-3">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-5">
+
+      <div class="col-span-1 lg:col-span-2">
         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-          <input type="text" nz-input placeholder="Tìm kiếm" (keyup.enter)="search()" [(ngModel)]="keySearch" />
+          <input type="text" nz-input placeholder="Tìm kiếm" (keyup.enter)="search()" [(ngModel)]="keySearch"/>
         </nz-input-group>
         <ng-template #suffixIconButton>
           <button nz-button nzType="primary" (click)="search()" nzSearch><span nz-icon nzType="search"></span></button>
         </ng-template>
       </div>
-    </div>
-    <div class="basis-1/2 text-right">
-      <button
-        nz-button
-        nzType="primary"
-        class="text-right flex-1"
-        (click)="showModalUser()"
-      >
-        Thêm
+      <div></div>
+      <div></div>
+      <button nz-button nzType="primary" class="" (click)="showModalUser()">Thêm</button>
+
+      <button nz-button nzType="dashed" class="w-full" (click)="download()">
+        Mẫu danh sách
       </button>
     </div>
   </div>
+  <div class="w-full mb-3">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-5">
 
+      <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+        <button nz-button>
+          <span nz-icon nzType="upload"></span>
+          Chọn excel
+        </button>
+      </nz-upload>
+      <button nz-button [nzType]="'primary'" [nzLoading]="uploading" (click)="handleUpload()"
+              [disabled]="fileList.length === 0">
+        {{ uploading ? 'Uploading' : 'Import tài khoản' }}
+      </button>
+    </div>
+  </div>
   <div class="block sm:hidden">
     <div class="mt-2 space-y-2">
       <div
