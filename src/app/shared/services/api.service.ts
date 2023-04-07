@@ -157,6 +157,13 @@ export class ApiService {
     );
   }
 
+  public updatePassword(body: any) {
+    return this.http.post<ResponseApi<User>>(
+      `${this.domain}/api/User/change-password`,
+      body
+    );
+  }
+
   public putUser(createUser: any) {
     return this.http.post<ResponseApi<User>>(
       `${this.domain}/api/User/update-user`,

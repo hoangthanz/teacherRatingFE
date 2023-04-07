@@ -31,9 +31,14 @@
               alt="Windster Logo"
             />
             <span class="self-center whitespace-nowrap"
-              >CĐ THPT Trần Nguyên Hãn</span
+            >CĐ THPT Trần Nguyên Hãn</span
             >
           </a>
+        </div>
+        <div class="justify-end items-end">
+          <button nz-button nzType="primary" (click)="showModalUser()">
+            Đổi mật khẩu
+          </button>
         </div>
       </div>
     </div>
@@ -729,3 +734,52 @@
     </ul>
   </nav>
 </div>
+
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Đổi mật khẩu"
+  [nzFooter]="null"
+  centered
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="passwordOld" nzRequired>Mật khẩu cũ</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Yêu cầu nhập mật khẩu!">
+          <input nz-input type="password" id="passwordOld" formControlName="passwordOld"/>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="passwordNew" nzRequired>Mật khẩu mới</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Yêu cầu nhập mật khẩu!">
+          <input nz-input type="password" id="passwordNew" formControlName="passwordNew"
+                 (ngModelChange)="updateConfirmValidator()"/>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="confirmPassword" nzRequired>Xác nhận mật khẩu
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
+          <input nz-input type="password" formControlName="confirmPassword" id="confirmPassword"/>
+          <ng-template #errorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')"
+            >Yêu cầu nhập lại mật khẩu xác nhận
+            </ng-container>
+            <ng-container *ngIf="control.hasError('confirm')">
+              Mật khẩu xác nhận không khớp
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item nz-row class="register-area">
+        <nz-form-control [nzSpan]="14" [nzOffset]="6">
+          <button nz-button nzType="primary" (click)="submit()">
+            Xác nhận
+          </button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
