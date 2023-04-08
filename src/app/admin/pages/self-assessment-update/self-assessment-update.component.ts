@@ -210,14 +210,14 @@ export class SelfAssessmentUpdateComponent implements OnInit {
     this.createdSelfCriticism.assessmentCriterias.forEach((item) => {
       if (item?.assessmentCriteria1 == null || item?.assessmentCriteria1?.length == 0) {
         total += item.value;
-      } else if (item.allowUpdateScore) {
-        total += item.value * item.quantity;
+        // } else if (item.allowUpdateScore) {
+        //   total += item.value * item.quantity;
       } else {
-        if (item.isDeduct) {
-          total += item.value * item.quantity;
-        } else {
-          total -= item.value * item.quantity;
-        }
+        // if (item.isDeduct) {
+        total += item.value;
+        // } else {
+        //   total -= item.value * item.quantity;
+        // }
       }
     });
     return total;
