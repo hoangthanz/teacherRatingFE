@@ -123,6 +123,12 @@ export class SelfAssessmentComponent {
       if (!item.id) {
         item.id = Guid.newGuid().toString();
       }
+      if (item.value < 0) {
+        item.isDeduct = true;
+        item.value = Math.abs(item.value);
+      } else {
+        item.isDeduct = false;
+      }
     });
 
     this.apiService.postSelfCriticism(created).subscribe((response: any) => {
