@@ -9,7 +9,7 @@
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "options": {
-        "outputPath": "D://Publish/fe_demo_thpt_tnh",
+        "outputPath": "D://HostIIS//app_tran_nguyen_han//fe",
         "index": "./src/index.html",
         "main": "./src/main.ts",
         "polyfills": ["zone.js"],
